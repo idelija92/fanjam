@@ -1,0 +1,10 @@
+com/fanjam/model/User.class
+com/fanjam/controller/UserController.class
+com/fanjam/model/Event.class
+com/fanjam/repository/EventRepository.class
+com/fanjam/repository/UserRepository.class
+com/fanjam/repository/BandRepository.class
+com/fanjam/model/Band.class
+com/fanjam/FanJamApplication.class
+com/fanjam/controller/EventController.class
+com/fanjam/controller/BandController.class
