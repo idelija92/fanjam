@@ -1,13 +1,15 @@
-# FanJam Frontend
+** FanJam **
 
-React app to support the FanJam MVP project.
+git clone https://github.com/idelija92/fanjam.git
+cd fanjam
 
-## Setup
+# Start backend
+cd backend
+cp src/main/resources/application-sample.properties src/main/resources/application.properties
+# Edit with your db credentials
+mvn spring-boot:run
 
-```bash
-cd frontend
+# In a new terminal/tab for frontend
+cd ../frontend
 npm install
 npm start
-```
-
-Ensure your backend Spring Boot server is running at `http://localhost:8080`
