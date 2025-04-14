@@ -1,0 +1,19 @@
+# Ignore node_modules and build artifacts
+frontend/node_modules/
+frontend/.env
+
+# Java build files
+backend/target/
+backend/.classpath
+backend/.project
+backend/.settings/
+
+# OS + IDE files
+.DS_Store
+*.log
+*.iml
+.idea/
+.vscode/
+
+# Database credentials
+**/application.properties
