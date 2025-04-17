@@ -19,4 +19,25 @@ public class EventController {
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
     }
+
+    @GetMapping("/{id}")
+    public Event getEventById(@PathVariable Long id) {
+        return eventRepository.findById(id).orElseThrow();
+    }
+
+    @PostMapping
+    public Event createEvent(@RequestBody Event event) {
+        return eventRepository.save(event);
+    }
+
+    @PutMapping("/{id}")
+    public Event updateEvent(@PathVariable Long id, @RequestBody Event updatedEvent) {
+        updatedEvent.setId(id);
+        return eventRepository.save(updatedEvent);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteEvent(@PathVariable Long id) {
+        eventRepository.deleteById(id);
+    }
 }
