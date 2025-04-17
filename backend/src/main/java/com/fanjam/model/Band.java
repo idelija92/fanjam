@@ -2,6 +2,8 @@ package com.fanjam.model;
 
 import jakarta.persistence.*;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "bands")
@@ -15,6 +17,9 @@ public class Band {
 
     @Column(name = "created_at")
     private Instant createdAt = Instant.now();
+
+    @ManyToMany(mappedBy = "bands")
+    private Set<Event> events = new HashSet<>();
 
     // Getters
     public Long getId() {

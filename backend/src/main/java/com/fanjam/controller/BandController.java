@@ -19,4 +19,25 @@ public class BandController {
     public List<Band> getAllBands() {
         return bandRepository.findAll();
     }
+
+    @GetMapping("/{id}")
+    public Band getBandById(@PathVariable Long id) {
+        return bandRepository.findById(id).orElseThrow();
+    }
+
+    @PostMapping
+    public Band createBand(@RequestBody Band band) {
+        return bandRepository.save(band);
+    }
+
+    @PutMapping("/{id}")
+    public Band updateBand(@PathVariable Long id, @RequestBody Band updatedBand) {
+        updatedBand.setId(id);
+        return bandRepository.save(updatedBand);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteBand(@PathVariable Long id) {
+        bandRepository.deleteById(id);
+    }
 }

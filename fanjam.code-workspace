@@ -3,5 +3,7 @@
     { "path": "backend" },
     { "path": "frontend" }
   ],
-  "settings": {}
+  "settings": {
+    "java.compile.nullAnalysis.mode": "automatic"
+  }
 }

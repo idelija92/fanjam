@@ -19,4 +19,25 @@ public class UserController {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return userRepository.findById(id).orElseThrow();
+    }
+
+    @PostMapping
+    public User createUser(@RequestBody User user) {
+        return userRepository.save(user);
+    }
+
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        updatedUser.setId(id);
+        return userRepository.save(updatedUser);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userRepository.deleteById(id);
+    }
 }
