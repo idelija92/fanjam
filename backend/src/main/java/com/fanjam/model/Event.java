@@ -87,7 +87,7 @@ public class Event {
         this.description = description;
     }
 
-    public void setBands(Set<Band> band) {
+    public void setBands(Set<Band> bands) {
         this.bands = bands;
     }
 

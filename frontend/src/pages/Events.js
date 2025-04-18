@@ -9,6 +9,16 @@ const Events = () => {
     API.get('/events').then(res => setEvents(res.data));
   }, []);
 
+  const handleDelete = async (id) => {
+    if (!window.confirm('Delete this event?')) return;
+    try {
+      await API.delete(`/events/${id}`);
+      setEvents(events.filter(e => e.id !== id));
+    } catch (err) {
+      console.error('Delete failed', err);
+    }
+  };
+
   return (
     <div>
       <h1>Events</h1>
@@ -30,6 +40,8 @@ const Events = () => {
               </ul>
             </div>
           )}
+          <Link to={`/events/edit/${event.id}`}>[Edit]</Link> {' '}
+            <button onClick={() => handleDelete(event.id)}>Delete</button>
           </li>
         ))}
       </ul>

@@ -16,6 +16,16 @@ const Users = () => {
       });
   }, []);
 
+  const handleDelete = async (id) => {
+    if (!window.confirm('Delete this user?')) return;
+    try {
+      await API.delete(`/users/${id}`);
+      setUsers(users.filter(u => u.id !== id));
+    } catch (err) {
+      console.error('Delete failed', err);
+    }
+  };
+
   return (
     <div>
       <h1>Users</h1>
@@ -23,7 +33,9 @@ const Users = () => {
       <ul>
         {users.map(user => (
           <li key={user.id}>
-            {user.username} — {user.email}
+            {user.username} — {user.email}  {' '}
+            <Link to={`/users/edit/${user.id}`}>[Edit]</Link> {' '}
+            <button onClick={() => handleDelete(user.id)}>Delete</button>
           </li>
         ))}
       </ul>
