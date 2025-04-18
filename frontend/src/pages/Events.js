@@ -20,7 +20,16 @@ const Events = () => {
             {event.date} at {event.time}<br />
             Venue: {event.venue}<br />
             {event.description && <em>{event.description}</em>}<br />
-            {event.band && <span>By Band: {event.band.name}</span>}
+            {event.bands && event.bands.length > 0 && (
+            <div>
+              Bands:
+              <ul>
+                {event.bands.map(band => (
+                  <li key={band.id}>{band.name}</li>
+                ))}
+              </ul>
+            </div>
+          )}
           </li>
         ))}
       </ul>
