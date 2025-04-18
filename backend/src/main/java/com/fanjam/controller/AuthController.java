@@ -2,6 +2,7 @@ package com.fanjam.controller;
 
 import com.fanjam.model.User;
 import com.fanjam.model.RegisterRequest;
+import com.fanjam.config.JwtUtil;
 import com.fanjam.model.LoginRequest;
 import com.fanjam.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,10 @@ public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -40,12 +45,14 @@ public class AuthController {
         if (userOpt.isEmpty()) {
             return "Error: Invalid credentials";
         }
-
+    
         User user = userOpt.get();
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             return "Error: Invalid credentials";
         }
-
-        return "Login successful (token coming in Step 4)";
+    
+        String token = jwtUtil.generateToken(user.getEmail());
+        return token;
     }
+    
 }
