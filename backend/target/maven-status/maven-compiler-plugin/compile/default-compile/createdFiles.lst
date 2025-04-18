@@ -1,4 +1,5 @@
 com/fanjam/model/User.class
+com/fanjam/config/JwtUtil.class
 com/fanjam/controller/UserController.class
 com/fanjam/model/Event.class
 com/fanjam/repository/EventRepository.class
