@@ -23,7 +23,8 @@ public class AuthController {
     private JwtUtil jwtUtil;
 
 
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
     public String register(@RequestBody RegisterRequest request) {
@@ -47,9 +48,14 @@ public class AuthController {
         }
     
         User user = userOpt.get();
+        System.out.println("Found user: " + user.getEmail());
+        System.out.println("Encoded password in DB: " + user.getPassword());
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            System.out.println("Password mismatch");
             return "Error: Invalid credentials";
         }
+        System.out.println("Login request: " + request.getEmail() + " / " + request.getPassword());
+
     
         String token = jwtUtil.generateToken(user.getEmail());
         return token;

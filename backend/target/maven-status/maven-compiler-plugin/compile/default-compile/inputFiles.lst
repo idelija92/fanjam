@@ -1,5 +1,6 @@
 /Users/idelija/Desktop/newfolder/fanjam/backend/src/main/java/com/fanjam/FanJamApplication.java
 /Users/idelija/Desktop/newfolder/fanjam/backend/src/main/java/com/fanjam/config/CorsConfig.java
+/Users/idelija/Desktop/newfolder/fanjam/backend/src/main/java/com/fanjam/config/JwtAuthFilter.java
 /Users/idelija/Desktop/newfolder/fanjam/backend/src/main/java/com/fanjam/config/JwtUtil.java
 /Users/idelija/Desktop/newfolder/fanjam/backend/src/main/java/com/fanjam/config/SecurityConfig.java
 /Users/idelija/Desktop/newfolder/fanjam/backend/src/main/java/com/fanjam/controller/AuthController.java

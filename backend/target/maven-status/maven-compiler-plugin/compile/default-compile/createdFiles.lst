@@ -6,6 +6,7 @@ com/fanjam/repository/EventRepository.class
 com/fanjam/model/Band.class
 com/fanjam/FanJamApplication.class
 com/fanjam/controller/BandController.class
+com/fanjam/config/JwtAuthFilter.class
 com/fanjam/model/RegisterRequest.class
 com/fanjam/config/SecurityConfig.class
 com/fanjam/repository/UserRepository.class
