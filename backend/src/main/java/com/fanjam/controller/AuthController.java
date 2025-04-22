@@ -57,7 +57,7 @@ public class AuthController {
         System.out.println("Login request: " + request.getEmail() + " / " + request.getPassword());
 
     
-        String token = jwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user);
         return token;
     }
     
