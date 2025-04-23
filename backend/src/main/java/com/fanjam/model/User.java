@@ -14,6 +14,9 @@ public class User {
     private String email;
     private String password;
 
+    @Column(nullable = false)
+    private String role = "USER"; 
+
     @Column(name = "created_at")
     private Instant createdAt = Instant.now();
 
@@ -32,6 +35,10 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getRole() {
+        return role;
     }
 
     public Instant getCreatedAt() {
@@ -53,6 +60,10 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public void setCreatedAt(Instant createdAt) {
