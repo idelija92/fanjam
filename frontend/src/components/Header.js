@@ -17,7 +17,7 @@ const Header = () => {
           {auth && auth.isAuthenticated ? (
             <>
               <span style={{ marginRight: '1rem' }}>
-                Logged in as: <strong>{getUsernameFromToken(auth.token)}</strong>
+                Logged in as: <strong>{getUsernameFromToken(auth.token)}</strong> ({getRoleFromToken(auth.token)})
               </span>
               <button onClick={() => { auth.logout(); navigate('/'); }}>Logout</button>
             </>
@@ -44,3 +44,13 @@ function getUsernameFromToken(token) {
   }
 
 export default Header;
+
+function getRoleFromToken(token) {
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.role || null;
+  } catch {
+    return null;
+  }
+}
