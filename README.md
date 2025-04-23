@@ -16,11 +16,11 @@ cd fanjam
 ### 2. Start the backend
 ```bash
 cd backend
-cp src/main/resources/application-sample.properties src/main/resources/application.properties
+mvn spring-boot:run
 ```
 #### Edit with your db credentials
 ```bash
-mvn spring-boot:run
+cp src/main/resources/application-sample.properties src/main/resources/application.properties
 ```
 
 ### 3. Start the frontend
