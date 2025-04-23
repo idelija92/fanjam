@@ -1,15 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 const Header = () => {
   const auth = React.useContext(AuthContext);
+  const navigate = useNavigate();
 
   return (
     <header style={{ padding: '1rem', borderBottom: '1px solid #ccc' }}>
       <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Link to="/" style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>
-          FanJam 🎸
+          FanJam 🎹
         </Link>
 
         <div>
@@ -18,7 +19,7 @@ const Header = () => {
               <span style={{ marginRight: '1rem' }}>
                 Logged in as: <strong>{getUsernameFromToken(auth.token)}</strong>
               </span>
-              <button onClick={auth.logout}>Logout</button>
+              <button onClick={() => { auth.logout(); navigate('/'); }}>Logout</button>
             </>
           ) : (
             <>
