@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Header from './components/Header';
+import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import Bands from './pages/Bands';
 import Events from './pages/Events';
@@ -28,10 +29,24 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/bands" element={<Bands />} />
           <Route path="/events" element={<Events />} />
-          <Route path="/users" element={<Users />} />
+          <Route 
+            path="/users" 
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <Users />
+              </ProtectedRoute>
+            } 
+          />
           <Route path="/bands/create" element={<CreateBand />} />
           <Route path="/events/create" element={<CreateEvent />} />
-          <Route path="/users/create" element={<CreateUser />} />
+          <Route
+            path="/users/create"
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <CreateUser />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/bands/edit/:id" element={<EditBand />} />
           <Route path="/events/edit/:id" element={<EditEvent />} />
           <Route path="/users/edit/:id" element={<EditUser />} />
