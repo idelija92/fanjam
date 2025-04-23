@@ -8,8 +8,8 @@ console.log('Raw AuthContext:', AuthContext);
 function Login() {
 
     const auth = React.useContext(AuthContext);
-    console.log('Login component is rendering');
-    console.log('Auth context before login: :', auth);
+    //console.log('Login component is rendering');
+    //console.log('Auth context before login: :', auth);
 
     //const { login } = useContext(AuthContext);
     const [email, setEmail] = React.useState('');
