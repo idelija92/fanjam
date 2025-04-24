@@ -1,6 +1,6 @@
 # 🎸 FanJam
 
-FanJam is a full-stack web application where fans and bands can connect through events, registrations, and more.
+FanJam is a full-stack web application where fans and bands can connect through events.
 
 ---
 
