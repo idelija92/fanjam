@@ -94,6 +94,14 @@ public class AuthController {
         String email = jwtUtil.extractEmail(token);
 
         User user = userRepository.findByEmail(email).orElseThrow();
+
+        if ("ADMIN".equals(user.getRole())) {
+            long adminCount = userRepository.countByRole("ADMIN");
+            if (adminCount <= 1) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Cannot delete the last remaining admin.");
+            }
+        }
+
         userRepository.delete(user);
 
         return ResponseEntity.ok("Account deleted.");
