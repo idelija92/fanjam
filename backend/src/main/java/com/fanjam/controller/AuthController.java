@@ -4,8 +4,11 @@ import com.fanjam.model.User;
 import com.fanjam.model.RegisterRequest;
 import com.fanjam.config.JwtUtil;
 import com.fanjam.model.LoginRequest;
+import com.fanjam.model.PasswordChangeRequest;
 import com.fanjam.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,5 +69,24 @@ public class AuthController {
         String token = jwtUtil.generateToken(user);
         return token;
     }
-    
+
+    @PutMapping("/change-password")
+    public ResponseEntity<String> changePassword(
+        @RequestHeader("Authorization") String authHeader,
+        @RequestBody PasswordChangeRequest request
+    ) {
+        String token = authHeader.replace("Bearer ", "");
+        String email = jwtUtil.extractEmail(token);
+
+        User user = userRepository.findByEmail(email).orElseThrow();
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Current password is incorrect.");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Password updated successfully.");
+    }
 }
