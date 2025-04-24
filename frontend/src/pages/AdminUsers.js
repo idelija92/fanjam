@@ -13,12 +13,21 @@ function AdminUsers() {
   }, []);
 
   const updateRole = (id, newRole) => {
-    API.put(`/users/${id}`, { role: newRole })
+    const user = users.find(u => u.id === id);
+    if (!user) return;
+  
+    const updatedUser = {
+      ...user,
+      role: newRole
+    };
+  
+    API.put(`/users/${id}`, updatedUser)
       .then(() => {
-        setUsers(prev => prev.map(user => user.id === id ? { ...user, role: newRole } : user));
+        setUsers(prev => prev.map(u => u.id === id ? { ...u, role: newRole } : u));
       })
       .catch(err => console.error(err));
   };
+  
 
   const deleteUser = (id) => {
     if (!window.confirm('Are you sure?')) return;
