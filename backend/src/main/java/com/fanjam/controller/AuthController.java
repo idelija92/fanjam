@@ -50,23 +50,21 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         Optional<User> userOpt = userRepository.findByEmail(request.getEmail());
+
         if (userOpt.isEmpty()) {
-            return "Error: Invalid credentials";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
 
         User user = userOpt.get();
-        System.out.println("Found user: " + user.getEmail());
-        System.out.println("Encoded password in DB: " + user.getPassword());
+
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            System.out.println("Password mismatch");
-            return "Error: Invalid credentials";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
-        System.out.println("Login request: " + request.getEmail() + " / " + request.getPassword());
 
         String token = jwtUtil.generateToken(user);
-        return token;
+        return ResponseEntity.ok(token);
     }
 
     @PutMapping("/change-password")
