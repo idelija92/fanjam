@@ -63,7 +63,12 @@ function Profile() {
             })
             .catch(err => {
                 console.error(err);
-                alert('Failed to delete account.');
+                if (err.response?.status === 403) {
+                    alert(err.response.data);
+                } else {
+                    alert('Failed to delete account.');
+                }
+
             });
     };
 
