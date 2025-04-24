@@ -22,9 +22,15 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
-
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @GetMapping("/me")
+    public User getCurrentUser(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        String email = jwtUtil.extractEmail(token);
+        return userRepository.findByEmail(email).orElseThrow();
+    }
 
     @PostMapping("/register")
     public String register(@RequestBody RegisterRequest request) {
