@@ -1,12 +1,15 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import API from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 
 function Profile() {
     const { token } = useContext(AuthContext);
+    const auth = useContext(AuthContext);
     const [user, setUser] = useState(null);
     const [form, setForm] = useState({ username: '', email: '' });
     const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '' });
+    const navigate = useNavigate();
 
     useEffect(() => {
         API.get('/auth/me')
@@ -49,6 +52,22 @@ function Profile() {
             });
     };
 
+    const handleDeleteAccount = () => {
+        if (!window.confirm('Are you sure you want to delete your account? This cannot be undone.')) return;
+
+        API.delete('/auth/delete')
+            .then(() => {
+                alert('Your account has been deleted.');
+                auth.logout();
+                navigate('/');
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Failed to delete account.');
+            });
+    };
+
+
     if (!user) return <p>Loading profile...</p>;
 
     return (
@@ -79,6 +98,12 @@ function Profile() {
                 onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
             /><br />
             <button onClick={handlePasswordChange}>Change Password</button>
+
+            <br />
+            <h3>Danger Zone</h3>
+            <button onClick={handleDeleteAccount} style={{ color: 'red' }}>
+                Delete My Account
+            </button>
 
 
             <p><strong>Role:</strong> {user.role}</p>
