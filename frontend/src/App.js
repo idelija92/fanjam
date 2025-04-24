@@ -29,15 +29,29 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/bands" element={<Bands />} />
-          <Route path="/events" element={<Events />} />
-          <Route 
-            path="/users" 
+          <Route
+            path="/bands"
+            element={
+              <ProtectedRoute>
+                <Bands />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/events"
+            element={
+              <ProtectedRoute>
+                <Events />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/users"
             element={
               <ProtectedRoute requiredRole="ADMIN">
                 <Users />
               </ProtectedRoute>
-            } 
+            }
           />
           <Route path="/bands/create" element={<CreateBand />} />
           <Route path="/events/create" element={<CreateEvent />} />
@@ -70,13 +84,13 @@ function App() {
             }
           />
           <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
         <ToastContainer position="top-center" autoClose={3000} />
       </Router>
