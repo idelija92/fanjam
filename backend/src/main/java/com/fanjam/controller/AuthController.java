@@ -55,7 +55,7 @@ public class AuthController {
         if (userOpt.isEmpty()) {
             return "Error: Invalid credentials";
         }
-    
+
         User user = userOpt.get();
         System.out.println("Found user: " + user.getEmail());
         System.out.println("Encoded password in DB: " + user.getPassword());
@@ -65,16 +65,14 @@ public class AuthController {
         }
         System.out.println("Login request: " + request.getEmail() + " / " + request.getPassword());
 
-    
         String token = jwtUtil.generateToken(user);
         return token;
     }
 
     @PutMapping("/change-password")
     public ResponseEntity<String> changePassword(
-        @RequestHeader("Authorization") String authHeader,
-        @RequestBody PasswordChangeRequest request
-    ) {
+            @RequestHeader("Authorization") String authHeader,
+            @RequestBody PasswordChangeRequest request) {
         String token = authHeader.replace("Bearer ", "");
         String email = jwtUtil.extractEmail(token);
 
@@ -89,4 +87,16 @@ public class AuthController {
 
         return ResponseEntity.ok("Password updated successfully.");
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteAccount(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        String email = jwtUtil.extractEmail(token);
+
+        User user = userRepository.findByEmail(email).orElseThrow();
+        userRepository.delete(user);
+
+        return ResponseEntity.ok("Account deleted.");
+    }
+
 }
