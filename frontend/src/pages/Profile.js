@@ -3,60 +3,89 @@ import API from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 
 function Profile() {
-  const { token } = useContext(AuthContext);
-  const [user, setUser] = useState(null);
-  const [form, setForm] = useState({ username: '', email: '' });
+    const { token } = useContext(AuthContext);
+    const [user, setUser] = useState(null);
+    const [form, setForm] = useState({ username: '', email: '' });
+    const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '' });
 
-  useEffect(() => {
-    API.get('/auth/me')
-      .then(res => {
-        setUser(res.data);
-        setForm({ username: res.data.username, email: res.data.email });
-      })
-      .catch(err => console.error(err));
-  }, []);
+    useEffect(() => {
+        API.get('/auth/me')
+            .then(res => {
+                setUser(res.data);
+                setForm({ username: res.data.username, email: res.data.email });
+            })
+            .catch(err => console.error(err));
+    }, []);
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
 
-  const handleSave = () => {
-    API.put(`/users/${user.id}`, {
-      ...user,
-      username: form.username,
-      email: form.email,
-    })
-      .then(res => {
-        setUser(res.data);
-        alert('Profile updated!');
-      })
-      .catch(err => {
-        console.error(err);
-        alert('Update failed.');
-      });
-  };
+    const handleSave = () => {
+        API.put(`/users/${user.id}`, {
+            ...user,
+            username: form.username,
+            email: form.email,
+        })
+            .then(res => {
+                setUser(res.data);
+                alert('Profile updated!');
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Update failed.');
+            });
+    };
 
-  if (!user) return <p>Loading profile...</p>;
+    const handlePasswordChange = () => {
+        API.put('/auth/change-password', passwords)
+            .then(() => {
+                alert('Password changed successfully!');
+                setPasswords({ currentPassword: '', newPassword: '' });
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Failed to change password. Check current password.');
+            });
+    };
 
-  return (
-    <div>
-      <h2>My Profile</h2>
+    if (!user) return <p>Loading profile...</p>;
 
-      <label>Username:</label>
-      <input name="username" value={form.username} onChange={handleChange} />
+    return (
+        <div>
+            <h2>My Profile</h2>
 
-      <br />
+            <label>Username:</label>
+            <input name="username" value={form.username} onChange={handleChange} />
 
-      <label>Email:</label>
-      <input name="email" value={form.email} onChange={handleChange} />
+            <br />
 
-      <br />
+            <label>Email:</label>
+            <input name="email" value={form.email} onChange={handleChange} />
 
-      <p><strong>Role:</strong> {user.role}</p>
+            <br />
 
-      <button onClick={handleSave}>Save Changes</button>
-    </div>
-  );
+            <h3>Change Password</h3>
+            <input
+                type="password"
+                placeholder="Current Password"
+                value={passwords.currentPassword}
+                onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })} />
+            <br />
+            <input
+                type="password"
+                placeholder="New Password"
+                value={passwords.newPassword}
+                onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
+            /><br />
+            <button onClick={handlePasswordChange}>Change Password</button>
+
+
+            <p><strong>Role:</strong> {user.role}</p>
+
+            <button onClick={handleSave}>Save Changes</button>
+        </div>
+    );
 }
 
 export default Profile;
