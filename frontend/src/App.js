@@ -17,6 +17,7 @@ import EditUser from './pages/EditUser';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import AdminUsers from './pages/AdminUsers';
+import Profile from './pages/Profile';
 import { AuthProvider } from './context/AuthContext';
 
 
@@ -61,6 +62,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
         </Routes>
         <ToastContainer position="top-center" autoClose={3000} />
       </Router>

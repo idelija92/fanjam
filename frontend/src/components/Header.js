@@ -24,6 +24,7 @@ const Header = () => {
                   <Link to="/admin/users" style={{ marginRight: '1rem' }}>Admin Panel</Link>
                 )}
               </span>
+              <Link to="/profile" style={{ marginRight: '1rem' }}>My Profile</Link> 
               <button onClick={() => { auth.logout(); navigate('/'); }}>Logout</button>
             </>
           ) : (
