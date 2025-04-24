@@ -51,7 +51,14 @@ function App() {
           />
           <Route path="/bands/edit/:id" element={<EditBand />} />
           <Route path="/events/edit/:id" element={<EditEvent />} />
-          <Route path="/users/edit/:id" element={<EditUser />} />
+          <Route
+            path="/users/edit/:id"
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <EditUser />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route
