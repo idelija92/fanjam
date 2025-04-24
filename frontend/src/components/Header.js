@@ -19,6 +19,11 @@ const Header = () => {
               <span style={{ marginRight: '1rem' }}>
                 Logged in as: <strong>{getUsernameFromToken(auth.token)}</strong> ({getRoleFromToken(auth.token)})
               </span>
+              <span>
+                {getRoleFromToken(auth.token) === 'ADMIN' && (
+                  <Link to="/admin/users" style={{ marginRight: '1rem' }}>Admin Panel</Link>
+                )}
+              </span>
               <button onClick={() => { auth.logout(); navigate('/'); }}>Logout</button>
             </>
           ) : (

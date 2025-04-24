@@ -16,6 +16,7 @@ import EditEvent from './pages/EditEvent';
 import EditUser from './pages/EditUser';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import AdminUsers from './pages/AdminUsers';
 import { AuthProvider } from './context/AuthContext';
 
 
@@ -52,6 +53,14 @@ function App() {
           <Route path="/users/edit/:id" element={<EditUser />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route
+            path="/admin/users"
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <AdminUsers />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
         <ToastContainer position="top-center" autoClose={3000} />
       </Router>
