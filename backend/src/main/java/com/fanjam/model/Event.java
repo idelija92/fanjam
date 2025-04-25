@@ -24,6 +24,9 @@ public class Event {
     @JoinTable(name = "event_band", joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "band_id"))
     private Set<Band> bands = new HashSet<>();
 
+    @ManyToMany(mappedBy = "rsvpedEvents")
+    private Set<User> rsvps = new HashSet<>();
+
     @Enumerated(EnumType.STRING)
     private EventType type;
 
@@ -70,7 +73,7 @@ public class Event {
     public List<String> getSetlist() {
         return setlist;
     }
-    
+
     // Setters
     public void setId(Long id) {
         this.id = id;

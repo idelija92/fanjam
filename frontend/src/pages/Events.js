@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import API from '../services/api';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 const Events = () => {
   const [events, setEvents] = useState([]);
+  const auth = useContext(AuthContext);
+
 
   useEffect(() => {
     API.get('/events').then(res => setEvents(res.data));
@@ -18,6 +21,27 @@ const Events = () => {
       console.error('Delete failed', err);
     }
   };
+
+  const handleRsvp = async (eventId) => {
+    try {
+      await API.put(`/events/${eventId}/rsvp`);
+      alert('RSVP successful!');
+    } catch (err) {
+      console.error(err);
+      alert('Failed to RSVP');
+    }
+  };
+
+  const handleCancelRsvp = async (eventId) => {
+    try {
+      await API.delete(`/events/${eventId}/rsvp`);
+      alert('RSVP cancelled');
+    } catch (err) {
+      console.error(err);
+      alert('Failed to cancel RSVP');
+    }
+  };
+
 
   return (
     <div>
@@ -53,6 +77,15 @@ const Events = () => {
                     <li key={i}>{song}</li>
                   ))}
                 </ul>
+              </td>
+              <td>
+                {auth?.isAuthenticated && (
+                  <div>
+                    <button onClick={() => handleRsvp(event.id)}>Join Event</button>
+                    <button onClick={() => handleCancelRsvp(event.id)}>Cancel RSVP</button>
+                  </div>
+                )}
+
               </td>
               <td>
                 <Link to={`/events/edit/${event.id}`}>Edit</Link> |{' '}

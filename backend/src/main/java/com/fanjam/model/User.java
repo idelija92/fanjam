@@ -1,7 +1,8 @@
 package com.fanjam.model;
 
+import java.util.HashSet;
+import java.util.Set;
 import jakarta.persistence.*;
-
 
 @Entity
 @Table(name = "users")
@@ -15,7 +16,11 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private String role = "USER"; 
+    private String role = "USER";
+
+    @ManyToMany
+    @JoinTable(name = "rsvps", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "event_id"))
+    private Set<Event> rsvpedEvents = new HashSet<>();
 
     // Getters
     public Long getId() {
@@ -38,6 +43,10 @@ public class User {
         return role;
     }
 
+    public Set<Event> getRsvpedEvents() {
+        return rsvpedEvents;
+    }
+
     // Setters
     public void setId(Long id) {
         this.id = id;
@@ -57,5 +66,9 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public void setRsvpedEvents(Set<Event> rsvpedEvents) {
+        this.rsvpedEvents = rsvpedEvents;
     }
 }
