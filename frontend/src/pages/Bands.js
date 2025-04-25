@@ -16,9 +16,15 @@ const Bands = () => {
       await API.delete(`/bands/${id}`);
       setBands(bands.filter(b => b.id !== id));
     } catch (err) {
-      console.error('Delete failed', err);
+      console.error('Delete failed:', err);
+      if (err.response?.status === 409 || err.response?.status === 500) {
+        alert('Cannot delete this band. It is linked to one or more events.');
+      } else {
+        alert('Failed to delete band.');
+      }
     }
   };
+
 
   return (
     <div>
@@ -27,8 +33,8 @@ const Bands = () => {
       <ul>
         {bands.map(band => (
           <li key={band.id}>{band.name} ({band.genre}) - {band.description}  {' '}
-          <Link to={`/bands/edit/${band.id}`}>[Edit]</Link> {' '}
-          <button onClick={() => handleDelete(band.id)}>Delete</button></li>
+            <Link to={`/bands/edit/${band.id}`}>[Edit]</Link> {' '}
+            <button onClick={() => handleDelete(band.id)}>Delete</button></li>
         ))}
       </ul>
     </div>
