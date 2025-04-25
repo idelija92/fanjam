@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import API from '../services/api';
 
-
 export const AuthContext = React.createContext();
 
 export function AuthProvider({ children }) {
@@ -10,18 +9,13 @@ export function AuthProvider({ children }) {
   const [role, setRole] = useState(getRoleFromToken(token));
   const [currentUser, setCurrentUser] = useState(null);
 
-
   const login = (newToken) => {
     localStorage.setItem('token', newToken);
     setToken(newToken);
     setRole(getRoleFromToken(newToken));
     setIsAuthenticated(true);
 
-    API.get('/auth/me')
-      .then(res => setCurrentUser(res.data))
-      .catch(err => {
-        console.error('Failed to fetch current user:', err);
-      });
+    fetchCurrentUser(newToken);
   };
 
   const logout = () => {
@@ -29,6 +23,19 @@ export function AuthProvider({ children }) {
     setToken(null);
     setRole(null);
     setIsAuthenticated(false);
+    setCurrentUser(null);
+  };
+
+  const fetchCurrentUser = async (tkn) => {
+    try {
+      const res = await API.get('/auth/me', {
+        headers: { Authorization: `Bearer ${tkn || token}` }
+      });
+      setCurrentUser(res.data);
+    } catch (err) {
+      console.error('Failed to fetch current user:', err);
+      setCurrentUser(null);
+    }
   };
 
   function getRoleFromToken(token) {
@@ -43,6 +50,9 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     setIsAuthenticated(!!token);
+    if (token && !currentUser) {
+      fetchCurrentUser();
+    }
   }, [token]);
 
   return (
