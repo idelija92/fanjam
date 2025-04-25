@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import java.time.*;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.List;
 
 @Entity
@@ -24,8 +27,9 @@ public class Event {
     @JoinTable(name = "event_band", joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "band_id"))
     private Set<Band> bands = new HashSet<>();
 
+    @JsonIgnoreProperties({"password", "rsvpedEvents", "role"})
     @ManyToMany(mappedBy = "rsvpedEvents")
-    private Set<User> rsvps = new HashSet<>();
+    private Set<User> rsvps = new HashSet<>();    
 
     @Enumerated(EnumType.STRING)
     private EventType type;
@@ -74,6 +78,10 @@ public class Event {
         return setlist;
     }
 
+    public Set<User> getRsvps() {
+        return rsvps;
+    }
+
     // Setters
     public void setId(Long id) {
         this.id = id;
@@ -115,4 +123,7 @@ public class Event {
         this.setlist = setlist;
     }
 
+    public void setRsvps(Set<User> rsvps) {
+        this.rsvps = rsvps;
+    }
 }
