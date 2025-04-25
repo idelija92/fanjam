@@ -101,8 +101,23 @@ const Events = () => {
                         <button onClick={() => handleRsvp(event.id)}>Join Event</button>
                       )}
                       <div><strong>RSVP Count:</strong> {event.rsvps?.length || 0}</div>
+                      {event.rsvps && event.rsvps.length > 0 && (
+                        <div>
+                          <strong>Attending:</strong>
+                          <ul style={{ margin: 0, paddingLeft: '1rem' }}>
+                            {event.rsvps.map(user => (
+                              <li key={user.id}>
+                                {user.username || user.email}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
                     </div>
+
                   )}
+
                 </td>
                 <td>
                   <Link to={`/events/edit/${event.id}`}>Edit</Link> |{' '}
