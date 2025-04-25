@@ -31,23 +31,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/bands" element={<Bands /> }/>
+          <Route path="/events" element={<Events />}/>
+          <Route path="/events/:eventId/winners" element={<EventWinnersPage />} />
 
-          <Route
-            path="/bands"
-            element={
-              <ProtectedRoute>
-                <Bands />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/events"
-            element={
-              <ProtectedRoute>
-                <Events />
-              </ProtectedRoute>
-            }
-          />
           <Route
             path="/events/:eventId/vote"
             element={
@@ -128,10 +115,6 @@ function App() {
                 <EditUser />
               </ProtectedRoute>
             }
-          />
-          <Route
-            path="/events/:eventId/winners"
-            element={<EventWinnersPage />}
           />
         </Routes>
         <ToastContainer position="top-center" autoClose={3000} />
