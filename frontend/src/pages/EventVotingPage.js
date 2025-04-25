@@ -1,17 +1,26 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { voteForSong, unvoteForSong, getVotesForEvent } from '../api/songVotes';
-import { AuthContext } from '../context/AuthContext'; // adjust if your context path is different
+import { AuthContext } from '../context/AuthContext';
+import { useParams, Link } from 'react-router-dom';
 
-const EventVotingPage = ({ eventId }) => {
+const EventVotingPage = () => {
     const { token } = useContext(AuthContext);
+    const { eventId } = useParams();
 
     const [songTitle, setSongTitle] = useState('');
     const [votes, setVotes] = useState([]);
+    const [voteCounts, setVoteCounts] = useState({});
 
     const fetchVotes = async () => {
         try {
             const res = await getVotesForEvent(eventId, token);
             setVotes(res.data);
+
+            const counts = {};
+            res.data.forEach(vote => {
+                counts[vote.songTitle] = (counts[vote.songTitle] || 0) + 1;
+            });
+            setVoteCounts(counts);
         } catch (err) {
             console.error(err);
         }
@@ -41,26 +50,41 @@ const EventVotingPage = ({ eventId }) => {
     }, [eventId]);
 
     return (
-        <div>
-            <h2>Vote for Songs</h2>
+        <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+            <h1>Vote for Songs </h1>
+            <Link to="/events">← Back to Events</Link>
 
-            <input
-                type="text"
-                placeholder="Song title..."
-                value={songTitle}
-                onChange={(e) => setSongTitle(e.target.value)}
-            />
-            <button onClick={handleVote}>Vote</button>
+            <div style={{ marginTop: '1.5rem' }}>
+                <input
+                    type="text"
+                    placeholder="Enter song title..."
+                    value={songTitle}
+                    onChange={(e) => setSongTitle(e.target.value)}
+                    style={{ padding: '0.5rem', width: '250px' }}
+                />
+                <button onClick={handleVote} style={{ marginLeft: '0.5rem', padding: '0.5rem' }}>
+                    Vote
+                </button>
+            </div>
 
-            <h3>Current Votes:</h3>
-            <ul>
-                {votes.map((vote) => (
-                    <li key={vote.id}>
-                        {vote.songTitle}
-                        <button onClick={() => handleUnvote(vote.songTitle)}>Unvote</button>
-                    </li>
-                ))}
-            </ul>
+            <h2 style={{ marginTop: '2rem' }}>Current Votes:</h2>
+
+            {Object.keys(voteCounts).length === 0 ? (
+                <p>No votes yet! Be the first to vote! </p>
+            ) : (
+                <ul style={{ listStyleType: 'none', padding: 0 }}>
+                    {Object.entries(voteCounts).map(([title, count]) => (
+                        <li key={title} style={{ marginBottom: '1rem' }}>
+                            <strong>{title}</strong> — {count} vote{count > 1 ? 's' : ''}
+                            <div>
+                                <button onClick={() => handleUnvote(title)} style={{ marginTop: '0.5rem' }}>
+                                    Unvote
+                                </button>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 };
