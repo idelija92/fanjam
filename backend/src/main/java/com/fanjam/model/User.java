@@ -1,7 +1,7 @@
 package com.fanjam.model;
 
 import jakarta.persistence.*;
-import java.time.Instant;
+
 
 @Entity
 @Table(name = "users")
@@ -16,9 +16,6 @@ public class User {
 
     @Column(nullable = false)
     private String role = "USER"; 
-
-    @Column(name = "created_at")
-    private Instant createdAt = Instant.now();
 
     // Getters
     public Long getId() {
@@ -41,10 +38,6 @@ public class User {
         return role;
     }
 
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
     // Setters
     public void setId(Long id) {
         this.id = id;
@@ -64,9 +57,5 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
     }
 }

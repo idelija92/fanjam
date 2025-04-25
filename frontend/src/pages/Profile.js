@@ -87,6 +87,9 @@ function Profile() {
             <label>Email:</label>
             <input name="email" value={form.email} onChange={handleChange} />
 
+            <p><strong>Role:</strong> {user.role}</p>
+
+            <button onClick={handleSave}>Save Changes</button>
             <br />
 
             <h3>Change Password</h3>
@@ -111,9 +114,6 @@ function Profile() {
             </button>
 
 
-            <p><strong>Role:</strong> {user.role}</p>
-
-            <button onClick={handleSave}>Save Changes</button>
         </div>
     );
 }

@@ -23,28 +23,46 @@ const Events = () => {
     <div>
       <h1>Events</h1>
       <Link to="/">← Back to Home</Link>
-      <ul>
-        {events.map(event => (
-          <li key={event.id}>
-            <strong>{event.title}</strong><br />
-            {event.date} at {event.time}<br />
-            Venue: {event.venue}<br />
-            {event.description && <em>{event.description}</em>}<br />
-            {event.bands && event.bands.length > 0 && (
-            <div>
-              Bands:
-              <ul>
-                {event.bands.map(band => (
-                  <li key={band.id}>{band.name}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-          <Link to={`/events/edit/${event.id}`}>[Edit]</Link> {' '}
-            <button onClick={() => handleDelete(event.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+      <table border="1" cellPadding="8" style={{ borderCollapse: 'collapse', width: '100%' }}>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Date/Time</th>
+            <th>Venue</th>
+            <th>Location</th>
+            <th>Type</th>
+            <th>Bands</th>
+            <th>Setlist</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {events.map(event => (
+            <tr key={event.id}>
+              <td>{event.title}</td>
+              <td>{event.date} {event.time}</td>
+              <td>{event.venue}</td>
+              <td>{event.location}</td>
+              <td>{event.type}</td>
+              <td>
+                {event.bands?.map(b => b.name).join(', ')}
+              </td>
+              <td>
+                <ul style={{ margin: 0, paddingLeft: '1rem' }}>
+                  {event.setlist?.map((song, i) => (
+                    <li key={i}>{song}</li>
+                  ))}
+                </ul>
+              </td>
+              <td>
+                <Link to={`/events/edit/${event.id}`}>Edit</Link> |{' '}
+                <button onClick={() => handleDelete(event.id)}>Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
     </div>
   );
 };
