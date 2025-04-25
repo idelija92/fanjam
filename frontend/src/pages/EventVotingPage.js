@@ -53,6 +53,11 @@ const EventVotingPage = () => {
         <div style={{ textAlign: 'center', marginTop: '2rem' }}>
             <h1>Vote for Songs </h1>
             <Link to="/events">← Back to Events</Link>
+            <Link to="/events">← Back to Events</Link>
+            <br />
+            <Link to={`/events/${eventId}/winners`} style={{ marginTop: '1rem', display: 'inline-block' }}>
+                View Current Song Rankings
+            </Link>
 
             <div style={{ marginTop: '1.5rem' }}>
                 <input

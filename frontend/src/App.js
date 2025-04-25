@@ -19,6 +19,7 @@ import Login from './pages/Login';
 import AdminUsers from './pages/AdminUsers';
 import Profile from './pages/Profile';
 import EventVotingPage from './pages/EventVotingPage'
+import EventWinnersPage from './pages/EventWinnersPage';
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
@@ -27,12 +28,10 @@ function App() {
       <Router>
         <Header />
         <Routes>
-          {/* Public routes */}
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
 
-          {/* Protected routes (logged-in users) */}
           <Route
             path="/bands"
             element={
@@ -66,7 +65,6 @@ function App() {
             }
           />
 
-          {/* Admin-only protected routes */}
           <Route
             path="/users"
             element={
@@ -88,6 +86,14 @@ function App() {
             element={
               <ProtectedRoute requiredRole="ADMIN">
                 <CreateBand />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/users/create"
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <CreateUser />
               </ProtectedRoute>
             }
           />
@@ -122,6 +128,10 @@ function App() {
                 <EditUser />
               </ProtectedRoute>
             }
+          />
+          <Route
+            path="/events/:eventId/winners"
+            element={<EventWinnersPage />}
           />
         </Routes>
         <ToastContainer position="top-center" autoClose={3000} />
