@@ -18,9 +18,8 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import AdminUsers from './pages/AdminUsers';
 import Profile from './pages/Profile';
+import EventVotingPage from './pages/EventVotingPage'
 import { AuthProvider } from './context/AuthContext';
-
-
 
 function App() {
   return (
@@ -28,7 +27,12 @@ function App() {
       <Router>
         <Header />
         <Routes>
+          {/* Public routes */}
           <Route path="/" element={<Home />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+
+          {/* Protected routes (logged-in users) */}
           <Route
             path="/bands"
             element={
@@ -46,40 +50,10 @@ function App() {
             }
           />
           <Route
-            path="/users"
+            path="/events/:eventId/vote"
             element={
-              <ProtectedRoute requiredRole="ADMIN">
-                <Users />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/bands/create" element={<CreateBand />} />
-          <Route path="/events/create" element={<CreateEvent />} />
-          <Route
-            path="/users/create"
-            element={
-              <ProtectedRoute requiredRole="ADMIN">
-                <CreateUser />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/bands/edit/:id" element={<EditBand />} />
-          <Route path="/events/edit/:id" element={<EditEvent />} />
-          <Route
-            path="/users/edit/:id"
-            element={
-              <ProtectedRoute requiredRole="ADMIN">
-                <EditUser />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/admin/users"
-            element={
-              <ProtectedRoute requiredRole="ADMIN">
-                <AdminUsers />
+              <ProtectedRoute>
+                <EventVotingPage />
               </ProtectedRoute>
             }
           />
@@ -91,11 +65,68 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* Admin-only protected routes */}
+          <Route
+            path="/users"
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <Users />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <AdminUsers />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/bands/create"
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <CreateBand />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/events/create"
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <CreateEvent />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/bands/edit/:id"
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <EditBand />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/events/edit/:id"
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <EditEvent />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/users/edit/:id"
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <EditUser />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
         <ToastContainer position="top-center" autoClose={3000} />
       </Router>
     </AuthProvider>
-
   );
 }
 
