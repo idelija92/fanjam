@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "events")
@@ -17,17 +18,17 @@ public class Event {
     private LocalTime time;
     private String venue;
     private String description;
+    private String location;
 
     @ManyToMany
-    @JoinTable(
-        name = "event_band",
-        joinColumns = @JoinColumn(name = "event_id"),
-        inverseJoinColumns = @JoinColumn(name = "band_id")
-    )
+    @JoinTable(name = "event_band", joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "band_id"))
     private Set<Band> bands = new HashSet<>();
 
-    @Column(name = "created_at")
-    private Instant createdAt = Instant.now();
+    @Enumerated(EnumType.STRING)
+    private EventType type;
+
+    @ElementCollection
+    private List<String> setlist;
 
     // Getters
     public Long getId() {
@@ -58,10 +59,18 @@ public class Event {
         return bands;
     }
 
-    public Instant getCreatedAt() {
-        return createdAt;
+    public String getLocation() {
+        return location;
     }
 
+    public EventType getType() {
+        return type;
+    }
+
+    public List<String> getSetlist() {
+        return setlist;
+    }
+    
     // Setters
     public void setId(Long id) {
         this.id = id;
@@ -91,7 +100,16 @@ public class Event {
         this.bands = bands;
     }
 
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
+    public void setLocation(String location) {
+        this.location = location;
     }
+
+    public void setType(EventType type) {
+        this.type = type;
+    }
+
+    public void setSetlist(List<String> setlist) {
+        this.setlist = setlist;
+    }
+
 }

@@ -1,7 +1,6 @@
 package com.fanjam.model;
 
 import jakarta.persistence.*;
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,9 +13,6 @@ public class Band {
     private String name;
     private String genre;
     private String description;
-
-    @Column(name = "created_at")
-    private Instant createdAt = Instant.now();
 
     @ManyToMany(mappedBy = "bands")
     private Set<Event> events = new HashSet<>();
@@ -38,10 +34,6 @@ public class Band {
         return description;
     }
 
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
     // Setters
     public void setId(Long id) {
         this.id = id;
@@ -57,9 +49,5 @@ public class Band {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
     }
 }
