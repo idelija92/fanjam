@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getVotesForEvent } from '../api/songVotes';
 import { useParams, Link } from 'react-router-dom';
 
+
 const EventWinnersPage = () => {
     const { eventId } = useParams();
     const [voteCounts, setVoteCounts] = useState({});
@@ -27,7 +28,7 @@ const EventWinnersPage = () => {
 
     return (
         <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-            <h1>🎵 Event Song Rankings</h1>
+            <h1>Event Song Rankings</h1>
             <Link to="/events">← Back to Events</Link>
 
             {sortedSongs.length === 0 ? (
