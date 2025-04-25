@@ -3,6 +3,9 @@ package com.fanjam.controller;
 import com.fanjam.model.Band;
 import com.fanjam.repository.BandRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,7 +40,14 @@ public class BandController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBand(@PathVariable Long id) {
-        bandRepository.deleteById(id);
+    public ResponseEntity<?> deleteBand(@PathVariable Long id) {
+        try {
+            bandRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Band is linked to one or more events.");
+        }
     }
+
 }
