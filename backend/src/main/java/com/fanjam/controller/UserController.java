@@ -3,6 +3,7 @@ package com.fanjam.controller;
 import com.fanjam.model.User;
 import com.fanjam.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +51,15 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
+    public void deleteUser(@PathVariable Long id,
+            @AuthenticationPrincipal org.springframework.security.core.userdetails.User currentUser) {
+        User userToDelete = userRepository.findById(id).orElseThrow();
+
+        if (userToDelete.getEmail().equalsIgnoreCase("admin@fanjam.com")) {
+            throw new RuntimeException("Cannot delete the main admin account!");
+        }
+
         userRepository.deleteById(id);
     }
+
 }
