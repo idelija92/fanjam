@@ -122,7 +122,8 @@ const Events = () => {
                 <td>
                   <Link to={`/events/edit/${event.id}`}>Edit</Link> |{' '}
                   <button onClick={() => handleDelete(event.id)}>Delete</button>
-                  <Link to={`/events/${event.id}/vote`}>Vote</Link>
+                  <Link to={`/events/${event.id}/vote`}>Vote</Link><br />
+                  <Link to={`/events/${event.id}/winners`}>Rankings</Link>
                 </td>
               </tr>
             );
