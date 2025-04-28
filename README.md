@@ -30,3 +30,22 @@ cd ../frontend
 npm install
 npm start
 ```
+
+---
+
+## Dockerized setup (runs backend + database in a container, frontend local)
+
+### Requirements
+- Docker + docker compose installed
+
+### Quick Start
+```bash
+git clone https://github.com/idelija92/fanjam.git
+cd fanjam
+docker compose up --build
+
+#### Frontend: http://localhost:3000
+
+#### Backend: http://localhost:8080
+
+#### Database (pgAdmin): http://localhost:5050
