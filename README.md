@@ -49,3 +49,8 @@ docker compose up --build
 #### Backend: http://localhost:8080
 
 #### Database (pgAdmin): http://localhost:5050
+```bash
+Servers -> Register a server
+Name: fanjamdb
+Host name/address: db
+```
