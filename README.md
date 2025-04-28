@@ -33,7 +33,7 @@ npm start
 
 ---
 
-## Dockerized setup (runs backend + database in a container, frontend local)
+## 🐳 Dockerized setup (runs backend + database in a container, frontend local)
 
 ### Requirements
 - Docker + docker compose installed
