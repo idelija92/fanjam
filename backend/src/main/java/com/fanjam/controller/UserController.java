@@ -43,6 +43,9 @@ public class UserController {
         if (updatedUser.getRole() != null) {
             existingUser.setRole(updatedUser.getRole());
         }
+        if (updatedUser.getPassword() != null && !updatedUser.getPassword().isBlank()) {
+            existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        }
         return userRepository.save(existingUser);
     }
 

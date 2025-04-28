@@ -15,20 +15,24 @@ const EditUser = () => {
       })
       .catch(() => setError('Failed to load user'));
   }, [id]);
-  
+
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
-
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      await API.put(`/users/${id}`, form);
+      const dataToSend = { username: form.username, email: form.email };
+      if (form.password.trim() !== '') {
+        dataToSend.password = form.password;
+      }
+      await API.put(`/users/${id}`, dataToSend);
       navigate('/users');
     } catch (err) {
       console.error(err);
       setError('Failed to update user');
     }
   };
+
 
   return (
     <div>
