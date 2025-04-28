@@ -43,7 +43,7 @@ npm start
 git clone https://github.com/idelija92/fanjam.git
 cd fanjam
 docker compose up --build
-
+```
 #### Frontend: http://localhost:3000
 
 #### Backend: http://localhost:8080
