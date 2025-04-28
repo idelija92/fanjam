@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getVotesForEvent } from '../api/songVotes';
 import { useParams, Link } from 'react-router-dom';
+import axios from 'axios';
 
 const EventWinnersPage = () => {
     const { eventId } = useParams();
@@ -8,7 +9,8 @@ const EventWinnersPage = () => {
 
     const fetchVotes = async () => {
         try {
-            const res = await getVotesForEvent(eventId);
+            //const res = await getVotesForEvent(eventId);
+            const res = await axios.get(`http://localhost:8080/api/song-votes/event/${eventId}`);
             const counts = {};
             res.data.forEach(vote => {
                 counts[vote.songTitle] = (counts[vote.songTitle] || 0) + 1;
