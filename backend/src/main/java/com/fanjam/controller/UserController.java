@@ -3,6 +3,7 @@ package com.fanjam.controller;
 import com.fanjam.model.User;
 import com.fanjam.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +15,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping
     public List<User> getAllUsers() {
@@ -27,6 +31,7 @@ public class UserController {
 
     @PostMapping
     public User createUser(@RequestBody User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -40,7 +45,6 @@ public class UserController {
         }
         return userRepository.save(existingUser);
     }
-    
 
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
