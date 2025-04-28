@@ -45,3 +45,5 @@ CREATE TABLE song_votes (
     UNIQUE (user_id, event_id, song_title)
 );
 
+INSERT INTO users (username, email, password, role)
+VALUES ('admin', 'admin@fanjam.com', '$2a$12$UpGHyhiOzs/fmGqeaZUNDOaQZVupDS7jY5UIq9qXiBfz8AwvGFwiy', 'ADMIN');
