@@ -1,0 +1,80 @@
+.home-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  .home-title {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+  }
+  
+  .nav-links {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: #2980b9;
+  }
+  
+  .admin-tools {
+    margin-bottom: 2rem;
+  }
+  
+  .admin-tools h3 {
+    color: #2c3e50;
+  }
+  
+  .admin-tools ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .events-heading {
+    color: #34495e;
+    margin-bottom: 1rem;
+  }
+  
+  .event-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    background-color: #f9f9f9;
+  }
+  
+  .event-title {
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+  }
+  
+  .event-details {
+    margin: 0.25rem 0;
+    color: #555;
+  }
+  
+  .event-links {
+    margin-top: 0.5rem;
+  }
+  
+  .event-links a {
+    text-decoration: none;
+  }
+  
+  .event-links .rankings {
+    color: #27ae60;
+  }
+  
+  .event-links .vote {
+    color: #e67e22;
+  }
+  
