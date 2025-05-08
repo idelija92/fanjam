@@ -1,0 +1,58 @@
+.bands-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  .bands-title {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+  }
+  
+  .bands-list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 2rem;
+  }
+  
+  .bands-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    background-color: #f9f9f9;
+    text-align: left;
+  }
+  
+  .bands-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2c3e50;
+  }
+  
+  .bands-meta {
+    color: #555;
+    margin: 0.5rem 0;
+  }
+  
+  .bands-actions {
+    margin-top: 0.5rem;
+  }
+  
+  .bands-actions a,
+  .bands-actions button {
+    margin-right: 0.5rem;
+    text-decoration: none;
+    background: none;
+    border: none;
+    color: #2980b9;
+    cursor: pointer;
+  }
+  
+  .bands-actions button:hover,
+  .bands-actions a:hover {
+    text-decoration: underline;
+  }
+  
