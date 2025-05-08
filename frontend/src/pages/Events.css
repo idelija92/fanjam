@@ -1,0 +1,97 @@
+.events-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 1rem;
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  .events-title {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+  }
+  
+  .events-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+  }
+  
+  .events-table th,
+  .events-table td {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    vertical-align: top;
+    text-align: left;
+  }
+  
+  .events-table th {
+    background-color: #f0f0f0;
+    color: #2c3e50;
+  }
+  
+  .events-table td ul {
+    margin: 0.5rem 0;
+    padding-left: 1rem;
+  }
+  
+  .events-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .events-admin-actions {
+    margin-top: 0.5rem;
+  }
+  
+  .events-rsvp-info {
+    font-size: 0.9rem;
+    color: #555;
+  }
+
+  .carousel .slide {
+    transition: transform 0.4s ease, opacity 0.3s ease;
+    transform-origin: center center;
+    padding: 1rem;
+    box-sizing: border-box;
+  }
+  
+  .carousel .slide.selected {
+    transform: scale(1);
+    z-index: 2;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .carousel .slide:not(.selected) {
+    transform: scale(0.7);
+    opacity: 0.5;
+    z-index: 1;
+  }
+  
+  .carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: none;
+    font-size: 2rem;
+    color: white;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+  }
+  
+  .carousel-arrow.prev {
+    left: 10px;
+  }
+  
+  .carousel-arrow.next {
+    right: 10px;
+  }
+  
+  .carousel-arrow:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
