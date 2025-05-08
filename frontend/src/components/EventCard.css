@@ -1,0 +1,48 @@
+.event-card-container {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1rem auto;
+    width: 90%;
+    max-width: 600px;
+    background: #fdfdfd;
+    text-align: left;
+    font-family: Arial, sans-serif;
+  }
+  
+  .event-card-container h3 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
+  
+  .event-card-container p {
+    margin: 0.25rem 0;
+  }
+  
+  .event-card-container ul {
+    padding-left: 1.5rem;
+  }
+  
+  .event-actions {
+    margin-top: 1rem;
+  }
+  
+  .event-actions a {
+    display: inline-block;
+    margin-right: 1rem;
+    text-decoration: none;
+    color: #2980b9;
+  }
+  
+  .rsvp-section {
+    margin-top: 1rem;
+  }
+  
+  .rsvp-section button {
+    margin-top: 0.5rem;
+  }
+  
+  .admin-controls {
+    margin-top: 1rem;
+  }
+  
