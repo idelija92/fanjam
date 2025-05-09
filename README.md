@@ -18,16 +18,15 @@ git clone https://github.com/idelija92/fanjam.git
 cd fanjam
 ```
 
-### 2. Start the backend and database using docker compose
+### 2. Start the backend and database using docker compose from fanjam folder
 ```bash
-cd backend
 docker compose up --build
 ```
 
-### 3. Start the frontend
+### 3. Start the frontend from frontend folder
 #### In a new terminal/tab for frontend
 ```bash
-cd ../frontend
+cd frontend
 npm install
 npm start
 ```
