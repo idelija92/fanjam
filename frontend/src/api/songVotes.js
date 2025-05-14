@@ -2,15 +2,16 @@ import axios from 'axios';
 
 const API = 'http://localhost:8080/api/song-votes';
 
-export const voteForSong = async (eventId, songTitle, token) => {
+export const voteForSong = async (eventId, songTitle, token, customMessage = '') => {
     return axios.post(
         API,
-        new URLSearchParams({ eventId, songTitle }),
+        new URLSearchParams({ eventId, songTitle, customMessage }),
         {
             headers: { Authorization: `Bearer ${token}` }
         }
     );
 };
+
 
 export const unvoteForSong = async (eventId, songTitle, token) => {
     return axios.delete(
