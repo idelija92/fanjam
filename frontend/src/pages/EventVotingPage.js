@@ -9,6 +9,9 @@ const EventVotingPage = () => {
     const { eventId } = useParams();
 
     const [songTitle, setSongTitle] = useState('');
+    const [customMessage, setCustomMessage] = useState('');
+    const [mode, setMode] = useState('setlist');
+
     const [votes, setVotes] = useState([]);
     const [voteCounts, setVoteCounts] = useState({});
     const [setlist, setSetlist] = useState([]);
@@ -46,9 +49,10 @@ const EventVotingPage = () => {
         }
 
         try {
-            await voteForSong(eventId, titleToVote, token);
+            await voteForSong(eventId, titleToVote, token, customMessage);
             setSongTitle('');
             setSelectedSong('');
+            setCustomMessage('');
             fetchVotes();
         } catch (err) {
             alert(err.response?.data || 'Error voting');
@@ -71,7 +75,7 @@ const EventVotingPage = () => {
 
     return (
         <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-            <h1>Vote for Songs </h1>
+            <h1>Vote for Songs</h1>
             <Link to="/events">← Back to Events</Link>
             <br />
             <Link to={`/events/${eventId}/winners`} style={{ marginTop: '1rem', display: 'inline-block' }}>
@@ -79,47 +83,96 @@ const EventVotingPage = () => {
             </Link>
 
             <div style={{ marginTop: '2rem' }}>
-                <h2>Choose from Setlist:</h2>
-                {setlist.length > 0 ? (
-                    <select
-                        value={selectedSong}
-                        onChange={(e) => setSelectedSong(e.target.value)}
-                        style={{ padding: '0.5rem', marginBottom: '1rem' }}
-                    >
-                        <option value="">-- Select a song --</option>
-                        {setlist.map((song, index) => (
-                            <option key={index} value={song}>
-                                {song}
-                            </option>
-                        ))}
-                    </select>
-                ) : (
-                    <p>No setlist available for this event</p>
-                )}
+                <h2>Choose Your Voting Option:</h2>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem' }}>
+                    <label>
+                        <input
+                            type="radio"
+                            name="mode"
+                            value="setlist"
+                            checked={mode === 'setlist'}
+                            onChange={() => setMode('setlist')}
+                        /> Setlist
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            name="mode"
+                            value="custom"
+                            checked={mode === 'custom'}
+                            onChange={() => setMode('custom')}
+                        /> Song Request
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            name="mode"
+                            value="customWithMessage"
+                            checked={mode === 'customWithMessage'}
+                            onChange={() => setMode('customWithMessage')}
+                        /> Custom Song + Message
+                    </label>
+                </div>
             </div>
 
-            <div style={{ marginTop: '1.5rem' }}>
-                <h2>Or Request a Song:</h2>
-                <input
-                    type="text"
-                    placeholder="Enter song title..."
-                    value={songTitle}
-                    onChange={(e) => setSongTitle(e.target.value)}
-                    style={{ padding: '0.5rem', width: '250px' }}
-                />
-            </div>
+            {mode === 'setlist' && (
+                <div style={{ marginTop: '2rem' }}>
+                    <h3>Select from Setlist:</h3>
+                    {setlist.length > 0 ? (
+                        <select
+                            value={selectedSong}
+                            onChange={(e) => setSelectedSong(e.target.value)}
+                            style={{ padding: '0.5rem', marginBottom: '1rem' }}
+                        >
+                            <option value="">-- Select a song --</option>
+                            {setlist.map((song, index) => (
+                                <option key={index} value={song}>
+                                    {song}
+                                </option>
+                            ))}
+                        </select>
+                    ) : (
+                        <p>No setlist available for this event</p>
+                    )}
+                </div>
+            )}
+
+            {(mode === 'custom' || mode === 'customWithMessage') && (
+                <div style={{ marginTop: '2rem' }}>
+                    <h3>Enter Song Title:</h3>
+                    <input
+                        type="text"
+                        placeholder="Enter song title..."
+                        value={songTitle}
+                        onChange={(e) => setSongTitle(e.target.value)}
+                        style={{ padding: '0.5rem', width: '250px' }}
+                    />
+                </div>
+            )}
+
+            {mode === 'customWithMessage' && (
+                <div style={{ marginTop: '1.5rem' }}>
+                    <h3>Optional Message (Lyrics, Dedication, etc.):</h3>
+                    <textarea
+                        value={customMessage}
+                        onChange={(e) => setCustomMessage(e.target.value)}
+                        rows={4}
+                        style={{ padding: '0.5rem', width: '300px' }}
+                        placeholder="Write your message here..."
+                    />
+                </div>
+            )}
 
             <div style={{ marginTop: '1.5rem' }}>
                 <button onClick={handleVote} style={{ padding: '0.7rem 1.5rem' }}>
-                    Vote
+                    Submit Vote
                 </button>
             </div>
-
 
             <h2 style={{ marginTop: '2rem' }}>Current Votes:</h2>
 
             {Object.keys(voteCounts).length === 0 ? (
-                <p>No votes yet! Be the first to vote! </p>
+                <p>No votes yet! Be the first to vote!</p>
             ) : (
                 <ul style={{ listStyleType: 'none', padding: 0 }}>
                     {Object.entries(voteCounts).map(([title, count]) => (

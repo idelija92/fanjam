@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "song_votes", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"user_id", "event_id", "song_title"})
+        @UniqueConstraint(columnNames = { "user_id", "event_id", "song_title" })
 })
 public class SongVote {
     @Id
@@ -19,16 +19,47 @@ public class SongVote {
 
     private String songTitle;
 
+    @Column(length = 1000)
+    private String customMessage;
+
     // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Event getEvent() { return event; }
-    public void setEvent(Event event) { this.event = event; }
+    public User getUser() {
+        return user;
+    }
 
-    public String getSongTitle() { return songTitle; }
-    public void setSongTitle(String songTitle) { this.songTitle = songTitle; }
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
+    public String getSongTitle() {
+        return songTitle;
+    }
+
+    public void setSongTitle(String songTitle) {
+        this.songTitle = songTitle;
+    }
+
+    public String getCustomMessage() {
+        return customMessage;
+    }
+
+    public void setCustomMessage(String customMessage) {
+        this.customMessage = customMessage;
+    }
 }

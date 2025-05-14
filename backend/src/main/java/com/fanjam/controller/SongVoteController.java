@@ -31,13 +31,13 @@ public class SongVoteController {
     public ResponseEntity<?> voteForSong(
             @RequestParam Long eventId,
             @RequestParam String songTitle,
+            @RequestParam(required = false) String customMessage,
             Principal principal) {
+
         String email = principal.getName();
         User user = userRepository.findByEmail(email).orElseThrow();
-
         Event event = eventRepository.findById(eventId).orElseThrow();
 
-        // Check if user already voted for this song
         if (songVoteRepository.findByUserIdAndEventIdAndSongTitle(user.getId(), eventId, songTitle).isPresent()) {
             return ResponseEntity.badRequest().body("Already voted for this song");
         }
@@ -46,9 +46,9 @@ public class SongVoteController {
         vote.setUser(user);
         vote.setEvent(event);
         vote.setSongTitle(songTitle);
+        vote.setCustomMessage(customMessage);
 
         songVoteRepository.save(vote);
-
         return ResponseEntity.ok("Vote recorded");
     }
 
