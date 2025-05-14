@@ -20,6 +20,7 @@ const EventVotingPage = () => {
     const fetchVotes = async () => {
         try {
             const res = await getVotesForEvent(eventId, token);
+            console.log(res.data);
             setVotes(res.data);
 
             const counts = {};
@@ -171,13 +172,22 @@ const EventVotingPage = () => {
 
             <h2 style={{ marginTop: '2rem' }}>Current Votes:</h2>
 
-            {Object.keys(voteCounts).length === 0 ? (
+            {votes.length === 0 ? (
                 <p>No votes yet! Be the first to vote!</p>
             ) : (
                 <ul style={{ listStyleType: 'none', padding: 0 }}>
                     {Object.entries(voteCounts).map(([title, count]) => (
                         <li key={title} style={{ marginBottom: '1rem' }}>
                             <strong>{title}</strong> — {count} vote{count > 1 ? 's' : ''}
+
+                            <ul style={{ fontStyle: 'italic', color: '#555', marginTop: '0.3rem', paddingLeft: 0 }}>
+                                {votes
+                                    .filter(v => v.songTitle === title && v.customMessage)
+                                    .map((v, i) => (
+                                        <li key={i}>“{v.customMessage}”</li>
+                                    ))}
+                            </ul>
+
                             <div>
                                 <button onClick={() => handleUnvote(title)} style={{ marginTop: '0.5rem' }}>
                                     Unvote
@@ -185,6 +195,7 @@ const EventVotingPage = () => {
                             </div>
                         </li>
                     ))}
+
                 </ul>
             )}
         </div>
