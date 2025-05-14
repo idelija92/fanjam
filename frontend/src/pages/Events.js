@@ -12,8 +12,11 @@ const Events = () => {
 
   useEffect(() => {
     API.get('/events').then(res => {
-      console.log('Loaded events:', res.data);
-      setEvents(res.data);
+      //console.log('Loaded events:', res.data);
+      const uniqueEvents = Array.from(
+        new Map(res.data.map(e => [e.id, e])).values()
+      );
+      setEvents(uniqueEvents);
     });
   }, []);
 
