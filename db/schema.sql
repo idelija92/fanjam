@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS song_votes; 
-DROP TABLE IF EXISTS event_band; 
+DROP TABLE IF EXISTS event_band;
+DROP TABLE IF EXISTS user_roles; 
 DROP TABLE IF EXISTS events; 
 DROP TABLE IF EXISTS bands; 
 DROP TABLE IF EXISTS users; 
@@ -8,8 +9,7 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(100),
     email VARCHAR(100) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    role VARCHAR(20) DEFAULT 'USER' NOT NULL
+    password VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE bands (
@@ -31,6 +31,12 @@ CREATE TABLE events (
     setlist TEXT[]
 );
 
+CREATE TABLE user_roles (
+    user_id INT REFERENCES users(id) ON DELETE CASCADE,
+    roles VARCHAR(50),
+    PRIMARY KEY (user_id, roles)
+);
+
 CREATE TABLE event_band (
     event_id INT REFERENCES events(id) ON DELETE CASCADE,
     band_id INT REFERENCES bands(id) ON DELETE CASCADE,
@@ -45,5 +51,8 @@ CREATE TABLE song_votes (
     UNIQUE (user_id, event_id, song_title)
 );
 
-INSERT INTO users (username, email, password, role)
-VALUES ('admin', 'admin@fanjam.com', '$2a$12$UpGHyhiOzs/fmGqeaZUNDOaQZVupDS7jY5UIq9qXiBfz8AwvGFwiy', 'ADMIN');
+INSERT INTO users (username, email, password)
+VALUES ('admin', 'admin@fanjam.com', '$2a$12$UpGHyhiOzs/fmGqeaZUNDOaQZVupDS7jY5UIq9qXiBfz8AwvGFwiy');
+
+INSERT INTO user_roles (user_id, roles)
+SELECT id, 'ADMIN' FROM users WHERE email = 'admin@fanjam.com';
