@@ -5,6 +5,7 @@ import com.fanjam.model.RegisterRequest;
 import com.fanjam.config.JwtUtil;
 import com.fanjam.model.LoginRequest;
 import com.fanjam.model.PasswordChangeRequest;
+import com.fanjam.model.Role;
 import com.fanjam.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -45,6 +47,9 @@ public class AuthController {
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        user.setRoles(Set.of(Role.USER));
+
         userRepository.save(user);
         return "User registered successfully";
     }
@@ -93,8 +98,8 @@ public class AuthController {
 
         User user = userRepository.findByEmail(email).orElseThrow();
 
-        if ("ADMIN".equals(user.getRole())) {
-            long adminCount = userRepository.countByRole("ADMIN");
+        if (user.getRoles().contains(Role.ADMIN)) {
+            long adminCount = userRepository.countByRole(Role.ADMIN);
             if (adminCount <= 1) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Cannot delete the last remaining admin.");
             }

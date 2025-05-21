@@ -16,15 +16,20 @@ const Header = () => {
         <div>
           {auth && auth.isAuthenticated ? (
             <>
-              <span style={{ marginRight: '1rem' }}>
-                Logged in as: <strong>{getUsernameFromToken(auth.token)}</strong> ({getRoleFromToken(auth.token)})
-              </span>
-              <span>
-                {getRoleFromToken(auth.token) === 'ADMIN' && (
-                  <Link to="/admin/users" style={{ marginRight: '1rem' }}>Admin Panel</Link>
-                )}
-              </span>
-              <Link to="/profile" style={{ marginRight: '1rem' }}>My Profile</Link> 
+              {(() => {
+                const roles = getRolesFromToken(auth.token);
+                return (
+                  <>
+                    <span style={{ marginRight: '1rem' }}>
+                      Logged in as: <strong>{getUsernameFromToken(auth.token)}</strong> ({roles.join(', ')})
+                    </span>
+                    {roles.includes('ADMIN') && (
+                      <Link to="/admin/users" style={{ marginRight: '1rem' }}>Admin Panel</Link>
+                    )}
+                  </>
+                );
+              })()}
+              <Link to="/profile" style={{ marginRight: '1rem' }}>My Profile</Link>
               <button onClick={() => { auth.logout(); navigate('/'); }}>Logout</button>
             </>
           ) : (
@@ -40,23 +45,23 @@ const Header = () => {
 };
 
 function getUsernameFromToken(token) {
-    if (!token) return 'Unknown';
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.username || 'Unknown';
-    } catch (e) {
-      return 'Unknown';
-    }
-  }
-
-export default Header;
-
-function getRoleFromToken(token) {
-  if (!token) return null;
+  if (!token) return 'Unknown';
   try {
     const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.role || null;
-  } catch {
-    return null;
+    return payload.username || 'Unknown';
+  } catch (e) {
+    return 'Unknown';
   }
 }
+
+function getRolesFromToken(token) {
+  if (!token) return [];
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.roles ? payload.roles.split(',') : [];
+  } catch {
+    return [];
+  }
+}
+
+export default Header;

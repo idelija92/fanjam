@@ -1,14 +1,16 @@
 package com.fanjam.config;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+import java.security.Key;
+import java.util.Date;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Component;
 
 import com.fanjam.model.User;
 
-import java.util.Date;
-import java.security.Key;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtil {
@@ -21,17 +23,21 @@ public class JwtUtil {
     public String generateToken(User user) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expirationMillis);
-    
+
+        // 🔄 Convert roles to comma-separated string
+        String roles = user.getRoles().stream()
+                .map(Enum::name)
+                .collect(Collectors.joining(","));
+
         return Jwts.builder()
                 .setSubject(user.getEmail())
                 .claim("username", user.getUsername())
-                .claim("role", user.getRole())
+                .claim("roles", roles) // 🆕 support multiple roles
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
-    
 
     public String extractEmail(String token) {
         return Jwts.parserBuilder()

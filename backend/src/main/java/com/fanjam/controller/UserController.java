@@ -1,13 +1,24 @@
 package com.fanjam.controller;
 
-import com.fanjam.model.User;
-import com.fanjam.repository.UserRepository;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.fanjam.model.Role;
+import com.fanjam.model.User;
+import com.fanjam.repository.UserRepository;
 
 @RestController
 @RequestMapping("/api/users")
@@ -33,6 +44,9 @@ public class UserController {
     @PostMapping
     public User createUser(@RequestBody User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user.getRoles() == null || user.getRoles().isEmpty()) {
+            user.setRoles(Set.of(Role.USER));
+        }
         return userRepository.save(user);
     }
 
@@ -41,12 +55,15 @@ public class UserController {
         User existingUser = userRepository.findById(id).orElseThrow();
         existingUser.setUsername(updatedUser.getUsername());
         existingUser.setEmail(updatedUser.getEmail());
-        if (updatedUser.getRole() != null) {
-            existingUser.setRole(updatedUser.getRole());
+
+        if (updatedUser.getRoles() != null && !updatedUser.getRoles().isEmpty()) {
+            existingUser.setRoles(updatedUser.getRoles());
         }
+
         if (updatedUser.getPassword() != null && !updatedUser.getPassword().isBlank()) {
             existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
         }
+
         return userRepository.save(existingUser);
     }
 
@@ -61,5 +78,4 @@ public class UserController {
 
         userRepository.deleteById(id);
     }
-
 }
