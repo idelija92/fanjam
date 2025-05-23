@@ -93,7 +93,7 @@ public class AuthController {
 
         User user = userRepository.findByEmail(email).orElseThrow();
 
-        if ("ADMIN".equals(user.getRole())) {
+        if ("ADMIN".equals(user.getRoles())) {
             long adminCount = userRepository.countByRole("ADMIN");
             if (adminCount <= 1) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Cannot delete the last remaining admin.");
