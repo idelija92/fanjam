@@ -1,11 +1,13 @@
 package com.fanjam.model;
 
+import java.util.Set;
+
 public class RegisterRequest {
     private String username;
     private String email;
     private String password;
+    private Set<Role> roles;
 
-    // Getters and setters
     public String getUsername() {
         return username;
     }
@@ -28,5 +30,13 @@ public class RegisterRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
