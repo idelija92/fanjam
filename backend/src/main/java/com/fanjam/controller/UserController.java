@@ -10,7 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+//import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -75,6 +75,8 @@ public class UserController {
 
         if (updatedUser.getPassword() != null && !updatedUser.getPassword().isBlank()) {
             existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        } else {
+            updatedUser.setPassword(existingUser.getPassword());
         }
 
         return ResponseEntity.ok(userRepository.save(existingUser));
