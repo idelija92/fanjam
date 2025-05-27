@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "bands")
 public class Band {
@@ -14,7 +16,8 @@ public class Band {
     private String genre;
     private String description;
 
-    @ManyToMany(mappedBy = "bands")
+    @JsonIgnore
+    @ManyToMany(mappedBy = "bands", fetch = FetchType.LAZY)
     private Set<Event> events = new HashSet<>();
 
     // Getters
@@ -34,6 +37,10 @@ public class Band {
         return description;
     }
 
+    public Set<Event> getEvents() {
+        return events;
+    }
+
     // Setters
     public void setId(Long id) {
         this.id = id;
@@ -49,5 +56,9 @@ public class Band {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setEvents(Set<Event> events) {
+        this.events = events;
     }
 }

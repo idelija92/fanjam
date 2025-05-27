@@ -5,6 +5,7 @@ import java.time.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class Event {
     private String description;
     private String location;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "event_band", joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "band_id"))
     private Set<Band> bands = new HashSet<>();

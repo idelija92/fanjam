@@ -51,7 +51,7 @@ const Home = () => {
         <p>No events available yet!</p>
       ) : (
         <div>
-          {events.map(event => (
+          {Array.isArray(events) &&events.map(event => (
             <div key={event.id} className="event-card">
               <h3 className="event-title">{event.title}</h3>
               <p className="event-details">{event.date} at <strong>{event.venue}</strong></p>
