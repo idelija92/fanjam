@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import API from '../services/api';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import "./Events.css"; import EventCard from '../components/EventCard';
+import "./styles/Events.css"; import EventCard from '../components/EventCard';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 

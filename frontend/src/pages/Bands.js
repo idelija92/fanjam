@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import API from '../services/api';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import "./Bands.css";
+import "./styles/Bands.css";
 
 const Bands = () => {
   const [bands, setBands] = useState([]);

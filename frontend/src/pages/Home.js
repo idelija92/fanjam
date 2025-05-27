@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import API from '../services/api';
-import "./Home.css";
+import "./styles/Home.css";
 
 const Home = () => {
   const auth = useContext(AuthContext);
