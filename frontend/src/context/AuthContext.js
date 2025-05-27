@@ -6,22 +6,28 @@ export const AuthContext = React.createContext();
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [isAuthenticated, setIsAuthenticated] = useState(!!token);
-  const [role, setRole] = useState(getRoleFromToken(token));
+  const [roles, setRoles] = useState(getRolesFromToken(token));
   const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    setIsAuthenticated(!!token);
+    if (token && !currentUser) {
+      fetchCurrentUser();
+    }
+  }, [token]);
 
   const login = (newToken) => {
     localStorage.setItem('token', newToken);
     setToken(newToken);
-    setRole(getRoleFromToken(newToken));
+    setRoles(getRolesFromToken(newToken));
     setIsAuthenticated(true);
-
     fetchCurrentUser(newToken);
   };
 
   const logout = () => {
     localStorage.removeItem('token');
     setToken(null);
-    setRole(null);
+    setRoles([]);
     setIsAuthenticated(false);
     setCurrentUser(null);
   };
@@ -38,25 +44,25 @@ export function AuthProvider({ children }) {
     }
   };
 
-  function getRoleFromToken(token) {
-    if (!token) return null;
+  function getRolesFromToken(token) {
+    if (!token) return [];
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.role || null;
+      return payload.roles || [];
     } catch {
-      return null;
+      return [];
     }
   }
 
-  useEffect(() => {
-    setIsAuthenticated(!!token);
-    if (token && !currentUser) {
-      fetchCurrentUser();
-    }
-  }, [token]);
-
   return (
-    <AuthContext.Provider value={{ token, isAuthenticated, role, currentUser, login, logout }}>
+    <AuthContext.Provider value={{
+      token,
+      isAuthenticated,
+      roles,
+      currentUser,
+      login,
+      logout
+    }}>
       {children}
     </AuthContext.Provider>
   );

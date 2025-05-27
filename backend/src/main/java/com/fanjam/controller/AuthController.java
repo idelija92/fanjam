@@ -56,7 +56,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        Optional<User> userOpt = userRepository.findByEmail(request.getEmail());
+        Optional<User> userOpt = userRepository.findByEmailWithRoles(request.getEmail());
 
         if (userOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");

@@ -8,8 +8,7 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(100),
     email VARCHAR(100) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    role VARCHAR(20) DEFAULT 'USER' NOT NULL
+    password VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE bands (
@@ -45,5 +44,14 @@ CREATE TABLE song_votes (
     UNIQUE (user_id, event_id, song_title)
 );
 
-INSERT INTO users (username, email, password, role)
-VALUES ('admin', 'admin@fanjam.com', '$2a$12$UpGHyhiOzs/fmGqeaZUNDOaQZVupDS7jY5UIq9qXiBfz8AwvGFwiy', 'ADMIN');
+CREATE TABLE users_roles (
+    user_id INT NOT NULL,
+    roles VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+
+INSERT INTO users (username, email, password)
+VALUES ('admin', 'admin@fanjam.com', '$2a$12$UpGHyhiOzs/fmGqeaZUNDOaQZVupDS7jY5UIq9qXiBfz8AwvGFwiy');
+
+INSERT INTO users_roles (user_id, roles) VALUES (1, 'ADMIN');

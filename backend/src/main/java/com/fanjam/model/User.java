@@ -17,14 +17,12 @@ public class User {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "roles")
     private Set<Role> roles = new HashSet<>();
 
     @ManyToMany
-    @JoinTable(
-        name = "rsvps",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "event_id")
-    )
+    @JoinTable(name = "rsvps", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "event_id"))
     private Set<Event> rsvpedEvents = new HashSet<>();
 
     // Getters

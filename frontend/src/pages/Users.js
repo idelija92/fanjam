@@ -8,7 +8,7 @@ const Users = () => {
   useEffect(() => {
     API.get('/users')
       .then(res => {
-        console.log('Users from backend:', res.data); // 👈 add this
+        console.log('Users from backend:', res.data);
         setUsers(res.data);
       })
       .catch(err => {
@@ -33,8 +33,8 @@ const Users = () => {
       <ul>
         {users.map(user => (
           <li key={user.id}>
-            {user.username} — {user.email}  {' '}
-            <Link to={`/users/edit/${user.id}`}>[Edit]</Link> {' '}
+            {user.username} — {user.email} — Roles: {user.roles?.join(', ')}
+            <Link to={`/users/edit/${user.id}`}> [Edit]</Link>
             <button onClick={() => handleDelete(user.id)}>Delete</button>
           </li>
         ))}
