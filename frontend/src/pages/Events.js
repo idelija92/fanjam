@@ -2,17 +2,19 @@ import React, { useEffect, useState, useContext } from 'react';
 import API from '../services/api';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import "./styles/Events.css"; import EventCard from '../components/EventCard';
+import useRole from '../hooks/useRole';
+import "./styles/Events.css";
+import EventCard from '../components/EventCard';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 
 const Events = () => {
   const [events, setEvents] = useState([]);
   const auth = useContext(AuthContext);
+  const { isAdmin, isUser } = useRole();
 
   useEffect(() => {
     API.get('/events').then(res => {
-      //console.log('Loaded events:', res.data);
       const uniqueEvents = Array.from(
         new Map(res.data.map(e => [e.id, e])).values()
       );
@@ -70,18 +72,14 @@ const Events = () => {
           centerMode
           centerSlidePercentage={33.33}
           showArrows={true}
-          renderArrowPrev={(onClickHandler, hasPrev, label) =>
+          renderArrowPrev={(onClickHandler, hasPrev) =>
             hasPrev && (
-              <button type="button" onClick={onClickHandler} className="carousel-arrow prev">
-                ‹
-              </button>
+              <button type="button" onClick={onClickHandler} className="carousel-arrow prev">‹</button>
             )
           }
-          renderArrowNext={(onClickHandler, hasNext, label) =>
+          renderArrowNext={(onClickHandler, hasNext) =>
             hasNext && (
-              <button type="button" onClick={onClickHandler} className="carousel-arrow next">
-                ›
-              </button>
+              <button type="button" onClick={onClickHandler} className="carousel-arrow next">›</button>
             )
           }
         >
@@ -94,13 +92,13 @@ const Events = () => {
               <div key={event.id}>
                 <EventCard
                   event={event}
-                  isAdmin={auth.roles?.includes('ADMIN')}
+                  isAdmin={isAdmin}
+                  isUser={isUser}
                   isAttending={isAttending}
                   onRsvp={handleRsvp}
                   onCancelRsvp={handleCancelRsvp}
                   onDelete={handleDelete}
                 />
-
               </div>
             );
           })}
