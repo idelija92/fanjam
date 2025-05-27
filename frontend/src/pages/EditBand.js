@@ -4,12 +4,16 @@ import API from '../services/api';
 import FormWrapper from '../components/form/FormWrapper';
 import FormInput from '../components/form/FormInput';
 import FormButton from '../components/form/FormButton';
+import useRole from '../hooks/useRole';
 
 const EditBand = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', genre: '', description: '' });
   const [error, setError] = useState('');
+
+  const { isAdmin } = useRole();
+  if (!isAdmin) return <p>Access denied</p>;
 
   useEffect(() => {
     API.get(`/bands/${id}`).then(res => setForm(res.data)).catch(() => setError('Failed to load band'));

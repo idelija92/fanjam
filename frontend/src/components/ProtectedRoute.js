@@ -2,19 +2,20 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
-const ProtectedRoute = ({ children, requiredRole }) => {
-  const auth = React.useContext(AuthContext);
+const ProtectedRoute = ({ children, requiredRoles = [] }) => {
+  const { isAuthenticated, roles } = React.useContext(AuthContext);
 
-  if (!auth?.isAuthenticated) {
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  if (requiredRole) {
-    if (!auth?.roles || auth.roles.length === 0) {
+  if (requiredRoles.length > 0) {
+    if (!roles || roles.length === 0) {
       return <p>Loading roles...</p>;
     }
-    if (!auth.roles.includes(requiredRole)) {
-      return <p>⛔ Access denied (requires {requiredRole})</p>;
+    const hasAccess = requiredRoles.some(role => roles.includes(role));
+    if (!hasAccess) {
+      return <p>⛔ Access denied (requires one of: {requiredRoles.join(', ')})</p>;
     }
   }
 

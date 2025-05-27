@@ -3,13 +3,14 @@ import API from '../services/api';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import "./styles/Bands.css";
+import useRole from '../hooks/useRole';
 
 const Bands = () => {
   const [bands, setBands] = useState([]);
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const isAdmin = auth?.roles?.includes('ADMIN');
+  const { isAdmin } = useRole();
 
   useEffect(() => {
     API.get('/bands').then(res => setBands(res.data));
@@ -42,7 +43,7 @@ const Bands = () => {
             <div className="bands-name">{band.name}</div>
             <div className="bands-meta">{band.genre}</div>
             <div className="bands-meta">{band.description}</div>
-            {isAdmin && (
+            {isAdmin() && (
               <div className="bands-actions">
                 <Link to={`/bands/edit/${band.id}`}>Edit</Link>
                 <button onClick={() => handleDelete(band.id)}>Delete</button>
