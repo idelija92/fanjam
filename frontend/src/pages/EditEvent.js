@@ -24,14 +24,32 @@ const EditEvent = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    API.get(`/events/${id}`).then(res => {
-      setForm({
-        ...res.data,
-        bands: res.data.bands.map(b => ({ id: b.id })),
-        setlist: res.data.setlist ? res.data.setlist.join('\n') : '',
-      });
-    });
-    API.get('/bands').then(res => setAllBands(res.data));
+    const fetchData = async () => {
+      try {
+        const [eventRes, bandsRes] = await Promise.all([
+          API.get(`/events/${id}`),
+          API.get('/bands')
+        ]);
+
+        const eventData = eventRes.data;
+        setForm({
+          ...eventData,
+          bands: Array.isArray(eventData.bands)
+            ? eventData.bands.map(b => ({ id: b.id }))
+            : [],
+          setlist: Array.isArray(eventData.setlist)
+            ? eventData.setlist.join('\n')
+            : '',
+        });
+
+        setAllBands(bandsRes.data);
+      } catch (err) {
+        console.error('Failed to load data:', err);
+        setError('Failed to load event or bands');
+      }
+    };
+
+    fetchData();
   }, [id]);
 
   const handleChange = e => {
@@ -75,7 +93,12 @@ const EditEvent = () => {
         </select>
 
         <label>Select Bands:</label>
-        <select className="form-select" multiple value={form.bands.map(b => b.id)} onChange={handleBandSelection}>
+        <select
+          className="form-select"
+          multiple
+          value={form.bands.map(b => b.id)}
+          onChange={handleBandSelection}
+        >
           {allBands.map(b => (
             <option key={b.id} value={b.id}>{b.name}</option>
           ))}
