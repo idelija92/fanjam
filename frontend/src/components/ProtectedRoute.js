@@ -9,8 +9,13 @@ const ProtectedRoute = ({ children, requiredRole }) => {
     return <Navigate to="/login" replace />;
   }
 
-  if (requiredRole && auth?.role !== requiredRole) {
-    return <p>⛔ Access denied (requires {requiredRole})</p>;
+  if (requiredRole) {
+    if (!auth?.roles || auth.roles.length === 0) {
+      return <p>Loading roles...</p>;
+    }
+    if (!auth.roles.includes(requiredRole)) {
+      return <p>⛔ Access denied (requires {requiredRole})</p>;
+    }
   }
 
   return children;

@@ -32,7 +32,7 @@ const Home = () => {
         </ul>
       </nav>
 
-      {auth?.isAuthenticated && auth.role === 'ADMIN' && (
+      {auth?.isAuthenticated && auth.roles?.includes('ADMIN') && (
         <div className="admin-tools">
           <h3>Admin Tools</h3>
           <ul>
@@ -43,6 +43,7 @@ const Home = () => {
           </ul>
         </div>
       )}
+
 
       <h2 className="events-heading">Current Events</h2>
 
