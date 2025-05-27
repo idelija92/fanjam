@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import API from '../services/api';
 import { Link } from 'react-router-dom';
+import FormWrapper from '../components/form/FormWrapper';
+import FormInput from '../components/form/FormInput';
+import FormButton from '../components/form/FormButton';
 
 const CreateBand = () => {
   const [form, setForm] = useState({ name: '', genre: '', description: '' });
@@ -24,17 +27,16 @@ const CreateBand = () => {
   };
 
   return (
-    <div>
-      <h1>Create Band</h1>
-      <Link to="/bands">← Back to Bands</Link>
+    <FormWrapper title="Create Band">
+      <p><Link to="/bands">← Back to Bands</Link></p>
       <form onSubmit={handleSubmit}>
-        <input name="name" placeholder="Name" onChange={handleChange} value={form.name} /><br />
-        <input name="genre" placeholder="Genre" onChange={handleChange} value={form.genre} /><br />
-        <input name="description" placeholder="Description" onChange={handleChange} value={form.description} /><br />
-        <button type="submit">Create</button>
+        <FormInput name="name" placeholder="Name" value={form.name} onChange={handleChange} />
+        <FormInput name="genre" placeholder="Genre" value={form.genre} onChange={handleChange} />
+        <FormInput name="description" placeholder="Description" value={form.description} onChange={handleChange} />
+        <FormButton type="submit">Create</FormButton>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-    </div>
+      {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+    </FormWrapper>
   );
 };
 

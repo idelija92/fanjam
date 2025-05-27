@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import API from '../services/api';
 import { Link } from 'react-router-dom';
+import FormWrapper from '../components/form/FormWrapper';
+import FormInput from '../components/form/FormInput';
+import FormButton from '../components/form/FormButton';
 
 const ALL_ROLES = ['USER', 'ADMIN', 'BAND', 'VENUE'];
 
@@ -36,52 +39,24 @@ const CreateUser = () => {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '2rem auto', padding: '1rem', border: '1px solid #ccc', borderRadius: '8px' }}>
-      <h1 style={{ textAlign: 'center' }}>Create User</h1>
+    <FormWrapper title="Create User">
       <p><Link to="/users">← Back to Users</Link></p>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-        <input
-          name="username"
-          placeholder="Username"
-          onChange={handleChange}
-          value={form.username}
-          style={{ padding: '0.5rem' }}
-        />
-        <input
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          value={form.email}
-          style={{ padding: '0.5rem' }}
-        />
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          onChange={handleChange}
-          value={form.password}
-          style={{ padding: '0.5rem' }}
-        />
+      <form onSubmit={handleSubmit}>
+        <FormInput name="username" placeholder="Username" value={form.username} onChange={handleChange} />
+        <FormInput name="email" placeholder="Email" value={form.email} onChange={handleChange} />
+        <FormInput type="password" name="password" placeholder="Password" value={form.password} onChange={handleChange} />
 
-        <label>Roles (Ctrl/Cmd + Click to select multiple):</label>
-        <select
-          multiple
-          onChange={handleRoleChange}
-          value={form.roles}
-          style={{ padding: '0.5rem', height: '6rem' }}
-        >
+        <label>Roles:</label>
+        <select multiple onChange={handleRoleChange} value={form.roles}>
           {ALL_ROLES.map(role => (
             <option key={role} value={role}>{role}</option>
           ))}
         </select>
 
-        <button type="submit" style={{ padding: '0.6rem', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px' }}>
-          Create
-        </button>
-
+        <FormButton type="submit">Create</FormButton>
         {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
       </form>
-    </div>
+    </FormWrapper>
   );
 };
 

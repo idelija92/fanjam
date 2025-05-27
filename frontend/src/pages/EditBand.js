@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import API from '../services/api';
+import FormWrapper from '../components/form/FormWrapper';
+import FormInput from '../components/form/FormInput';
+import FormButton from '../components/form/FormButton';
 
 const EditBand = () => {
   const { id } = useParams();
@@ -26,17 +29,16 @@ const EditBand = () => {
   };
 
   return (
-    <div>
-      <h1>Edit Band</h1>
-      <Link to="/bands">← Back to Bands</Link>
+    <FormWrapper title="Edit Band">
+      <p><Link to="/bands">← Back to Bands</Link></p>
       <form onSubmit={handleSubmit}>
-        <input name="name" placeholder="Name" value={form.name} onChange={handleChange} /><br />
-        <input name="genre" placeholder="Genre" value={form.genre} onChange={handleChange} /><br />
-        <input name="description" placeholder="Description" value={form.description} onChange={handleChange} /><br />
-        <button type="submit">Update</button>
+        <FormInput name="name" value={form.name} onChange={handleChange} placeholder="Name" />
+        <FormInput name="genre" value={form.genre} onChange={handleChange} placeholder="Genre" />
+        <FormInput name="description" value={form.description} onChange={handleChange} placeholder="Description" />
+        <FormButton type="submit">Update</FormButton>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-    </div>
+      {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+    </FormWrapper>
   );
 };
 
