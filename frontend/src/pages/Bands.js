@@ -37,7 +37,7 @@ const Bands = () => {
       <Link to="/">← Back to Home</Link>
 
       <ul className="bands-list">
-        {bands.map(band => (
+        {Array.isArray(bands) && bands.map(band => (
           <li key={band.id} className="bands-item">
             <div className="bands-name">{band.name}</div>
             <div className="bands-meta">{band.genre}</div>

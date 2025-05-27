@@ -41,13 +41,17 @@ public class BandController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteBand(@PathVariable Long id) {
-        try {
-            bandRepository.deleteById(id);
-            return ResponseEntity.ok().build();
-        } catch (DataIntegrityViolationException e) {
+        Band band = bandRepository.findByIdWithEvents(id).orElseThrow();
+
+        System.out.println("Deleting band: " + band.getName() + " with " + band.getEvents().size() + " events");
+
+        if (band.getEvents() != null && !band.getEvents().isEmpty()) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("Band is linked to one or more events.");
+                    .body("Cannot delete band: it is assigned to one or more events.");
         }
+
+        bandRepository.delete(band);
+        return ResponseEntity.ok("Band deleted successfully");
     }
 
 }
