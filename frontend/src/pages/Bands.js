@@ -9,6 +9,8 @@ const Bands = () => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const isAdmin = auth?.roles?.includes('ADMIN');
+
   useEffect(() => {
     API.get('/bands').then(res => setBands(res.data));
   }, []);
@@ -30,7 +32,7 @@ const Bands = () => {
 
 
   return (
-<div className="bands-container">
+    <div className="bands-container">
       <h1 className="bands-title">Bands</h1>
       <Link to="/">← Back to Home</Link>
 
@@ -40,12 +42,13 @@ const Bands = () => {
             <div className="bands-name">{band.name}</div>
             <div className="bands-meta">{band.genre}</div>
             <div className="bands-meta">{band.description}</div>
-            {auth.role === 'ADMIN' && (
+            {isAdmin && (
               <div className="bands-actions">
                 <Link to={`/bands/edit/${band.id}`}>Edit</Link>
                 <button onClick={() => handleDelete(band.id)}>Delete</button>
               </div>
             )}
+
           </li>
         ))}
       </ul>
