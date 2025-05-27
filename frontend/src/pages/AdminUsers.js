@@ -18,7 +18,12 @@ function AdminUsers() {
         const user = users.find(u => u.id === id);
         if (!user) return;
 
-        const updatedUser = { ...user, roles };
+        const updatedUser = {
+            username: user.username,
+            email: user.email,
+            roles
+        };
+
 
         API.put(`/users/${id}`, updatedUser)
             .then(() => {
