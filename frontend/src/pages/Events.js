@@ -94,12 +94,13 @@ const Events = () => {
               <div key={event.id}>
                 <EventCard
                   event={event}
-                  isAdmin={auth.role === 'ADMIN'}
+                  isAdmin={auth.roles?.includes('ADMIN')}
                   isAttending={isAttending}
                   onRsvp={handleRsvp}
                   onCancelRsvp={handleCancelRsvp}
                   onDelete={handleDelete}
                 />
+
               </div>
             );
           })}
