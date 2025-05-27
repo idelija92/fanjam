@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import API from '../services/api';
+import FormWrapper from '../components/form/FormWrapper';
+import FormInput from '../components/form/FormInput';
+import FormButton from '../components/form/FormButton';
+import '../components/form/form.css';
 
 const EditEvent = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
   const [form, setForm] = useState({
     title: '',
     date: '',
@@ -17,7 +20,6 @@ const EditEvent = () => {
     bands: [],
     setlist: '',
   });
-
   const [allBands, setAllBands] = useState([]);
   const [error, setError] = useState('');
 
@@ -37,9 +39,7 @@ const EditEvent = () => {
   };
 
   const handleBandSelection = e => {
-    const selected = Array.from(e.target.selectedOptions).map(option => ({
-      id: Number(option.value),
-    }));
+    const selected = Array.from(e.target.selectedOptions).map(option => ({ id: Number(option.value) }));
     setForm({ ...form, bands: selected });
   };
 
@@ -58,39 +58,43 @@ const EditEvent = () => {
   };
 
   return (
-    <div>
-      <h1>Edit Event</h1>
-      <Link to="/events">← Back to Events</Link>
+    <FormWrapper title="Edit Event">
+      <p><Link to="/events">← Back to Events</Link></p>
       <form onSubmit={handleSubmit}>
-        <input name="title" value={form.title} onChange={handleChange} placeholder="Title" /><br />
-        <input type="date" name="date" value={form.date} onChange={handleChange} /><br />
-        <input type="time" name="time" value={form.time} onChange={handleChange} /><br />
-        <input name="venue" value={form.venue} onChange={handleChange} placeholder="Venue" /><br />
-        <input name="location" value={form.location} onChange={handleChange} placeholder="Location" /><br />
-        <input name="description" value={form.description} onChange={handleChange} placeholder="Description" /><br />
-        <label>Event Type:</label><br />
-        <select name="type" value={form.type} onChange={handleChange}>
+        <FormInput name="title" value={form.title} onChange={handleChange} placeholder="Title" />
+        <FormInput name="date" type="date" value={form.date} onChange={handleChange} />
+        <FormInput name="time" type="time" value={form.time} onChange={handleChange} />
+        <FormInput name="venue" value={form.venue} onChange={handleChange} placeholder="Venue" />
+        <FormInput name="location" value={form.location} onChange={handleChange} placeholder="Location" />
+        <FormInput name="description" value={form.description} onChange={handleChange} placeholder="Description" />
+
+        <label>Event Type:</label>
+        <select className="form-select" name="type" value={form.type} onChange={handleChange}>
           <option value="FREE">Free</option>
           <option value="PAID">Paid</option>
-        </select><br />
-        <label>Select Bands:</label><br />
-        <select multiple value={form.bands.map(b => b.id)} onChange={handleBandSelection}>
+        </select>
+
+        <label>Select Bands:</label>
+        <select className="form-select" multiple value={form.bands.map(b => b.id)} onChange={handleBandSelection}>
           {allBands.map(b => (
             <option key={b.id} value={b.id}>{b.name}</option>
           ))}
-        </select><br />
-        <label>Setlist (one song per line):</label><br />
+        </select>
+
+        <label>Setlist (one song per line):</label>
         <textarea
           name="setlist"
+          className="form-textarea"
           rows="5"
           value={form.setlist}
           onChange={handleChange}
           placeholder="Enter song titles"
-        /><br />
-        <button type="submit">Update</button>
+        />
+
+        <FormButton type="submit">Update</FormButton>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-    </div>
+      {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+    </FormWrapper>
   );
 };
 
