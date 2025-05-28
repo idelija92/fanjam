@@ -24,14 +24,19 @@ public class Event {
     private String description;
     private String location;
 
-    @JsonIgnore
+    @JsonIgnoreProperties({"events"})
     @ManyToMany
     @JoinTable(name = "event_band", joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "band_id"))
     private Set<Band> bands = new HashSet<>();
 
-    @JsonIgnoreProperties({"password", "rsvpedEvents", "role"})
+    @JsonIgnoreProperties({ "password", "rsvpedEvents", "role" })
     @ManyToMany(mappedBy = "rsvpedEvents")
-    private Set<User> rsvps = new HashSet<>();    
+    private Set<User> rsvps = new HashSet<>();
+
+    @JsonIgnoreProperties({ "password", "rsvpedEvents", "roles" })
+    @ManyToOne
+    @JoinColumn(name = "created_by_id")
+    private User createdBy;
 
     @Enumerated(EnumType.STRING)
     private EventType type;
@@ -84,6 +89,10 @@ public class Event {
         return rsvps;
     }
 
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
     // Setters
     public void setId(Long id) {
         this.id = id;
@@ -127,5 +136,9 @@ public class Event {
 
     public void setRsvps(Set<User> rsvps) {
         this.rsvps = rsvps;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 }

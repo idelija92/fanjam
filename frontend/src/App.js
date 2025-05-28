@@ -20,6 +20,8 @@ import AdminUsers from './pages/AdminUsers';
 import Profile from './pages/Profile';
 import EventVotingPage from './pages/EventVotingPage';
 import EventWinnersPage from './pages/EventWinnersPage';
+import BandDashboard from './pages/BandDashboard';
+import VenueDashboard from './pages/VenueDashboard';
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
@@ -113,6 +115,22 @@ function App() {
             element={
               <ProtectedRoute requiredRoles={['ADMIN']}>
                 <EditUser />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/band/dashboard"
+            element={
+              <ProtectedRoute requiredRoles={['BAND']}>
+                <BandDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/venue/dashboard"
+            element={
+              <ProtectedRoute requiredRoles={['VENUE']}>
+                <VenueDashboard />
               </ProtectedRoute>
             }
           />
