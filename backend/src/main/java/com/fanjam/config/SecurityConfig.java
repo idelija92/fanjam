@@ -23,6 +23,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/song-votes/event/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/bands/my")).hasAnyRole("BAND", "ADMIN")
                         .requestMatchers(new AntPathRequestMatcher("/api/bands/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/events/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/venue/**")).hasAnyRole("VENUE", "ADMIN")
