@@ -92,12 +92,11 @@ const Events = () => {
               <div key={event.id}>
                 <EventCard
                   event={event}
-                  isAdmin={isAdmin}
-                  isUser={isUser}
                   isAttending={isAttending}
                   onRsvp={handleRsvp}
                   onCancelRsvp={handleCancelRsvp}
                   onDelete={handleDelete}
+                  showEditDelete={isAdmin || isVenue}
                 />
               </div>
             );

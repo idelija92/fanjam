@@ -15,7 +15,6 @@ const EventCard = ({
 
     const canVote = isUser || isAdmin;
     const canRsvp = isUser || isAdmin;
-    const isVenueUser = isVenue();
     const canEditDelete = showEditDelete;
 
     return (

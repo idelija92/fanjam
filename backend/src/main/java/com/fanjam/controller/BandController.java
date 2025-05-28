@@ -50,13 +50,17 @@ public class BandController {
     }
 
     @PostMapping
-    public Band createBand(@RequestBody Band band, @RequestHeader("Authorization") String authHeader) {
-        String token = authHeader.replace("Bearer ", "");
-        String email = jwtUtil.extractEmail(token);
-        User manager = userRepository.findByEmail(email).orElseThrow();
+    public ResponseEntity<?> createBand(@RequestBody Band band) {
+        if (band.getManager() != null && band.getManager().getId() != null) {
+            User manager = userRepository.findById(band.getManager().getId())
+                    .orElseThrow(() -> new RuntimeException("Manager not found"));
+            band.setManager(manager);
+        } else {
+            return ResponseEntity.badRequest().body("Manager ID is required");
+        }
 
-        band.setManager(manager);
-        return bandRepository.save(band);
+        Band saved = bandRepository.save(band);
+        return ResponseEntity.ok(saved);
     }
 
     @PutMapping("/{id}")

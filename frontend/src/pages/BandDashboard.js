@@ -5,55 +5,62 @@ import { AuthContext } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 
 const BandDashboard = () => {
-  const { currentUser } = useContext(AuthContext);
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
+    const { token, currentUser } = useContext(AuthContext);
+    const [band, setBand] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
 
-  useEffect(() => {
-    const fetchBandEvents = async () => {
-      try {
-        const res = await API.get('/events');
-        const userEmail = currentUser?.email;
-        const filtered = res.data.filter(event =>
-          event.bands?.some(band => band.users?.some(user => user.email === userEmail))
-        );
-        setEvents(filtered);
-      } catch (err) {
-        console.error('Failed to load events for band', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    useEffect(() => {
+        const fetchMyBand = async () => {
+            try {
+                const res = await API.get('/bands/my', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setBand(res.data);
+            } catch (err) {
+                console.error('Failed to fetch band:', err);
+                setError('No band found for your account.');
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    if (currentUser?.email) {
-      fetchBandEvents();
-    }
-  }, [currentUser]);
+        fetchMyBand();
+    }, [token]);
 
-  return (
-    <div className="container">
-      <h1>🎸 Band Dashboard</h1>
-      <p>Welcome, {currentUser?.email}!</p>
+    return (
+        <div className="container">
+            <h1>🎸 Band Dashboard</h1>
+            <p>Welcome, {currentUser?.email}!</p>
 
-      <h2>Upcoming Events</h2>
+            {loading ? (
+                <p>Loading...</p>
+            ) : error ? (
+                <p style={{ color: 'red' }}>{error}</p>
+            ) : (
+                <>
+                    <h2>{band.name}</h2>
+                    <p><strong>Genre:</strong> {band.genre}</p>
+                    <p><strong>Description:</strong> {band.description}</p>
 
-      {loading ? (
-        <p>Loading...</p>
-      ) : events.length === 0 ? (
-        <p>No upcoming events assigned to your band.</p>
-      ) : (
-        <ul>
-          {events.map(event => (
-            <li key={event.id}>
-              <strong>{event.title}</strong> — {event.date} at {event.venue}
-              <br />
-              <Link to={`/events/edit/${event.id}`}>✏️ Edit Setlist</Link>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
+                    <h3>Upcoming Events</h3>
+                    {band.events.length === 0 ? (
+                        <p>No upcoming events.</p>
+                    ) : (
+                        <ul>
+                            {band.events.map(event => (
+                                <li key={event.id}>
+                                    <strong>{event.title}</strong> — {event.date} at {event.venue}
+                                    <br />
+                                    <Link to={`/events/edit/${event.id}`}>✏️ Edit Setlist</Link>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </>
+            )}
+        </div>
+    );
 };
 
 export default BandDashboard;
