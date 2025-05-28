@@ -1,11 +1,13 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import useRole from '../hooks/useRole';
 import API from '../services/api';
 import "./styles/Home.css";
 
 const Home = () => {
-  const auth = useContext(AuthContext);
+  const { isAuthenticated } = useContext(AuthContext);
+  const { isAdmin, isVenue, isBand } = useRole();
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
@@ -32,7 +34,7 @@ const Home = () => {
         </ul>
       </nav>
 
-      {auth?.isAuthenticated && auth.roles?.includes('ADMIN') && (
+      {isAuthenticated && isAdmin() && (
         <div className="admin-tools">
           <h3>Admin Tools</h3>
           <ul>
@@ -44,6 +46,14 @@ const Home = () => {
         </div>
       )}
 
+      {isAuthenticated && isVenue() && !isAdmin() && (
+        <div className="venue-tools">
+          <h3>Venue Tools</h3>
+          <ul>
+            <li><Link to="/events/create">➕ Add New Event</Link></li>
+          </ul>
+        </div>
+      )}
 
       <h2 className="events-heading">Current Events</h2>
 
@@ -51,7 +61,7 @@ const Home = () => {
         <p>No events available yet!</p>
       ) : (
         <div>
-          {Array.isArray(events) &&events.map(event => (
+          {Array.isArray(events) && events.map(event => (
             <div key={event.id} className="event-card">
               <h3 className="event-title">{event.title}</h3>
               <p className="event-details">{event.date} at <strong>{event.venue}</strong></p>
@@ -60,7 +70,7 @@ const Home = () => {
                   🏆 View Song Rankings
                 </Link>
               </div>
-              {auth?.isAuthenticated && (
+              {isAuthenticated && (
                 <div className="event-links">
                   <Link to={`/events/${event.id}/vote`} className="vote">
                     🎤 Vote for Songs
