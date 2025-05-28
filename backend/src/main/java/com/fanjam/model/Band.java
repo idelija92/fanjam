@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "bands")
@@ -16,9 +17,13 @@ public class Band {
     private String genre;
     private String description;
 
-    
     @ManyToMany(mappedBy = "bands", fetch = FetchType.LAZY)
     private Set<Event> events = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    @JsonIgnoreProperties({ "password", "roles", "rsvpedEvents" })
+    private User manager;
 
     // Getters
     public Long getId() {
@@ -41,6 +46,10 @@ public class Band {
         return events;
     }
 
+    public User getManager() {
+        return manager;
+    }
+
     // Setters
     public void setId(Long id) {
         this.id = id;
@@ -60,5 +69,9 @@ public class Band {
 
     public void setEvents(Set<Event> events) {
         this.events = events;
+    }
+
+    public void setManager(User manager) {
+        this.manager = manager;
     }
 }
