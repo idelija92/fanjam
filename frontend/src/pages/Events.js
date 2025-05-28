@@ -65,7 +65,7 @@ const Events = () => {
         <Carousel
           showThumbs={false}
           showStatus={false}
-          infiniteLoop
+          infiniteLoop={false}
           autoPlay={false}
           emulateTouch
           swipeable

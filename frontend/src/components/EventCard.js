@@ -1,8 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './EventCard.css';
+import useRole from '../hooks/useRole';
 
-const EventCard = ({ event, isAdmin, isAttending, onRsvp, onCancelRsvp, onDelete }) => {
+const EventCard = ({
+    event,
+    isAttending,
+    onRsvp,
+    onCancelRsvp,
+    onDelete,
+    showEditDelete = false,
+}) => {
+    const { isUser, isAdmin, isVenue } = useRole();
+
+    const canVote = isUser || isAdmin;
+    const canRsvp = isUser || isAdmin;
+    const isVenueUser = isVenue();
+    const canEditDelete = showEditDelete;
+
     return (
         <div className="event-card-container">
             <h3>{event.title}</h3>
@@ -21,25 +36,30 @@ const EventCard = ({ event, isAdmin, isAttending, onRsvp, onCancelRsvp, onDelete
 
             <div className="event-actions">
                 <Link to={`/events/${event.id}/winners`}>🏆 Rankings</Link>
-                <Link to={`/events/${event.id}/vote`}>🎤 Vote</Link>
-            </div>
-
-            <div className="rsvp-section">
-                {isAttending ? (
-                    <>
-                        <p>✅ You are attending</p>
-                        <button onClick={() => onCancelRsvp(event.id)}>Cancel RSVP</button>
-                    </>
-                ) : (
-                    <button onClick={() => onRsvp(event.id)}>RSVP</button>
+                {canVote && (
+                    <Link to={`/events/${event.id}/vote`}>🎤 Vote</Link>
                 )}
-                <p><strong>Attending:</strong> {event.rsvps?.length || 0}</p>
             </div>
 
-            {isAdmin && (
+            {canRsvp && (
+                <div className="rsvp-section">
+                    {isAttending ? (
+                        <>
+                            <p>✅ You are attending</p>
+                            <button onClick={() => onCancelRsvp?.(event.id)}>Cancel RSVP</button>
+                        </>
+                    ) : (
+                        <button onClick={() => onRsvp?.(event.id)}>RSVP</button>
+                    )}
+                </div>
+            )}
+
+            <p><strong>Attending:</strong> {event.rsvps?.length || 0}</p>
+
+            {canEditDelete && (
                 <div className="admin-controls">
                     <Link to={`/events/edit/${event.id}`}>Edit</Link> |{' '}
-                    <button onClick={() => onDelete(event.id)}>Delete</button>
+                    <button onClick={() => onDelete?.(event.id)}>Delete</button>
                 </div>
             )}
         </div>

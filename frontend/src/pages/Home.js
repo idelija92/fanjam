@@ -47,7 +47,7 @@ const Home = () => {
       )}
 
       {isAuthenticated && isVenue() && !isAdmin() && (
-        <div className="venue-tools">
+        <div className="admin-tools">
           <h3>Venue Tools</h3>
           <ul>
             <li><Link to="/events/create">➕ Add New Event</Link></li>

@@ -16,7 +16,7 @@ public class Band {
     private String genre;
     private String description;
 
-    @JsonIgnore
+    
     @ManyToMany(mappedBy = "bands", fetch = FetchType.LAZY)
     private Set<Event> events = new HashSet<>();
 
