@@ -1,13 +1,22 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import useRole from '../hooks/useRole';
 
 const Header = () => {
   const auth = React.useContext(AuthContext);
   const navigate = useNavigate();
+  const { isAdmin, isVenue, isBand } = useRole();
 
-  const roles = getRolesFromToken(auth?.token);
-  const isAdmin = roles.includes('ADMIN');
+  const getUsernameFromToken = (token) => {
+    if (!token) return 'Unknown';
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.username || 'Unknown';
+    } catch (e) {
+      return 'Unknown';
+    }
+  };
 
   return (
     <header style={{ padding: '1rem', borderBottom: '1px solid #ccc' }}>
@@ -20,13 +29,17 @@ const Header = () => {
           {auth && auth.isAuthenticated ? (
             <>
               <span style={{ marginRight: '1rem' }}>
-                Logged in as: <strong>{getUsernameFromToken(auth.token)}</strong> ({roles.join(', ')})
+                Logged in as: <strong>{getUsernameFromToken(auth.token)}</strong> ({auth.roles.join(', ')})
               </span>
-              <span>
-                {isAdmin && (
-                  <Link to="/admin/users" style={{ marginRight: '1rem' }}>Admin Panel</Link>
-                )}
-              </span>
+              {isAdmin() && (
+                <Link to="/admin/users" style={{ marginRight: '1rem' }}>Admin Panel</Link>
+              )}
+              {isVenue() && (
+                <Link to="/venue/dashboard" style={{ marginRight: '1rem' }}>Venue Dashboard</Link>
+              )}
+              {isBand() && (
+                <Link to="/band/dashboard" style={{ marginRight: '1rem' }}>Band Dashboard</Link>
+              )}
               <Link to="/profile" style={{ marginRight: '1rem' }}>My Profile</Link>
               <button onClick={() => { auth.logout(); navigate('/'); }}>Logout</button>
             </>
@@ -41,25 +54,5 @@ const Header = () => {
     </header>
   );
 };
-
-function getUsernameFromToken(token) {
-  if (!token) return 'Unknown';
-  try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.username || 'Unknown';
-  } catch (e) {
-    return 'Unknown';
-  }
-}
-
-function getRolesFromToken(token) {
-  if (!token) return [];
-  try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.roles || [];
-  } catch {
-    return [];
-  }
-}
 
 export default Header;
