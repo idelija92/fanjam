@@ -5,13 +5,11 @@ import { AuthContext } from '../context/AuthContext';
 import useRole from '../hooks/useRole';
 import "./styles/Events.css";
 import EventCard from '../components/EventCard';
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from 'react-responsive-carousel';
 
 const Events = () => {
   const [events, setEvents] = useState([]);
   const auth = useContext(AuthContext);
-  const { isAdmin, isUser } = useRole();
+  const { isAdmin, isUser, isVenue, isBand } = useRole();
 
   useEffect(() => {
     API.get('/events').then(res => {
@@ -62,27 +60,7 @@ const Events = () => {
       {events.length === 0 ? (
         <p>No events yet!</p>
       ) : (
-        <Carousel
-          showThumbs={false}
-          showStatus={false}
-          infiniteLoop={false}
-          autoPlay={false}
-          emulateTouch
-          swipeable
-          centerMode
-          centerSlidePercentage={33.33}
-          showArrows={true}
-          renderArrowPrev={(onClickHandler, hasPrev) =>
-            hasPrev && (
-              <button type="button" onClick={onClickHandler} className="carousel-arrow prev">‹</button>
-            )
-          }
-          renderArrowNext={(onClickHandler, hasNext) =>
-            hasNext && (
-              <button type="button" onClick={onClickHandler} className="carousel-arrow next">›</button>
-            )
-          }
-        >
+        <div className="event-list">
           {events.map(event => {
             const isAttending = event.rsvps?.some(
               u => u.email === auth.currentUser?.email
@@ -93,15 +71,15 @@ const Events = () => {
                 <EventCard
                   event={event}
                   isAttending={isAttending}
-                  onRsvp={handleRsvp}
-                  onCancelRsvp={handleCancelRsvp}
-                  onDelete={handleDelete}
+                  onRsvp={isUser || isAdmin ? handleRsvp : undefined}
+                  onCancelRsvp={isUser || isAdmin ? handleCancelRsvp : undefined}
+                  onDelete={isAdmin || isVenue ? handleDelete : undefined}
                   showEditDelete={isAdmin || isVenue}
                 />
               </div>
             );
           })}
-        </Carousel>
+        </div>
       )}
     </div>
   );

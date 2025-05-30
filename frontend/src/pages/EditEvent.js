@@ -10,15 +10,7 @@ const EditEvent = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    title: '',
-    date: '',
-    time: '',
-    venue: '',
-    location: '',
-    description: '',
-    type: 'FREE',
-    bands: [],
-    setlist: '',
+    title: '', date: '', time: '', venue: '', location: '', description: '', type: 'FREE', bands: []
   });
   const [allBands, setAllBands] = useState([]);
   const [error, setError] = useState('');
@@ -34,12 +26,7 @@ const EditEvent = () => {
         const eventData = eventRes.data;
         setForm({
           ...eventData,
-          bands: Array.isArray(eventData.bands)
-            ? eventData.bands.map(b => ({ id: b.id }))
-            : [],
-          setlist: Array.isArray(eventData.setlist)
-            ? eventData.setlist.join('\n')
-            : '',
+          bands: Array.isArray(eventData.bands) ? eventData.bands.map(b => ({ id: b.id })) : []
         });
 
         setAllBands(bandsRes.data);
@@ -52,9 +39,7 @@ const EditEvent = () => {
     fetchData();
   }, [id]);
 
-  const handleChange = e => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleBandSelection = e => {
     const selected = Array.from(e.target.selectedOptions).map(option => ({ id: Number(option.value) }));
@@ -64,10 +49,7 @@ const EditEvent = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      await API.put(`/events/${id}`, {
-        ...form,
-        setlist: form.setlist.split('\n').filter(song => song.trim() !== ''),
-      });
+      await API.put(`/events/${id}`, form);
       navigate('/events');
     } catch (err) {
       console.error(err);
@@ -103,16 +85,6 @@ const EditEvent = () => {
             <option key={b.id} value={b.id}>{b.name}</option>
           ))}
         </select>
-
-        <label>Setlist (one song per line):</label>
-        <textarea
-          name="setlist"
-          className="form-textarea"
-          rows="5"
-          value={form.setlist}
-          onChange={handleChange}
-          placeholder="Enter song titles"
-        />
 
         <FormButton type="submit">Update</FormButton>
       </form>

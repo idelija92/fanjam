@@ -22,6 +22,7 @@ import EventVotingPage from './pages/EventVotingPage';
 import EventWinnersPage from './pages/EventWinnersPage';
 import BandDashboard from './pages/BandDashboard';
 import VenueDashboard from './pages/VenueDashboard';
+import EditSetlist from './pages/EditSetlist';
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
@@ -115,6 +116,14 @@ function App() {
             element={
               <ProtectedRoute requiredRoles={['ADMIN']}>
                 <EditUser />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/events/:eventId/setlist"
+            element={
+              <ProtectedRoute requiredRoles={['BAND']}>
+                <EditSetlist />
               </ProtectedRoute>
             }
           />
