@@ -11,11 +11,11 @@ const EventCard = ({
     onDelete,
     showEditDelete = false,
 }) => {
-    const { isUser, isAdmin, isVenue } = useRole();
+    const { isUser, isAdmin, isVenue, isBand } = useRole();
 
     const canVote = isUser || isAdmin;
     const canRsvp = isUser || isAdmin;
-    const canEditDelete = showEditDelete;
+    const canEditDelete = isAdmin || isVenue;
 
     return (
         <div className="event-card-container">
@@ -34,11 +34,13 @@ const EventCard = ({
             </ul>
 
             <div className="event-actions">
-                <Link to={`/events/${event.id}/winners`}>🏆 Rankings</Link>
-                {canVote && (
-                    <Link to={`/events/${event.id}/vote`}>🎤 Vote</Link>
-                )}
+                <Link to={`/events/${event.id}/winners`}>🏆 Rankings</Link><br></br>
+                <p><strong>Attending:</strong> {event.rsvps?.length || 0}</p>
             </div>
+
+            {canVote && (
+                <Link to={`/events/${event.id}/vote`}>🎤 Vote</Link>
+            )}
 
             {canRsvp && (
                 <div className="rsvp-section">
@@ -53,14 +55,13 @@ const EventCard = ({
                 </div>
             )}
 
-            <p><strong>Attending:</strong> {event.rsvps?.length || 0}</p>
-
             {canEditDelete && (
                 <div className="admin-controls">
                     <Link to={`/events/edit/${event.id}`}>Edit</Link> |{' '}
                     <button onClick={() => onDelete?.(event.id)}>Delete</button>
                 </div>
             )}
+
         </div>
     );
 };

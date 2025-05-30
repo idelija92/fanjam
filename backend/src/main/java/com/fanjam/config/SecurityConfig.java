@@ -25,6 +25,7 @@ public class SecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/api/song-votes/event/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/bands/my")).hasAnyRole("BAND", "ADMIN")
                         .requestMatchers(new AntPathRequestMatcher("/api/bands/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/events/*/setlist")).hasRole("BAND")
                         .requestMatchers(new AntPathRequestMatcher("/api/events/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/venue/**")).hasAnyRole("VENUE", "ADMIN")
                         .requestMatchers(new AntPathRequestMatcher("/api/band/**")).hasAnyRole("BAND", "ADMIN")

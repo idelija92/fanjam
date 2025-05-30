@@ -52,7 +52,7 @@ const BandDashboard = () => {
                                 <li key={event.id}>
                                     <strong>{event.title}</strong> — {event.date} at {event.venue}
                                     <br />
-                                    <Link to={`/events/edit/${event.id}`}>✏️ Edit Setlist</Link>
+                                    <Link to={`/events/${event.id}/setlist`}>✏️ Edit Your Setlist</Link>
                                 </li>
                             ))}
                         </ul>

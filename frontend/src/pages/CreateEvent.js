@@ -7,8 +7,7 @@ import FormButton from '../components/form/FormButton';
 
 const CreateEvent = () => {
   const [form, setForm] = useState({
-    title: '', date: '', time: '', venue: '', location: '', description: '',
-    type: 'FREE', bands: [], setlist: ''
+    title: '', date: '', time: '', venue: '', location: '', description: '', type: 'FREE', bands: []
   });
   const [allBands, setAllBands] = useState([]);
   const [error, setError] = useState('');
@@ -17,9 +16,7 @@ const CreateEvent = () => {
     API.get('/bands').then(res => setAllBands(res.data));
   }, []);
 
-  const handleChange = e => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleBandSelection = e => {
     const selected = Array.from(e.target.selectedOptions).map(option => ({ id: Number(option.value) }));
@@ -29,10 +26,7 @@ const CreateEvent = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      await API.post('/events', {
-        ...form,
-        setlist: form.setlist.split('\n').filter(song => song.trim() !== '')
-      });
+      await API.post('/events', form);
       setError('');
       alert('Event created!');
     } catch (err) {
@@ -64,16 +58,6 @@ const CreateEvent = () => {
             <option key={band.id} value={band.id}>{band.name}</option>
           ))}
         </select>
-
-        <label>Setlist:</label>
-        <textarea
-          name="setlist"
-          rows="5"
-          placeholder="Enter song titles"
-          value={form.setlist}
-          onChange={handleChange}
-          style={{ width: '100%', marginBottom: '1rem' }}
-        />
 
         <FormButton type="submit">Create</FormButton>
       </form>
