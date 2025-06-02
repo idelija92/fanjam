@@ -1,6 +1,8 @@
 package com.fanjam.controller;
 
 import com.fanjam.config.JwtUtil;
+import com.fanjam.dto.BandWithSetlistDTO;
+import com.fanjam.dto.EventWithSetlistsDTO;
 import com.fanjam.dto.SetlistUpdateRequest;
 import com.fanjam.model.Band;
 import com.fanjam.model.Event;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,8 +43,39 @@ public class EventController {
     private JwtUtil jwtUtil;
 
     @GetMapping
-    public List<Event> getAllEvents() {
-        return eventRepository.findAll();
+    public List<EventWithSetlistsDTO> getAllEvents() {
+        List<Event> events = eventRepository.findAll();
+
+        return events.stream().map(event -> {
+            EventWithSetlistsDTO dto = new EventWithSetlistsDTO();
+            dto.id = event.getId();
+            dto.title = event.getTitle();
+            dto.date = event.getDate();
+            dto.time = event.getTime();
+            dto.venue = event.getVenue();
+            dto.location = event.getLocation();
+            dto.description = event.getDescription();
+            dto.type = event.getType().name();
+            dto.rsvpCount = event.getRsvps().size();
+
+            dto.bands = event.getBands().stream().map(band -> {
+                BandWithSetlistDTO bandDto = new BandWithSetlistDTO();
+                bandDto.id = band.getId();
+                bandDto.name = band.getName();
+
+                event.getBandInfos().stream()
+                        .filter(info -> info.getBand().getId().equals(band.getId()))
+                        .findFirst()
+                        .ifPresent(info -> {
+                            bandDto.setlist = info.getSetlist();
+                            bandDto.customSongSlots = info.getCustomSongSlots();
+                        });
+
+                return bandDto;
+            }).toList();
+
+            return dto;
+        }).toList();
     }
 
     @GetMapping("/created")
@@ -72,6 +106,37 @@ public class EventController {
         Optional<EventBandInfo> info = eventBandInfoRepository.findByEventAndBand(event, band);
         return info.<ResponseEntity<?>>map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.FORBIDDEN).body("No access"));
+    }
+
+    @GetMapping("/{id}/my-setlist")
+    @PreAuthorize("hasRole('BAND')")
+    public ResponseEntity<?> getMySetlist(@PathVariable Long id, @RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        String email = jwtUtil.extractEmail(token);
+        User user = userRepository.findByEmail(email).orElseThrow();
+
+        Optional<Band> optionalBand = bandRepository.findByManager(user);
+        if (optionalBand.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not managing any band.");
+        }
+
+        Band band = optionalBand.get();
+        Optional<Event> optionalEvent = eventRepository.findById(id);
+        if (optionalEvent.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found.");
+        }
+
+        Event event = optionalEvent.get();
+        Optional<EventBandInfo> info = eventBandInfoRepository.findByEventAndBand(event, band);
+
+        if (info.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("This band is not assigned to this event.");
+        }
+
+        return ResponseEntity.ok(
+                Map.of(
+                        "setlist", info.get().getSetlist(),
+                        "customSongSlots", info.get().getCustomSongSlots()));
     }
 
     @PostMapping

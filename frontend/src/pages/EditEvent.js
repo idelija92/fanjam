@@ -20,8 +20,11 @@ const EditEvent = () => {
   const [allBands, setAllBands] = useState([]);
   const [error, setError] = useState('');
 
+  const admin = isAdmin();
+  const venue = isVenue();
+
   useEffect(() => {
-    if (!isAdmin && !isVenue) {
+    if (!admin && !venue) {
       navigate('/events');
       return;
     }
@@ -47,7 +50,7 @@ const EditEvent = () => {
     };
 
     fetchData();
-  }, [id, isAdmin, isVenue, navigate]);
+  }, [id, navigate]);
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -60,7 +63,7 @@ const EditEvent = () => {
     e.preventDefault();
     try {
       await API.put(`/events/${id}`, form);
-      navigate(isVenue ? '/venue/dashboard' : '/events');
+      navigate(venue ? '/venue/dashboard' : '/events');
     } catch (err) {
       console.error(err);
       setError('Failed to update event');
