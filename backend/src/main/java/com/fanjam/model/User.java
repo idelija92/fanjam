@@ -15,8 +15,11 @@ public class User {
     private String email;
     private String password;
 
-    @Column(nullable = false)
-    private String role = "USER";
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "roles")
+    private Set<Role> roles = new HashSet<>();
 
     @ManyToMany
     @JoinTable(name = "rsvps", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "event_id"))
@@ -39,8 +42,8 @@ public class User {
         return password;
     }
 
-    public String getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
     public Set<Event> getRsvpedEvents() {
@@ -64,8 +67,8 @@ public class User {
         this.password = password;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public void setRsvpedEvents(Set<Event> rsvpedEvents) {

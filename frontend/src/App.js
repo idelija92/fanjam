@@ -18,8 +18,11 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import AdminUsers from './pages/AdminUsers';
 import Profile from './pages/Profile';
-import EventVotingPage from './pages/EventVotingPage'
+import EventVotingPage from './pages/EventVotingPage';
 import EventWinnersPage from './pages/EventWinnersPage';
+import BandDashboard from './pages/BandDashboard';
+import VenueDashboard from './pages/VenueDashboard';
+import EditSetlist from './pages/EditSetlist';
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
@@ -31,14 +34,14 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/bands" element={<Bands /> }/>
-          <Route path="/events" element={<Events />}/>
+          <Route path="/bands" element={<Bands />} />
+          <Route path="/events" element={<Events />} />
           <Route path="/events/:eventId/winners" element={<EventWinnersPage />} />
 
           <Route
             path="/events/:eventId/vote"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute requiredRoles={['USER', 'ADMIN']}>
                 <EventVotingPage />
               </ProtectedRoute>
             }
@@ -55,7 +58,7 @@ function App() {
           <Route
             path="/users"
             element={
-              <ProtectedRoute requiredRole="ADMIN">
+              <ProtectedRoute requiredRoles={['ADMIN']}>
                 <Users />
               </ProtectedRoute>
             }
@@ -63,7 +66,7 @@ function App() {
           <Route
             path="/admin/users"
             element={
-              <ProtectedRoute requiredRole="ADMIN">
+              <ProtectedRoute requiredRoles={['ADMIN']}>
                 <AdminUsers />
               </ProtectedRoute>
             }
@@ -71,7 +74,7 @@ function App() {
           <Route
             path="/bands/create"
             element={
-              <ProtectedRoute requiredRole="ADMIN">
+              <ProtectedRoute requiredRoles={['ADMIN']}>
                 <CreateBand />
               </ProtectedRoute>
             }
@@ -79,7 +82,7 @@ function App() {
           <Route
             path="/users/create"
             element={
-              <ProtectedRoute requiredRole="ADMIN">
+              <ProtectedRoute requiredRoles={['ADMIN']}>
                 <CreateUser />
               </ProtectedRoute>
             }
@@ -87,7 +90,7 @@ function App() {
           <Route
             path="/events/create"
             element={
-              <ProtectedRoute requiredRole="ADMIN">
+              <ProtectedRoute requiredRoles={['ADMIN', 'VENUE']}>
                 <CreateEvent />
               </ProtectedRoute>
             }
@@ -95,7 +98,7 @@ function App() {
           <Route
             path="/bands/edit/:id"
             element={
-              <ProtectedRoute requiredRole="ADMIN">
+              <ProtectedRoute requiredRoles={['ADMIN']}>
                 <EditBand />
               </ProtectedRoute>
             }
@@ -103,7 +106,7 @@ function App() {
           <Route
             path="/events/edit/:id"
             element={
-              <ProtectedRoute requiredRole="ADMIN">
+              <ProtectedRoute requiredRoles={['ADMIN', 'VENUE', 'BAND']}>
                 <EditEvent />
               </ProtectedRoute>
             }
@@ -111,8 +114,32 @@ function App() {
           <Route
             path="/users/edit/:id"
             element={
-              <ProtectedRoute requiredRole="ADMIN">
+              <ProtectedRoute requiredRoles={['ADMIN']}>
                 <EditUser />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/events/:eventId/setlist"
+            element={
+              <ProtectedRoute requiredRoles={['BAND']}>
+                <EditSetlist />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/band/dashboard"
+            element={
+              <ProtectedRoute requiredRoles={['BAND']}>
+                <BandDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/venue/dashboard"
+            element={
+              <ProtectedRoute requiredRoles={['VENUE']}>
+                <VenueDashboard />
               </ProtectedRoute>
             }
           />

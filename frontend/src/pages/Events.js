@@ -2,17 +2,17 @@ import React, { useEffect, useState, useContext } from 'react';
 import API from '../services/api';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import "./Events.css"; import EventCard from '../components/EventCard';
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from 'react-responsive-carousel';
+import useRole from '../hooks/useRole';
+import "./styles/Events.css";
+import EventCard from '../components/EventCard';
 
 const Events = () => {
   const [events, setEvents] = useState([]);
   const auth = useContext(AuthContext);
+  const { isAdmin, isUser, isVenue, isBand } = useRole();
 
   useEffect(() => {
     API.get('/events').then(res => {
-      //console.log('Loaded events:', res.data);
       const uniqueEvents = Array.from(
         new Map(res.data.map(e => [e.id, e])).values()
       );
@@ -60,31 +60,7 @@ const Events = () => {
       {events.length === 0 ? (
         <p>No events yet!</p>
       ) : (
-        <Carousel
-          showThumbs={false}
-          showStatus={false}
-          infiniteLoop
-          autoPlay={false}
-          emulateTouch
-          swipeable
-          centerMode
-          centerSlidePercentage={33.33}
-          showArrows={true}
-          renderArrowPrev={(onClickHandler, hasPrev, label) =>
-            hasPrev && (
-              <button type="button" onClick={onClickHandler} className="carousel-arrow prev">
-                ‹
-              </button>
-            )
-          }
-          renderArrowNext={(onClickHandler, hasNext, label) =>
-            hasNext && (
-              <button type="button" onClick={onClickHandler} className="carousel-arrow next">
-                ›
-              </button>
-            )
-          }
-        >
+        <div className="event-list">
           {events.map(event => {
             const isAttending = event.rsvps?.some(
               u => u.email === auth.currentUser?.email
@@ -94,16 +70,16 @@ const Events = () => {
               <div key={event.id}>
                 <EventCard
                   event={event}
-                  isAdmin={auth.role === 'ADMIN'}
                   isAttending={isAttending}
-                  onRsvp={handleRsvp}
-                  onCancelRsvp={handleCancelRsvp}
-                  onDelete={handleDelete}
+                  onRsvp={(isUser() || isAdmin()) ? handleRsvp : undefined}
+                  onCancelRsvp={(isUser() || isAdmin()) ? handleCancelRsvp : undefined}
+                  onDelete={isAdmin() ? handleDelete : undefined}
+                  showEditDelete={isAdmin()}
                 />
               </div>
             );
           })}
-        </Carousel>
+        </div>
       )}
     </div>
   );

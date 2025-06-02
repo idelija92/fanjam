@@ -1,10 +1,7 @@
 package com.fanjam.controller;
 
-import com.fanjam.model.User;
-import com.fanjam.model.RegisterRequest;
 import com.fanjam.config.JwtUtil;
-import com.fanjam.model.LoginRequest;
-import com.fanjam.model.PasswordChangeRequest;
+import com.fanjam.model.*;
 import com.fanjam.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -36,22 +34,29 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            return "Error: Email already exists";
+            return ResponseEntity.badRequest().body("Error: Email already exists");
         }
 
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        Set<Role> roles = request.getRoles();
+        if (roles == null || roles.isEmpty()) {
+            roles = Set.of(Role.USER);
+        }
+        user.setRoles(roles);
+
         userRepository.save(user);
-        return "User registered successfully";
+        return ResponseEntity.ok("User registered successfully");
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        Optional<User> userOpt = userRepository.findByEmail(request.getEmail());
+        Optional<User> userOpt = userRepository.findByEmailWithRoles(request.getEmail());
 
         if (userOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
@@ -93,16 +98,14 @@ public class AuthController {
 
         User user = userRepository.findByEmail(email).orElseThrow();
 
-        if ("ADMIN".equals(user.getRole())) {
-            long adminCount = userRepository.countByRole("ADMIN");
+        if (user.getRoles().contains(Role.ADMIN)) {
+            long adminCount = userRepository.countByRole(Role.ADMIN);
             if (adminCount <= 1) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Cannot delete the last remaining admin.");
             }
         }
 
         userRepository.delete(user);
-
         return ResponseEntity.ok("Account deleted.");
     }
-
 }
