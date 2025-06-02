@@ -57,6 +57,7 @@ public class EventController {
             dto.description = event.getDescription();
             dto.type = event.getType().name();
             dto.rsvpCount = event.getRsvps().size();
+            dto.createdByEmail = event.getCreatedBy() != null ? event.getCreatedBy().getEmail() : null;
 
             dto.bands = event.getBands().stream().map(band -> {
                 BandWithSetlistDTO bandDto = new BandWithSetlistDTO();
@@ -76,6 +77,7 @@ public class EventController {
 
             return dto;
         }).toList();
+
     }
 
     @GetMapping("/created")
@@ -170,8 +172,38 @@ public class EventController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'VENUE')")
     public Event updateEvent(@PathVariable Long id, @RequestBody Event updatedEvent) {
-        updatedEvent.setId(id);
-        return eventRepository.save(updatedEvent);
+        Event existingEvent = eventRepository.findById(id).orElseThrow();
+
+        existingEvent.setTitle(updatedEvent.getTitle());
+        existingEvent.setDate(updatedEvent.getDate());
+        existingEvent.setTime(updatedEvent.getTime());
+        existingEvent.setVenue(updatedEvent.getVenue());
+        existingEvent.setLocation(updatedEvent.getLocation());
+        existingEvent.setDescription(updatedEvent.getDescription());
+        existingEvent.setType(updatedEvent.getType());
+
+        Set<Long> newBandIds = updatedEvent.getBands() != null
+                ? updatedEvent.getBands().stream().map(Band::getId).collect(Collectors.toSet())
+                : Set.of();
+
+        Set<Band> attachedBands = new HashSet<>(bandRepository.findAllById(newBandIds));
+        existingEvent.setBands(attachedBands);
+
+        Event savedEvent = eventRepository.save(existingEvent);
+
+        for (Band band : attachedBands) {
+            Optional<EventBandInfo> existingInfo = eventBandInfoRepository.findByEventAndBand(savedEvent, band);
+            if (existingInfo.isEmpty()) {
+                EventBandInfo info = new EventBandInfo();
+                info.setEvent(savedEvent);
+                info.setBand(band);
+                info.setSetlist(List.of());
+                info.setCustomSongSlots(0);
+                eventBandInfoRepository.save(info);
+            }
+        }
+
+        return savedEvent;
     }
 
     @DeleteMapping("/{id}")

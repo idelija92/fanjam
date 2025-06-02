@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import './EventCard.css';
 import useRole from '../hooks/useRole';
+import { AuthContext } from '../context/AuthContext';
 
 const EventCard = ({
     event,
@@ -13,10 +14,11 @@ const EventCard = ({
 }) => {
 
     const { isUser, isAdmin, isVenue, isBand } = useRole();
+    const { currentUser } = useContext(AuthContext);
 
     const canVote = isUser() || isAdmin();
     const canRsvp = isUser() || isAdmin();
-    const canEditDelete = isAdmin() || isVenue();
+    const canEditDelete = isAdmin() || (isVenue() && event.createdBy?.email === currentUser?.email);
 
 
     return (
