@@ -11,11 +11,13 @@ const EventCard = ({
     onDelete,
     showEditDelete = false,
 }) => {
+
     const { isUser, isAdmin, isVenue, isBand } = useRole();
 
-    const canVote = isUser || isAdmin;
-    const canRsvp = isUser || isAdmin;
-    const canEditDelete = isAdmin || isVenue;
+    const canVote = isUser() || isAdmin();
+    const canRsvp = isUser() || isAdmin();
+    const canEditDelete = isAdmin() || isVenue();
+    
 
     return (
         <div className="event-card-container">
