@@ -23,10 +23,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/song-votes/event/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/bands/my")).hasAnyRole("BAND", "ADMIN")
                         .requestMatchers(new AntPathRequestMatcher("/api/bands/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/events/*/setlist")).hasRole("BAND")
                         .requestMatchers(new AntPathRequestMatcher("/api/events/**")).permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers(new AntPathRequestMatcher("/api/venue/**")).hasAnyRole("VENUE", "ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/api/band/**")).hasAnyRole("BAND", "ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/api/admin/**")).hasRole("ADMIN")
 
+                        .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter,
                         org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

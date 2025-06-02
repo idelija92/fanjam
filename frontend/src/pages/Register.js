@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import API from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import FormWrapper from '../components/form/FormWrapper';
+import FormInput from '../components/form/FormInput';
+import FormButton from '../components/form/FormButton';
 
 function Register() {
   const [email, setEmail] = useState('');
@@ -27,19 +30,30 @@ function Register() {
   };
 
   return (
-    <div>
-      <h2>Register</h2>
+    <FormWrapper title="Register">
       <form onSubmit={handleRegister}>
-        <input type="text" placeholder="Username" value={username}
-               onChange={(e) => setUsername(e.target.value)} />
-        <input type="email" placeholder="Email" value={email}
-               onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="Password" value={password}
-               onChange={(e) => setPassword(e.target.value)} />
-        <button type="submit">Register</button>
+        <FormInput
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <FormInput
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <FormInput
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <FormButton type="submit">Register</FormButton>
       </form>
-      <p>{message}</p>
-    </div>
+      {message && <p style={{ marginTop: '1rem', textAlign: 'center' }}>{message}</p>}
+    </FormWrapper>
   );
 }
 

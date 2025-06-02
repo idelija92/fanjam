@@ -1,11 +1,15 @@
 package com.fanjam.controller;
 
+import com.fanjam.config.JwtUtil;
 import com.fanjam.model.Band;
+import com.fanjam.model.User;
 import com.fanjam.repository.BandRepository;
+import com.fanjam.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +22,12 @@ public class BandController {
     @Autowired
     private BandRepository bandRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @GetMapping
     public List<Band> getAllBands() {
         return bandRepository.findAll();
@@ -28,9 +38,31 @@ public class BandController {
         return bandRepository.findById(id).orElseThrow();
     }
 
+    @GetMapping("/my")
+    @PreAuthorize("hasRole('BAND')")
+    public ResponseEntity<?> getMyBand(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        String email = jwtUtil.extractEmail(token);
+        User manager = userRepository.findByEmail(email).orElseThrow();
+
+        return bandRepository.findByManager(manager)
+                .<ResponseEntity<?>>map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No band assigned to this user"));
+    }
+
     @PostMapping
-    public Band createBand(@RequestBody Band band) {
-        return bandRepository.save(band);
+    public ResponseEntity<?> createBand(@RequestBody Band band) {
+        if (band.getManager() != null && band.getManager().getId() != null) {
+            User manager = userRepository.findById(band.getManager().getId())
+                    .orElseThrow(() -> new RuntimeException("Manager not found"));
+            band.setManager(manager);
+        } else {
+            return ResponseEntity.badRequest().body("Manager ID is required");
+        }
+
+        Band saved = bandRepository.save(band);
+        return ResponseEntity.ok(saved);
     }
 
     @PutMapping("/{id}")
@@ -41,13 +73,14 @@ public class BandController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteBand(@PathVariable Long id) {
-        try {
-            bandRepository.deleteById(id);
-            return ResponseEntity.ok().build();
-        } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("Band is linked to one or more events.");
-        }
-    }
+        Band band = bandRepository.findByIdWithEvents(id).orElseThrow();
 
+        if (band.getEvents() != null && !band.getEvents().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Cannot delete band: it is assigned to one or more events.");
+        }
+
+        bandRepository.delete(band);
+        return ResponseEntity.ok("Band deleted successfully");
+    }
 }
