@@ -17,7 +17,7 @@ const EventCard = ({
     const canVote = isUser() || isAdmin();
     const canRsvp = isUser() || isAdmin();
     const canEditDelete = isAdmin() || isVenue();
-    
+
 
     return (
         <div className="event-card-container">
@@ -27,11 +27,22 @@ const EventCard = ({
             <p><strong>Location:</strong> {event.location}</p>
             <p><strong>Description:</strong> {event.description}</p>
             <p><strong>Type:</strong> {event.type}</p>
-            <p><strong>Bands:</strong> {event.bands?.map(b => b.name).join(', ')}</p>
-            <p><strong>Setlist:</strong></p>
+            <p><strong>Bands & Setlists:</strong></p>
             <ul>
-                {event.setlist?.map((song, i) => (
-                    <li key={i}>{song}</li>
+                {event.bands?.map(band => (
+                    <li key={band.id}>
+                        <strong>{band.name}</strong>
+                        {band.customSongSlots != null && (
+                            <p>🎶 Custom Song Slots: {band.customSongSlots}</p>
+                        )}
+                        {band.setlist?.length > 0 && (
+                            <ul>
+                                {band.setlist.map((song, i) => (
+                                    <li key={i}>🎵 {song}</li>
+                                ))}
+                            </ul>
+                        )}
+                    </li>
                 ))}
             </ul>
 
