@@ -1,0 +1,30 @@
+.band-card {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    list-style: none;
+    background: #fafafa;
+    border-radius: 8px;
+  }
+  
+  .band-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .band-genre,
+  .band-description,
+  .band-manager {
+    font-size: 0.95rem;
+    margin-top: 0.25rem;
+    color: #333;
+  }
+  
+  .band-actions {
+    margin-top: 0.5rem;
+  }
+  
+  .band-actions button {
+    margin-left: 1rem;
+  }
+  

@@ -17,7 +17,12 @@ const CreateBand = () => {
 
   useEffect(() => {
     API.get('/users')
-      .then(res => setUsers(res.data))
+      .then(res => {
+        const bandRoleUsers = res.data.filter(user =>
+          user.roles?.includes('BAND')
+        );
+        setUsers(bandRoleUsers);
+      })
       .catch(err => console.error('Failed to fetch users', err));
   }, []);
 

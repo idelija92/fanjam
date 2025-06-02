@@ -71,10 +71,10 @@ const Events = () => {
                 <EventCard
                   event={event}
                   isAttending={isAttending}
-                  onRsvp={isUser || isAdmin ? handleRsvp : undefined}
-                  onCancelRsvp={isUser || isAdmin ? handleCancelRsvp : undefined}
-                  onDelete={isAdmin || isVenue ? handleDelete : undefined}
-                  showEditDelete={isAdmin || isVenue}
+                  onRsvp={(isUser() || isAdmin()) ? handleRsvp : undefined}
+                  onCancelRsvp={(isUser() || isAdmin()) ? handleCancelRsvp : undefined}
+                  onDelete={isAdmin() ? handleDelete : undefined}
+                  showEditDelete={isAdmin()}
                 />
               </div>
             );
