@@ -14,13 +14,12 @@ const EventVotingPage = () => {
 
     const [votes, setVotes] = useState([]);
     const [voteCounts, setVoteCounts] = useState({});
-    const [setlist, setSetlist] = useState([]);
+    const [eventData, setEventData] = useState(null);
     const [selectedSong, setSelectedSong] = useState('');
 
     const fetchVotes = async () => {
         try {
             const res = await getVotesForEvent(eventId, token);
-            console.log(res.data);
             setVotes(res.data);
 
             const counts = {};
@@ -33,12 +32,12 @@ const EventVotingPage = () => {
         }
     };
 
-    const fetchSetlist = async () => {
+    const fetchEvent = async () => {
         try {
             const res = await API.get(`/events/${eventId}`);
-            setSetlist(res.data.setlist || []);
+            setEventData(res.data);
         } catch (err) {
-            console.error('Failed to load event setlist', err);
+            console.error('Failed to load event data', err);
         }
     };
 
@@ -71,7 +70,7 @@ const EventVotingPage = () => {
 
     useEffect(() => {
         fetchVotes();
-        fetchSetlist();
+        fetchEvent();
     }, [eventId]);
 
     return (
@@ -116,25 +115,23 @@ const EventVotingPage = () => {
                 </div>
             </div>
 
-            {mode === 'setlist' && (
+            {mode === 'setlist' && eventData?.bands?.length > 0 && (
                 <div style={{ marginTop: '2rem' }}>
-                    <h3>Select from Setlist:</h3>
-                    {setlist.length > 0 ? (
-                        <select
-                            value={selectedSong}
-                            onChange={(e) => setSelectedSong(e.target.value)}
-                            style={{ padding: '0.5rem', marginBottom: '1rem' }}
-                        >
-                            <option value="">-- Select a song --</option>
-                            {setlist.map((song, index) => (
-                                <option key={index} value={song}>
-                                    {song}
+                    <h3>Select from Band Setlists:</h3>
+                    <select
+                        value={selectedSong}
+                        onChange={(e) => setSelectedSong(e.target.value)}
+                        style={{ padding: '0.5rem', marginBottom: '1rem' }}
+                    >
+                        <option value="">-- Select a song --</option>
+                        {eventData.bands.flatMap((band) =>
+                            band.setlist?.map((song, index) => (
+                                <option key={`${band.name}-${index}`} value={song}>
+                                    {song} — ({band.name})
                                 </option>
-                            ))}
-                        </select>
-                    ) : (
-                        <p>No setlist available for this event</p>
-                    )}
+                            ))
+                        )}
+                    </select>
                 </div>
             )}
 
@@ -179,7 +176,6 @@ const EventVotingPage = () => {
                     {Object.entries(voteCounts).map(([title, count]) => (
                         <li key={title} style={{ marginBottom: '1rem' }}>
                             <strong>{title}</strong> — {count} vote{count > 1 ? 's' : ''}
-
                             <ul style={{ fontStyle: 'italic', color: '#555', marginTop: '0.3rem', paddingLeft: 0 }}>
                                 {votes
                                     .filter(v => v.songTitle === title && v.customMessage)
@@ -187,7 +183,6 @@ const EventVotingPage = () => {
                                         <li key={i}>“{v.customMessage}”</li>
                                     ))}
                             </ul>
-
                             <div>
                                 <button onClick={() => handleUnvote(title)} style={{ marginTop: '0.5rem' }}>
                                     Unvote
@@ -195,7 +190,6 @@ const EventVotingPage = () => {
                             </div>
                         </li>
                     ))}
-
                 </ul>
             )}
         </div>
