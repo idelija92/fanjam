@@ -89,8 +89,37 @@ public class EventController {
     }
 
     @GetMapping("/{id:[0-9]+}")
-    public Event getEventById(@PathVariable Long id) {
-        return eventRepository.findById(id).orElseThrow();
+    public EventWithSetlistsDTO getEventById(@PathVariable Long id) {
+        Event event = eventRepository.findById(id).orElseThrow();
+
+        EventWithSetlistsDTO dto = new EventWithSetlistsDTO();
+        dto.id = event.getId();
+        dto.title = event.getTitle();
+        dto.date = event.getDate();
+        dto.time = event.getTime();
+        dto.venue = event.getVenue();
+        dto.location = event.getLocation();
+        dto.description = event.getDescription();
+        dto.type = event.getType().name();
+        dto.rsvpCount = event.getRsvps().size();
+
+        dto.bands = event.getBands().stream().map(band -> {
+            BandWithSetlistDTO bandDto = new BandWithSetlistDTO();
+            bandDto.id = band.getId();
+            bandDto.name = band.getName();
+
+            event.getBandInfos().stream()
+                    .filter(info -> info.getBand().getId().equals(band.getId()))
+                    .findFirst()
+                    .ifPresent(info -> {
+                        bandDto.setlist = info.getSetlist();
+                        bandDto.customSongSlots = info.getCustomSongSlots();
+                    });
+
+            return bandDto;
+        }).toList();
+
+        return dto;
     }
 
     @GetMapping("/{id}/bandinfo")
