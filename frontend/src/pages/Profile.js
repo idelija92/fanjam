@@ -2,14 +2,16 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../services/api';
 import { AuthContext } from '../context/AuthContext';
+import useRole from '../hooks/useRole';
+import ProfileCard from '../components/ProfileCard';
 
 function Profile() {
-    const { token } = useContext(AuthContext);
     const auth = useContext(AuthContext);
     const [user, setUser] = useState(null);
     const [form, setForm] = useState({ username: '', email: '' });
     const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '' });
     const navigate = useNavigate();
+    const { roles } = useRole();
 
     useEffect(() => {
         API.get('/auth/me')
@@ -63,57 +65,43 @@ function Profile() {
             })
             .catch(err => {
                 console.error(err);
-                if (err.response?.status === 403) {
-                    alert(err.response.data);
-                } else {
-                    alert('Failed to delete account.');
-                }
-
+                alert(err.response?.data || 'Failed to delete account.');
             });
     };
-
 
     if (!user) return <p>Loading profile...</p>;
 
     return (
-        <div>
-            <h2>My Profile</h2>
+        <div className="profile-page-container">
+            <div className="profile-page-card">
+                <ProfileCard user={{ ...user, roles }} form={form} onChange={handleChange} onSave={handleSave} />
 
-            <label>Username:</label>
-            <input name="username" value={form.username} onChange={handleChange} />
+                <div className="profile-section">
+                    <h3>Change Password</h3>
+                    <input
+                        type="password"
+                        placeholder="Current Password"
+                        value={passwords.currentPassword}
+                        onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })}
+                    />
+                    <input
+                        type="password"
+                        placeholder="New Password"
+                        value={passwords.newPassword}
+                        onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
+                    />
+                    <button onClick={handlePasswordChange} className="profile-button green">
+                        Change Password
+                    </button>
+                </div>
 
-            <br />
-
-            <label>Email:</label>
-            <input name="email" value={form.email} onChange={handleChange} />
-
-            <p><strong>Role:</strong> {user.role}</p>
-
-            <button onClick={handleSave}>Save Changes</button>
-            <br />
-
-            <h3>Change Password</h3>
-            <input
-                type="password"
-                placeholder="Current Password"
-                value={passwords.currentPassword}
-                onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })} />
-            <br />
-            <input
-                type="password"
-                placeholder="New Password"
-                value={passwords.newPassword}
-                onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
-            /><br />
-            <button onClick={handlePasswordChange}>Change Password</button>
-
-            <br />
-            <h3>Danger Zone</h3>
-            <button onClick={handleDeleteAccount} style={{ color: 'red' }}>
-                Delete My Account
-            </button>
-
-
+                <div className="profile-section danger-zone">
+                    <h3>Danger Zone</h3>
+                    <button onClick={handleDeleteAccount} className="profile-button red">
+                        Delete My Account
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }
