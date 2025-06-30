@@ -24,12 +24,19 @@ import BandDashboard from './pages/BandDashboard';
 import VenueDashboard from './pages/VenueDashboard';
 import EditSetlist from './pages/EditSetlist';
 import { AuthProvider } from './context/AuthContext';
+import './App.css'; // For full-height CSS //added rc
+import 'bootstrap/dist/css/bootstrap.min.css'; // added rc
+import { Button, Navbar, Nav } from 'react-bootstrap'; //added rc
+
 
 function App() {
   return (
+
     <AuthProvider>
       <Router>
-        <Header />
+      <div className="d-flex flex-column min-vh-100"> {/* //Added Rc */}
+        <Header />{/* //Added Rc */}
+        <main className="flex-fill container py-3"> {/* //Added Rc */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
@@ -144,10 +151,21 @@ function App() {
             }
           />
         </Routes>
+        </main> {/* //Added Rc */}
+
+ <footer className="bg-light text-center text-lg-start mt-auto py-3 border-top"> {/* //Added Rc */}
+            <div className="container text-center"> {/* //Added Rc */}
+              <span className="text-muted">&copy; {new Date().getFullYear()} FanJam. All rights reserved.</span>
+            </div> {/* //Added Rc */}
+          </footer>  {/* //Added Rc */}
+        </div> {/* //Added Rc */}
+
+
         <ToastContainer position="top-center" autoClose={3000} />
       </Router>
     </AuthProvider>
   );
 }
+
 
 export default App;
