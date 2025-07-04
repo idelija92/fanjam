@@ -1,5 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
+import EventCard from '../components/EventCard';
 import { AuthContext } from '../context/AuthContext';
 import useRole from '../hooks/useRole';
 import API from '../services/api';
@@ -62,27 +63,16 @@ const Home = () => {
       {events.length === 0 ? (
         <p>No events available yet!</p>
       ) : (
-        <div>
-          {Array.isArray(events) && events.map(event => (
-            <div key={event.id} className="event-card">
-              <h3 className="event-title">{event.title}</h3>
-              <p className="event-details">{event.date} at <strong>{event.venue}</strong></p>
-              <div className="event-links">
-                <Link to={`/events/${event.id}/winners`} className="rankings">
-                  🏆 View Song Rankings
-                </Link>
-              </div>
-              {isAuthenticated && (
-                <div className="event-links">
-                  <Link to={`/events/${event.id}/vote`} className="vote">
-                    🎤 Vote for Songs
-                  </Link>
-                </div>
-              )}
-            </div>
+      <div className='event-grid'>
+        {events.map(event => ( 
+          <EventCard key={event.id} event={event} isAuthenticated={isAuthenticated}/>
           ))}
-        </div>
+      </div>
       )}
+
+{/* TODO: Add in a HERO dashboard here  */}
+
+
     </div>
   );
 };
