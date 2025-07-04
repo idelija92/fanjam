@@ -25,14 +25,16 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <h1 className="home-title">Welcome to FanJam 🎸🎷🎧🎶</h1>
 
-      <nav>
-        <ul className="nav-links">
-          <li><Link to="/bands">Browse Bands</Link></li>
-          <li><Link to="/events">View Events</Link></li>
-        </ul>
-      </nav>
+      <section className='hero'>
+        <h1 className='hero-title'>Welcome to FanJam</h1>
+        <p className="home-subtitle">Discover. Vote. Celebrate Local Talent.</p>
+
+        <div className='hero-buttons'>
+          <Link to="/bands">Browse Bands</Link>
+          <Link to="/events">View Events</Link>
+        </div>
+      </section>
 
       {isAuthenticated && isAdmin() && (
         <div className="admin-tools">
