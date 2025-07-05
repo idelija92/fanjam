@@ -38,15 +38,14 @@ const Home = () => {
       </section>
 
       {isAuthenticated && isAdmin() && (
-        <div className="admin-tools">
-          <h3>Admin Tools</h3>
-          <ul>
-            <li><Link to="/bands/create">➕ Add New Band</Link></li>
-            <li><Link to="/events/create">➕ Add New Event</Link></li>
-            <li><Link to="/users/create">➕ Add New User</Link></li>
-            <li><Link to="/users">👤 Manage Users</Link></li>
-          </ul>
-        </div>
+        <section className="admin-tools">
+    <h3>Admin Tools</h3>
+    <div className="tool-buttons">
+      <Link to="/bands/create" className="tool-button">➕ Add New Band</Link>
+      <Link to="/events/create" className="tool-button">➕ Add New Event</Link>
+      <Link to="/users" className="tool-button">👤 Manage Users</Link>
+    </div>
+  </section>
       )}
 
       {isAuthenticated && isVenue() && !isAdmin() && (

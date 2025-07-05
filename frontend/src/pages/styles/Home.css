@@ -70,18 +70,38 @@
   }
   
   .admin-tools {
-    margin-bottom: 2rem;
-  }
-  
+  margin: 2rem 0;
+  text-align: center;
+}
+
   .admin-tools h3 {
-    color: #2c3e50;
-  }
-  
-  .admin-tools ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #1e293b;
+}
+
+  .tool-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+  .tool-button {
+  background-color: #2563eb;
+  color: white;
+  padding: 0.6rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+  .tool-button:hover {
+  background-color: #1e4db8;
+}
+
   .events-heading {
     color: #34495e;
     margin-bottom: 1rem;
@@ -120,4 +140,5 @@
   .event-links .vote {
     color: #e67e22;
   }
+
   
