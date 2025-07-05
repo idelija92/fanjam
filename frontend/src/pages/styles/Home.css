@@ -102,12 +102,12 @@
   background-color: #1e4db8;
 }
 
-  .events-heading {
+   .events-heading {
     color: #34495e;
     margin-bottom: 1rem;
   }
   
-  .event-card {
+  .event-list {
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 1rem;
@@ -140,5 +140,3 @@
   .event-links .vote {
     color: #e67e22;
   }
-
-  

@@ -5,7 +5,7 @@ const EventCard = ({ event, isAuthenticated }) => {
   if (!event || !event.id || !event.title) return null;
 
   return (
-    <article className="event-card">
+    <article className="event-list">
       <h3 className="event-title">{event.title}</h3>
       <p className="event-details">
         {event.date} at <strong>{event.venue}</strong>

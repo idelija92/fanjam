@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import EventCard from '../components/EventCard';
+import EventList from '../components/EventList';
 import { AuthContext } from '../context/AuthContext';
 import useRole from '../hooks/useRole';
 import API from '../services/api';
@@ -64,7 +64,7 @@ const Home = () => {
       ) : (
       <div className='event-grid'>
         {events.map(event => ( 
-          <EventCard key={event.id} event={event} isAuthenticated={isAuthenticated}/>
+          <EventList key={event.id} event={event} isAuthenticated={isAuthenticated}/>
           ))}
       </div>
       )}
