@@ -1,15 +1,58 @@
-.home-container {
+  body {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  color: #1e293b;
+}
+
+  .home-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+  .home-subtitle {
+  font-size: 1.25rem;
+  color: #475569;
+  margin-top: 0.5rem;
+}
+
+  .hero {
+  text-align: center;
+  padding: 3rem, 1rem;
+  background: #f8fafc;
+}
+
+  .event-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  }
+
+
+
+  .home-container {
     max-width: 800px;
     margin: 2rem auto;
     padding: 1rem;
     text-align: center;
     font-family: Arial, sans-serif;
   }
-  
-  .home-title {
-    color: #2c3e50;
-    margin-bottom: 1.5rem;
-  }
+
+  .hero-buttons {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+  .hero-buttons a {
+  padding: 0.75rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  background: #2563eb;
+  color: white;
+  transition: background 0.2s;
+}
   
   .nav-links {
     list-style-type: none;
@@ -27,24 +70,44 @@
   }
   
   .admin-tools {
-    margin-bottom: 2rem;
-  }
-  
+  margin: 2rem 0;
+  text-align: center;
+}
+
   .admin-tools h3 {
-    color: #2c3e50;
-  }
-  
-  .admin-tools ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .events-heading {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #1e293b;
+}
+
+  .tool-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+  .tool-button {
+  background-color: #2563eb;
+  color: white;
+  padding: 0.6rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+  .tool-button:hover {
+  background-color: #1e4db8;
+}
+
+   .events-heading {
     color: #34495e;
     margin-bottom: 1rem;
   }
   
-  .event-card {
+  .event-list {
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 1rem;
@@ -77,4 +140,3 @@
   .event-links .vote {
     color: #e67e22;
   }
-  

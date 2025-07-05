@@ -1,5 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
+import EventList from '../components/EventList';
 import { AuthContext } from '../context/AuthContext';
 import useRole from '../hooks/useRole';
 import API from '../services/api';
@@ -25,25 +26,26 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <h1 className="home-title">Welcome to FanJam 🎸🎷🎧🎶</h1>
 
-      <nav>
-        <ul className="nav-links">
-          <li><Link to="/bands">Browse Bands</Link></li>
-          <li><Link to="/events">View Events</Link></li>
-        </ul>
-      </nav>
+      <section className='hero'>
+        <h1 className='hero-title'>Welcome to FanJam</h1>
+        <p className="home-subtitle">Discover. Vote. Celebrate Local Talent.</p>
+
+        <div className='hero-buttons'>
+          <Link to="/bands">Browse Bands</Link>
+          <Link to="/events">View Events</Link>
+        </div>
+      </section>
 
       {isAuthenticated && isAdmin() && (
-        <div className="admin-tools">
-          <h3>Admin Tools</h3>
-          <ul>
-            <li><Link to="/bands/create">➕ Add New Band</Link></li>
-            <li><Link to="/events/create">➕ Add New Event</Link></li>
-            <li><Link to="/users/create">➕ Add New User</Link></li>
-            <li><Link to="/users">👤 Manage Users</Link></li>
-          </ul>
-        </div>
+        <section className="admin-tools">
+    <h3>Admin Tools</h3>
+    <div className="tool-buttons">
+      <Link to="/bands/create" className="tool-button">➕ Add New Band</Link>
+      <Link to="/events/create" className="tool-button">➕ Add New Event</Link>
+      <Link to="/users" className="tool-button">👤 Manage Users</Link>
+    </div>
+  </section>
       )}
 
       {isAuthenticated && isVenue() && !isAdmin() && (
@@ -60,27 +62,16 @@ const Home = () => {
       {events.length === 0 ? (
         <p>No events available yet!</p>
       ) : (
-        <div>
-          {Array.isArray(events) && events.map(event => (
-            <div key={event.id} className="event-card">
-              <h3 className="event-title">{event.title}</h3>
-              <p className="event-details">{event.date} at <strong>{event.venue}</strong></p>
-              <div className="event-links">
-                <Link to={`/events/${event.id}/winners`} className="rankings">
-                  🏆 View Song Rankings
-                </Link>
-              </div>
-              {isAuthenticated && (
-                <div className="event-links">
-                  <Link to={`/events/${event.id}/vote`} className="vote">
-                    🎤 Vote for Songs
-                  </Link>
-                </div>
-              )}
-            </div>
+      <div className='event-grid'>
+        {events.map(event => ( 
+          <EventList key={event.id} event={event} isAuthenticated={isAuthenticated}/>
           ))}
-        </div>
+      </div>
       )}
+
+{/* TODO: Add in a HERO dashboard here  */}
+
+
     </div>
   );
 };
