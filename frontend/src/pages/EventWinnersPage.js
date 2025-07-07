@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import API from '../api/api';
 
 const EventWinnersPage = () => {
     const { eventId } = useParams();
@@ -12,8 +12,8 @@ const EventWinnersPage = () => {
         const fetchData = async () => {
             try {
                 const [voteRes, eventRes] = await Promise.all([
-                    axios.get(`http://localhost:8080/api/song-votes/event/${eventId}`),
-                    axios.get(`http://localhost:8080/api/events/${eventId}`)
+                    API.get(`/song-votes/event/${eventId}`),
+                    API.get(`/events/${eventId}`)
                 ]);
 
                 setVotes(voteRes.data);
@@ -67,18 +67,20 @@ const EventWinnersPage = () => {
                                         acc[vote.songTitle].push(vote);
                                         return acc;
                                     }, {})
-                                ).sort((a, b) => b[1].length - a[1].length).map(([title, votes]) => (
-                                    <li key={title} style={{ marginBottom: '1rem' }}>
-                                        <strong>{title}</strong> — {votes.length} vote{votes.length > 1 ? 's' : ''}
-                                        {votes.some(v => v.customMessage) && (
-                                            <ul style={{ fontStyle: 'italic', color: '#555', marginTop: '0.3rem', paddingLeft: '1rem' }}>
-                                                {votes.filter(v => v.customMessage).map((v, i) => (
-                                                    <li key={i}>“{v.customMessage}”</li>
-                                                ))}
-                                            </ul>
-                                        )}
-                                    </li>
-                                ))}
+                                )
+                                    .sort((a, b) => b[1].length - a[1].length)
+                                    .map(([title, votes]) => (
+                                        <li key={title} style={{ marginBottom: '1rem' }}>
+                                            <strong>{title}</strong> — {votes.length} vote{votes.length > 1 ? 's' : ''}
+                                            {votes.some(v => v.customMessage) && (
+                                                <ul style={{ fontStyle: 'italic', color: '#555', marginTop: '0.3rem', paddingLeft: '1rem' }}>
+                                                    {votes.filter(v => v.customMessage).map((v, i) => (
+                                                        <li key={i}>“{v.customMessage}”</li>
+                                                    ))}
+                                                </ul>
+                                            )}
+                                        </li>
+                                    ))}
                             </ul>
                         )}
                     </div>
