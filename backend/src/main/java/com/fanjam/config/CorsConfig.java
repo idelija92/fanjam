@@ -13,7 +13,10 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000")
+                        .allowedOrigins("http://localhost:3000", 
+                        "http://fanjam-app.s3-website-eu-west-1.amazonaws.com",
+                        "https://app.fanjam.com",
+                        "https://d1564fsq19mtf3.cloudfront.net")
                         .allowedMethods("*")
                         .allowedHeaders("*");
             }
