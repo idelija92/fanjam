@@ -2,7 +2,7 @@ name: Build and Deploy Backend to ECR
 
 on:
   push:
-    branches: [ "main", "feature/cloud-deploy" ] # adjust as needed
+    branches: [ "main", "feature/cloud-deploy" ]
 
 jobs:
   deploy:

@@ -29,11 +29,37 @@ resource "aws_security_group" "ec2_sg" {
   }
 }
 
+resource "aws_iam_role" "ssm_role" {
+  name = "fanjam-ec2-ssm-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Principal = {
+        Service = "ec2.amazonaws.com"
+      },
+      Action = "sts:AssumeRole"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_core" {
+  role       = aws_iam_role.ssm_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_instance_profile" "ssm_instance_profile" {
+  name = "fanjam-ec2-profile"
+  role = aws_iam_role.ssm_role.name
+}
+
 resource "aws_instance" "backend" {
-  ami           = "ami-021d9f8e43481e7da"
-  instance_type = "t2.micro"
-  key_name      = aws_key_pair.fanjam_key.key_name
-  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+  ami                         = "ami-021d9f8e43481e7da"
+  instance_type               = "t2.micro"
+  key_name                    = aws_key_pair.fanjam_key.key_name
+  vpc_security_group_ids      = [aws_security_group.ec2_sg.id]
+  iam_instance_profile        = aws_iam_instance_profile.ssm_instance_profile.name
 
   user_data = <<-EOF
               #!/bin/bash
@@ -51,6 +77,7 @@ resource "aws_instance" "backend" {
               EOF
 
   tags = {
-    Name = "fanjam-backend"
+    Name        = "fanjam-backend"
+    Environment = "prod"
   }
 }
