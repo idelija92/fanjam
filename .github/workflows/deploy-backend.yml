@@ -31,3 +31,24 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./backend
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          
+      - name: Restart backend container on EC2 via SSM
+        run: |
+          aws ssm send-command \
+            --instance-ids ${{ secrets.EC2_INSTANCE_ID }} \
+            --document-name "AWS-RunShellScript" \
+            --comment "Restart FanJam backend container" \
+            --parameters 'commands=[
+              "docker pull 870964588993.dkr.ecr.eu-west-1.amazonaws.com/fanjam-backend",
+              "docker stop fanjam-backend || true",
+              "docker rm fanjam-backend || true",
+              "docker run -d --name fanjam-backend \
+                -e SPRING_DATASOURCE_URL=jdbc:postgresql://fanjam-db.czes28w46v8t.eu-west-1.rds.amazonaws.com:5432/fanjamdb \
+                -e SPRING_DATASOURCE_USERNAME=fanjamdb \
+                -e SPRING_DATASOURCE_PASSWORD=fanjam123 \
+                -e SPRING_JPA_HIBERNATE_DDL_AUTO=update \
+                -p 8080:8080 \
+                870964588993.dkr.ecr.eu-west-1.amazonaws.com/fanjam-backend"
+            ]' \
+            --region eu-west-1
+
