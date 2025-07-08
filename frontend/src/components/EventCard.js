@@ -50,7 +50,7 @@ const EventCard = ({
 
             <div className="event-actions">
                 <Link to={`/events/${event.id}/winners`}>🏆 Rankings</Link><br></br>
-                <p><strong>Attending:</strong> {event.rsvps?.length || 0}</p>
+                <p><strong>Attending:</strong> {event.rsvpCount}</p>
             </div>
 
             {canVote && (
