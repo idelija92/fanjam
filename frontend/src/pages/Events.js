@@ -62,6 +62,7 @@ const Events = () => {
       ) : (
         <div className="event-list">
           {events.map(event => {
+            console.log("Event", event);  
             const isAttending = event.rsvps?.some(
               u => u.email === auth.currentUser?.email
             );
