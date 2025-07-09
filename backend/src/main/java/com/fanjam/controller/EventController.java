@@ -63,10 +63,6 @@ public class EventController {
                     .collect(Collectors.toList());
             dto.createdByEmail = event.getCreatedBy() != null ? event.getCreatedBy().getEmail() : null;
 
-            dto.rsvps = event.getRsvps().stream()
-                    .map(UserDTO::new)
-                    .collect(Collectors.toList());
-
             dto.bands = event.getBands().stream().map(band -> {
                 BandWithSetlistDTO bandDto = new BandWithSetlistDTO();
                 bandDto.id = band.getId();
@@ -115,10 +111,6 @@ public class EventController {
                 .collect(Collectors.toList());
 
         dto.createdByEmail = event.getCreatedBy() != null ? event.getCreatedBy().getEmail() : null;
-
-        dto.rsvps = event.getRsvps().stream()
-                .map(UserDTO::new)
-                .collect(Collectors.toList());
 
         dto.bands = event.getBands().stream().map(band -> {
             BandWithSetlistDTO bandDto = new BandWithSetlistDTO();
