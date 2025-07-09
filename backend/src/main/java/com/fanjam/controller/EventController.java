@@ -49,21 +49,19 @@ public class EventController {
 
         return events.stream().map(event -> {
             EventWithSetlistsDTO dto = new EventWithSetlistsDTO();
-            dto.id = event.getId();
-            dto.title = event.getTitle();
-            dto.date = event.getDate();
-            dto.time = event.getTime();
-            dto.venue = event.getVenue();
-            dto.location = event.getLocation();
-            dto.description = event.getDescription();
-            dto.type = event.getType().name();
-            dto.rsvpCount = event.getRsvps().size();
-            dto.rsvps = event.getRsvps().stream()
-                    .map(UserDTO::new)
-                    .collect(Collectors.toList());
-            dto.createdByEmail = event.getCreatedBy() != null ? event.getCreatedBy().getEmail() : null;
+            dto.setId(event.getId());
+            dto.setTitle(event.getTitle());
+            dto.setDate(event.getDate());
+            dto.setTime(event.getTime());
+            dto.setVenue(event.getVenue());
+            dto.setLocation(event.getLocation());
+            dto.setDescription(event.getDescription());
+            dto.setType(event.getType().name());
+            dto.setRsvpCount(event.getRsvps().size());
+            dto.setRsvps(event.getRsvps().stream().map(UserDTO::new).collect(Collectors.toList()));
+            dto.setCreatedByEmail(event.getCreatedBy() != null ? event.getCreatedBy().getEmail() : null);
 
-            dto.bands = event.getBands().stream().map(band -> {
+            dto.setBands(event.getBands().stream().map(band -> {
                 BandWithSetlistDTO bandDto = new BandWithSetlistDTO();
                 bandDto.id = band.getId();
                 bandDto.name = band.getName();
@@ -77,11 +75,10 @@ public class EventController {
                         });
 
                 return bandDto;
-            }).toList();
+            }).toList());
 
             return dto;
         }).toList();
-
     }
 
     @GetMapping("/created")
@@ -97,22 +94,19 @@ public class EventController {
         Event event = eventRepository.findById(id).orElseThrow();
 
         EventWithSetlistsDTO dto = new EventWithSetlistsDTO();
-        dto.id = event.getId();
-        dto.title = event.getTitle();
-        dto.date = event.getDate();
-        dto.time = event.getTime();
-        dto.venue = event.getVenue();
-        dto.location = event.getLocation();
-        dto.description = event.getDescription();
-        dto.type = event.getType().name();
-        dto.rsvpCount = event.getRsvps().size();
-        dto.rsvps = event.getRsvps().stream()
-                .map(UserDTO::new)
-                .collect(Collectors.toList());
+        dto.setId(event.getId());
+        dto.setTitle(event.getTitle());
+        dto.setDate(event.getDate());
+        dto.setTime(event.getTime());
+        dto.setVenue(event.getVenue());
+        dto.setLocation(event.getLocation());
+        dto.setDescription(event.getDescription());
+        dto.setType(event.getType().name());
+        dto.setRsvpCount(event.getRsvps().size());
+        dto.setRsvps(event.getRsvps().stream().map(UserDTO::new).collect(Collectors.toList()));
+        dto.setCreatedByEmail(event.getCreatedBy() != null ? event.getCreatedBy().getEmail() : null);
 
-        dto.createdByEmail = event.getCreatedBy() != null ? event.getCreatedBy().getEmail() : null;
-
-        dto.bands = event.getBands().stream().map(band -> {
+        dto.setBands(event.getBands().stream().map(band -> {
             BandWithSetlistDTO bandDto = new BandWithSetlistDTO();
             bandDto.id = band.getId();
             bandDto.name = band.getName();
@@ -126,7 +120,7 @@ public class EventController {
                     });
 
             return bandDto;
-        }).toList();
+        }).toList());
 
         return dto;
     }
@@ -305,5 +299,4 @@ public class EventController {
 
         return ResponseEntity.ok("RSVP removed");
     }
-
 }
