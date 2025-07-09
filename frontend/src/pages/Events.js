@@ -34,7 +34,10 @@ const Events = () => {
     try {
       await API.put(`/events/${eventId}/rsvp`);
       const updated = await API.get('/events');
-      setEvents(updated.data);
+      const uniqueEvents = Array.from(
+        new Map(updated.data.map(e => [e.id, e])).values()
+      );
+      setEvents(uniqueEvents);
       alert('RSVP successful!');
     } catch (err) {
       console.error(err);
@@ -46,7 +49,10 @@ const Events = () => {
     try {
       await API.delete(`/events/${eventId}/rsvp`);
       const updated = await API.get('/events');
-      setEvents(updated.data);
+      const uniqueEvents = Array.from(
+        new Map(updated.data.map(e => [e.id, e])).values()
+      );
+      setEvents(uniqueEvents);
       alert('RSVP cancelled');
     } catch (err) {
       console.error(err);
@@ -62,7 +68,8 @@ const Events = () => {
       ) : (
         <div className="event-list">
           {events.map(event => {
-            console.log("Event", event);  
+            console.log("RSVPs for event", event.title, event.rsvps);
+            console.log("Checking if attending:", auth.currentUser?.email, event.rsvps);
             const isAttending = event.rsvps?.some(
               u => u.email === auth.currentUser?.email
             );
