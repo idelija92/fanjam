@@ -68,6 +68,7 @@ const Events = () => {
       ) : (
         <div className="event-list">
           {events.map(event => {
+            console.log("Event", event);
             console.log("RSVPs for event", event.title, event.rsvps);
             console.log("Checking if attending:", auth.currentUser?.email, event.rsvps);
             const isAttending = event.rsvps?.some(

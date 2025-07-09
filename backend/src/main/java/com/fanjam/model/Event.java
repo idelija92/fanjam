@@ -32,7 +32,7 @@ public class Event {
     @JsonIgnoreProperties({"event", "band"})
     private Set<EventBandInfo> bandInfos = new HashSet<>();
 
-    @JsonIgnoreProperties({ "password", "rsvpedEvents", "roles" })
+    //@JsonIgnoreProperties({ "password", "rsvpedEvents", "roles" })
     @ManyToMany(mappedBy = "rsvpedEvents")
     private Set<User> rsvps = new HashSet<>();
 
