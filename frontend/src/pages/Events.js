@@ -30,33 +30,20 @@ const Events = () => {
     }
   };
 
-  const handleRsvp = async (eventId) => {
+  const handleRsvpToggle = async (eventId, isCurrentlyAttending) => {
     try {
-      await API.put(`/events/${eventId}/rsvp`);
-      const updated = await API.get('/events');
-      const uniqueEvents = Array.from(
-        new Map(updated.data.map(e => [e.id, e])).values()
+      if (isCurrentlyAttending) {
+        await API.delete(`/events/${eventId}/rsvp`);
+      } else {
+        await API.put(`/events/${eventId}/rsvp`);
+      }
+      const updated = await API.get(`/events/${eventId}`);
+      setEvents(prev =>
+        prev.map(e => (e.id === eventId ? updated.data : e))
       );
-      setEvents(uniqueEvents);
-      alert('RSVP successful!');
     } catch (err) {
-      console.error(err);
-      alert('Failed to RSVP');
-    }
-  };
-
-  const handleCancelRsvp = async (eventId) => {
-    try {
-      await API.delete(`/events/${eventId}/rsvp`);
-      const updated = await API.get('/events');
-      const uniqueEvents = Array.from(
-        new Map(updated.data.map(e => [e.id, e])).values()
-      );
-      setEvents(uniqueEvents);
-      alert('RSVP cancelled');
-    } catch (err) {
-      console.error(err);
-      alert('Failed to cancel RSVP');
+      console.error('Failed to toggle RSVP', err);
+      alert('Something went wrong while toggling RSVP.');
     }
   };
 
@@ -80,8 +67,8 @@ const Events = () => {
                 <EventCard
                   event={event}
                   isAttending={isAttending}
-                  onRsvp={(isUser() || isAdmin()) ? handleRsvp : undefined}
-                  onCancelRsvp={(isUser() || isAdmin()) ? handleCancelRsvp : undefined}
+                  onRsvp={(id) => handleRsvpToggle(id, false)}
+                  onCancelRsvp={(id) => handleRsvpToggle(id, true)}
                   onDelete={isAdmin() ? handleDelete : undefined}
                   showEditDelete={isAdmin()}
                 />
