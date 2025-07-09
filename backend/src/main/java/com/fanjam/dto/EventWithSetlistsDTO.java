@@ -14,6 +14,7 @@ public class EventWithSetlistsDTO {
     public String description;
     public String type;
     public int rsvpCount;
+    public List<UserDTO> rsvps;
     public List<BandWithSetlistDTO> bands;
     public String createdByEmail;
 }

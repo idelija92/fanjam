@@ -4,6 +4,7 @@ import com.fanjam.config.JwtUtil;
 import com.fanjam.dto.BandWithSetlistDTO;
 import com.fanjam.dto.EventWithSetlistsDTO;
 import com.fanjam.dto.SetlistUpdateRequest;
+import com.fanjam.dto.UserDTO;
 import com.fanjam.model.Band;
 import com.fanjam.model.Event;
 import com.fanjam.model.EventBandInfo;
@@ -57,6 +58,9 @@ public class EventController {
             dto.description = event.getDescription();
             dto.type = event.getType().name();
             dto.rsvpCount = event.getRsvps().size();
+            dto.rsvps = event.getRsvps().stream()
+                    .map(UserDTO::new)
+                    .collect(Collectors.toList());
             dto.createdByEmail = event.getCreatedBy() != null ? event.getCreatedBy().getEmail() : null;
 
             dto.bands = event.getBands().stream().map(band -> {
@@ -102,6 +106,11 @@ public class EventController {
         dto.description = event.getDescription();
         dto.type = event.getType().name();
         dto.rsvpCount = event.getRsvps().size();
+        dto.rsvps = event.getRsvps().stream()
+                .map(UserDTO::new)
+                .collect(Collectors.toList());
+
+        dto.createdByEmail = event.getCreatedBy() != null ? event.getCreatedBy().getEmail() : null;
 
         dto.bands = event.getBands().stream().map(band -> {
             BandWithSetlistDTO bandDto = new BandWithSetlistDTO();
