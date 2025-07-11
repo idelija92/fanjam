@@ -3,6 +3,10 @@ import { voteForSong, unvoteForSong, getVotesForEvent } from '../api/songVotes';
 import { AuthContext } from '../context/AuthContext';
 import { useParams, Link } from 'react-router-dom';
 import API from '../services/api';
+import { Card, ListGroup, Badge, Spinner, Container, Row, Col } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Button, Navbar, Nav } from 'react-bootstrap';
+
 
 const EventVotingPage = () => {
     const { token } = useContext(AuthContext);
@@ -74,7 +78,113 @@ const EventVotingPage = () => {
     }, [eventId]);
 
     return (
+
+<Container className="my-5">
+  {!eventData ? (
+    <div className="text-center">
+      <Spinner animation="border" role="status" />
+      <p className="mt-3">Loading event...</p>
+    </div>
+  ) : (
+    <>
+
+                 <div className="d-flex justify-content-center">
+                      <div className="card" style={{ width: "18rem" }}>
+                        <img className="card-img-top" src="/guitar.jpg" alt="Card image cap" />
+
+                        <div className="card-body">
+                          <h4 className="card-title">{eventData.title}</h4>
+
+                          <p className="event-details mb-1">{eventData.date} at</p>
+                          <p className="mb-2">
+                            <strong>{eventData.venue}</strong>
+                          </p>
+
+                          <hr />
+
+                          <div className="d-grid gap-2">
+                            <a href="/" className="btn btn-outline-warning">
+                              Home
+                            </a>
+
+                            <a href="/events" className="btn btn-outline-secondary">
+                              ← Back to Events
+                            </a>
+                            <a href={`/events/${eventId}/winners`} className="btn btn-outline-secondary">
+                           Current Song Rankings >>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                     <h3 className="display-7 fw-normal text-muted">Vote for Song</h3>
+                        <hr/>
+
+<p> *************************Add form for casting votes here************************************</p>
+
+
+
+ <h3 className="display-7 fw-normal text-muted">Current Votes</h3>
+                        <hr/>
+{/*<h2 className="mt-5">Current Votes</h2>*/}
+{votes.length === 0 ? (
+  <p>No votes yet! Be the first to vote!</p>
+) : (
+<div className="d-flex justify-content-center mt-4">
+  <div className="col-md-8">
+      <Card>
+        <Card.Header className="bg-secondary text-white">
+          <h5 className="mb-0">All Voted Songs</h5>
+        </Card.Header>
+
+        <Card.Body className="p-0">
+          <ListGroup className="list-group-flush">
+            {Object.entries(voteCounts)
+              .sort((a, b) => b[1] - a[1]) // Sort by vote count descending
+              .map(([title, count]) => (
+                <ListGroup.Item key={title}>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <strong>{title}</strong>
+                    <Badge bg="warning">{count}</Badge>
+                  </div>
+
+                  {votes.some(v => v.songTitle === title && v.customMessage) && (
+                    <ul className="text-muted fst-italic mt-2 ps-3 mb-0">
+                      {votes
+                        .filter(v => v.songTitle === title && v.customMessage)
+                        .map((v, i) => (
+                          <li key={i}>“{v.customMessage}”</li>
+                        ))}
+                    </ul>
+                  )}
+
+                  <div className="mt-2">
+                    <button
+                      className="btn btn-sm btn-outline-danger"
+                      onClick={() => handleUnvote(title)}
+                    >
+                      Unvote
+                    </button>
+                  </div>
+                </ListGroup.Item>
+              ))}
+          </ListGroup>
+        </Card.Body>
+      </Card>
+    </div>
+  </div>
+)}
+
+
+
+
+
+
+
+
+
         <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+
             <h1>Vote for Songs</h1>
             <Link to="/events">← Back to Events</Link>
             <br />
@@ -83,6 +193,8 @@ const EventVotingPage = () => {
             </Link>
 
             <div style={{ marginTop: '2rem' }}>
+
+
                 <h2>Choose Your Voting Option:</h2>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem' }}>
                     <label>
@@ -191,9 +303,20 @@ const EventVotingPage = () => {
                         </li>
                     ))}
                 </ul>
+
+
             )}
         </div>
+
+
+ </>
+  )}
+</Container>
+
+
+
     );
+
 };
 
 export default EventVotingPage;

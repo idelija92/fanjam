@@ -76,6 +76,11 @@ const Events = () => {
                   onDelete={isAdmin() ? handleDelete : undefined}
                   showEditDelete={isAdmin()}
                 />
+
+
+
+
+
               </div>
             );
           })}

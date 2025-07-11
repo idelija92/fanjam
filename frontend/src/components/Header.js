@@ -4,6 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import useRole from '../hooks/useRole';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Navbar, Nav } from 'react-bootstrap';
+import { Container } from "react-bootstrap";
 
 const Header = () => {
   const auth = React.useContext(AuthContext);
@@ -25,13 +26,13 @@ const Header = () => {
  <nav className="navbar navbar-expand-lg navbar-light bg-light">
 <div className="container">
  <Link className="navbar-brand" to="/">
-          <img className="logo" src="Fanjamlogo11.png" alt="Fanjam Logo" height="40" />
+          <img className="logo" src="/Fanjamlogo11.png" alt="Fanjam Logo" height="40" />
         </Link>
 
      <button
               className="navbar-toggler"
               type="button"
-              data-bs-toggle="collapse" // ✅ Bootstrap 5 format
+              data-bs-toggle="collapse"
               data-bs-target="#navbarNav"
               aria-controls="navbarNav"
               aria-expanded="false"

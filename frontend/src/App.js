@@ -36,7 +36,7 @@ function App() {
       <Router>
       <div className="d-flex flex-column min-vh-100"> {/* //Added Rc */}
         <Header />{/* //Added Rc */}
-        <main className="flex-fill container py-3"> {/* //Added Rc */}
+        <main className="flex-fill py-3"> {/* //Added Rc */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
