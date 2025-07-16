@@ -30,20 +30,27 @@ const Events = () => {
     }
   };
 
-  const handleRsvpToggle = async (eventId, isCurrentlyAttending) => {
+  const handleRsvp = async (eventId) => {
     try {
-      if (isCurrentlyAttending) {
-        await API.delete(`/events/${eventId}/rsvp`);
-      } else {
-        await API.put(`/events/${eventId}/rsvp`);
-      }
-      const updated = await API.get(`/events/${eventId}`);
-      setEvents(prev =>
-        prev.map(e => (e.id === eventId ? updated.data : e))
-      );
+      await API.put(`/events/${eventId}/rsvp`);
+      const updated = await API.get('/events');
+      setEvents(updated.data);
+      alert('RSVP successful!');
     } catch (err) {
-      console.error('Failed to toggle RSVP', err);
-      alert('Something went wrong while toggling RSVP.');
+      console.error(err);
+      alert('Failed to RSVP');
+    }
+  };
+
+  const handleCancelRsvp = async (eventId) => {
+    try {
+      await API.delete(`/events/${eventId}/rsvp`);
+      const updated = await API.get('/events');
+      setEvents(updated.data);
+      alert('RSVP cancelled');
+    } catch (err) {
+      console.error(err);
+      alert('Failed to cancel RSVP');
     }
   };
 
@@ -55,9 +62,6 @@ const Events = () => {
       ) : (
         <div className="event-list">
           {events.map(event => {
-            console.log("Event", event);
-            console.log("RSVPs for event", event.title, event.rsvps);
-            console.log("Checking if attending:", auth.currentUser?.email, event.rsvps);
             const isAttending = event.rsvps?.some(
               u => u.email === auth.currentUser?.email
             );
@@ -67,11 +71,16 @@ const Events = () => {
                 <EventCard
                   event={event}
                   isAttending={isAttending}
-                  onRsvp={(id) => handleRsvpToggle(id, false)}
-                  onCancelRsvp={(id) => handleRsvpToggle(id, true)}
+                  onRsvp={(isUser() || isAdmin()) ? handleRsvp : undefined}
+                  onCancelRsvp={(isUser() || isAdmin()) ? handleCancelRsvp : undefined}
                   onDelete={isAdmin() ? handleDelete : undefined}
                   showEditDelete={isAdmin()}
                 />
+
+
+
+
+
               </div>
             );
           })}
