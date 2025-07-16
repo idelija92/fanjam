@@ -111,7 +111,7 @@ const EventVotingPage = () => {
                               ← Back to Events
                             </a>
                             <a href={`/events/${eventId}/winners`} className="btn btn-outline-secondary">
-                           Current Song Rankings >>
+                           Current Song Rankings
                             </a>
                           </div>
                         </div>
