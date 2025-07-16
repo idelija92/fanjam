@@ -26,7 +26,7 @@ const Header = () => {
  <nav className="navbar navbar-expand-lg navbar-light bg-light">
 <div className="container">
  <Link className="navbar-brand" to="/">
-          <img className="logo" src="/Fanjamlogo11.png" alt="Fanjam Logo" height="40" />
+          <img className="logo" src="Fanjamlogo11.png" alt="Fanjam Logo" height="40" />
         </Link>
 
      <button

@@ -18,7 +18,8 @@ public class CorsConfig {
                         "https://app.fanjam.com",
                         "https://d1564fsq19mtf3.cloudfront.net")
                         .allowedMethods("*")
-                        .allowedHeaders("*");
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
             }
         };
     }
