@@ -81,13 +81,12 @@ const EventWinnersPage = () => {
                 <hr />
 
                 <div className="d-grid gap-2">
-                  <a href="/" className="btn btn-outline-warning">
+                  <Link to="/" className="btn btn-outline-warning">
                     Home
-                  </a>
-
-                  <a href="/events" className="btn btn-outline-secondary">
+                  </Link>
+                  <Link to="/events" className="btn btn-outline-secondary">
                     ← Back to Events
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
