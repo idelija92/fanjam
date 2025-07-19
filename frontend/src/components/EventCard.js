@@ -131,7 +131,7 @@ useEffect(() => {
 
 return (
     <div className="d-flex justify-content-center mt-4">
-      <div className="col-md-8">
+      <div className="col-md-10">
         <Card className="shadow">
 
           <Card.Img
@@ -151,12 +151,7 @@ return (
           <p className="event-details ">
                           {event.date} at {event.time}
                           </p>
-                          <p>
                          <h5><strong>{event.venue}</strong></h5>
-
-                        </p>
-
-
 
 
             <ListGroup className="list-group-flush ">
@@ -363,7 +358,7 @@ return (
       </Link>
 
       <Button
-        className="btn btn-secondary"
+       variant="outline-danger"
         onClick={() => onDelete?.(event.id)}
       >
         🗑️ Delete

@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import useRole from '../hooks/useRole';
 import BandCard from '../components/BandCard';
 import './styles/Bands.css';
+import { Card, ListGroup, Button, Navbar, Nav, Container } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Bands = () => {
   const [bands, setBands] = useState([]);
@@ -31,7 +33,7 @@ const Bands = () => {
   return (
     <div className="bands-container">
       <h1 className="bands-title">Bands</h1>
-      <Link to="/">← Back to Home</Link>
+
 
       <ul className="bands-list">
         {bands.map(band => (
