@@ -40,23 +40,48 @@ const CreateUser = () => {
 
   return (
     <FormWrapper title="Create User">
-      <p><Link to="/users">← Back to Users</Link></p>
-      <form onSubmit={handleSubmit}>
-        <FormInput name="username" placeholder="Username" value={form.username} onChange={handleChange} />
-        <FormInput name="email" placeholder="Email" value={form.email} onChange={handleChange} />
-        <FormInput type="password" name="password" placeholder="Password" value={form.password} onChange={handleChange} />
+  <div className="container mt-5">
+    <div className="card shadow-sm">
+      <div className="card-header bg-primary text-white">
+        <h5 className="mb-0">Create User</h5>
+      </div>
+      <div className="card-body">
+        <p>
+          <Link to="/users" className="btn btn-secondary btn-sm mb-3">← Back to Users</Link>
+        </p>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label htmlFor="username" className="form-label">Username</label>
+            <FormInput name="username" placeholder="Username" value={form.username} onChange={handleChange} className="form-control" />
+          </div>
 
-        <label>Roles:</label>
-        <select multiple onChange={handleRoleChange} value={form.roles}>
-          {ALL_ROLES.map(role => (
-            <option key={role} value={role}>{role}</option>
-          ))}
-        </select>
+          <div className="mb-3">
+            <label htmlFor="email" className="form-label">Email</label>
+            <FormInput name="email" placeholder="Email" value={form.email} onChange={handleChange} className="form-control" />
+          </div>
 
-        <FormButton type="submit">Create</FormButton>
-        {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
-      </form>
-    </FormWrapper>
+          <div className="mb-3">
+            <label htmlFor="password" className="form-label">Password</label>
+            <FormInput type="password" name="password" placeholder="Password" value={form.password} onChange={handleChange} className="form-control" />
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="roles" className="form-label">Roles</label>
+            <select multiple onChange={handleRoleChange} value={form.roles} className="form-select" style={{ height: 'auto' }}>
+              {ALL_ROLES.map(role => (
+                <option key={role} value={role}>{role}</option>
+              ))}
+            </select>
+          </div>
+
+          <FormButton type="submit" className="btn btn-success">Create</FormButton>
+        </form>
+
+        {error && <p className="text-danger text-center mt-3">{error}</p>}
+      </div>
+    </div>
+  </div>
+</FormWrapper>
   );
 };
 
