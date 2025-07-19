@@ -154,7 +154,7 @@ function App() {
         </main> {/* //Added Rc */}
 
  <footer className="bg-light text-center text-lg-start mt-auto py-3 border-top"> {/* //Added Rc */}
-            <div className="container text-center"> {/* //Added Rc */}
+            <div class="footer"> {/* //Added Rc */}
               <span className="text-muted">&copy; {new Date().getFullYear()} FanJam. All rights reserved.</span>
             </div> {/* //Added Rc */}
           </footer>  {/* //Added Rc */}

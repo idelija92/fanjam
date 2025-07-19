@@ -1,0 +1,186 @@
+.home-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  .home-title {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+  }
+  
+  .nav-links {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: #2980b9;
+  }
+  
+  .admin-tools {
+    margin-bottom: 2rem;
+  }
+  
+  .admin-tools h3 {
+    color: #2c3e50;
+  }
+  
+  .admin-tools ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .events-heading {
+    color: #34495e;
+    margin-bottom: 1rem;
+  }
+  
+  .event-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    background-color: #f9f9f9;
+  }
+  
+  .event-title {
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+  }
+  
+  .event-details {
+    margin: 0.25rem 0;
+    color: #555;
+  }
+  
+  .event-links {
+    margin-top: 0.5rem;
+  }
+  
+  .event-links a {
+    text-decoration: none;
+  }
+  
+  .event-links .rankings {
+    color: #27ae60;
+  }
+  
+  .event-links .vote {
+    color: #e67e22;
+  }
+  h2 {
+  font-size: 2.2rem;         /* Bigger than default */
+  font-weight: 600;          /* Slightly bold but not overpowering */
+  color: #2c3e50;            /* Professional deep blue-gray */
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 0.5rem;
+  font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+}
+
+
+table {
+  width: 50%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  margin-top: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+  background-color: #f4f4f4;
+  border-bottom: 2px solid #ccc; /* Horizontal line under header */
+}
+
+th, td {
+  border-right: 1px solid #ccc; /* Vertical lines between columns */
+  padding: 12px 16px;
+  text-align: left;
+}
+th:last-child, td:last-child {
+  border-right: none; /* Removes the last column's right border */
+}
+
+th {
+  font-weight: bold;
+  color: #333;
+}
+tr {
+  border-bottom: 1px solid #ccc; /* Adds a line below each row */
+}
+
+tbody tr:last-child {
+  border-bottom: none; /* Optional: removes the line after the last row */
+}
+
+tr:hover {
+  background-color: #f9f9f9;
+}
+
+label {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #c0392b;
+}
+
+.table-container {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+   margin-bottom: 10rem;
+}
+
+.table-wrapper {
+  /* margin-top: 2rem; */
+  display: flex; 
+  flex-direction: column;
+  align-items: center;
+}
+
+.table-heading {
+  margin-top: 2rem; /* Pushes it down from the top */
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 0.5rem;
+  font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+}
+
+table {
+  width: auto;
+  margin: 0;
+}
+h2 {
+ 
+  top: 0;
+  background-color: #fff;
+  z-index: 10;
+  padding: 1rem;
+}

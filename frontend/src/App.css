@@ -7,3 +7,9 @@ html, body, #root {
 body {
   font-family: var(--bs-body-font-family); /* Uses Bootstrap's default font */
 }
+.footer {
+  
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}

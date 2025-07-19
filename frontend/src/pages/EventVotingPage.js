@@ -192,9 +192,7 @@ const EventVotingPage = () => {
                 View Current Song Rankings
             </Link>
 
-            <div style={{ marginTop: '2rem' }}>
-
-
+             <div style={{ marginTop: '2rem' }}>
                 <h2>Choose Your Voting Option:</h2>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem' }}>
                     <label>
@@ -225,7 +223,7 @@ const EventVotingPage = () => {
                         /> Custom Song + Message
                     </label>
                 </div>
-            </div>
+            </div>*/
 
             {mode === 'setlist' && eventData?.bands?.length > 0 && (
                 <div style={{ marginTop: '2rem' }}>
@@ -278,6 +276,8 @@ const EventVotingPage = () => {
                     Submit Vote
                 </button>
             </div>
+
+            
 
             <h2 style={{ marginTop: '2rem' }}>Current Votes:</h2>
 

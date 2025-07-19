@@ -5,6 +5,7 @@ import FormWrapper from '../components/form/FormWrapper';
 import FormInput from '../components/form/FormInput';
 import FormButton from '../components/form/FormButton';
 
+
 const CreateEvent = () => {
   const [form, setForm] = useState({
     title: '', date: '', time: '', venue: '', location: '', description: '', type: 'FREE', bands: []
