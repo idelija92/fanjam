@@ -5,9 +5,6 @@ import { AuthContext } from '../context/AuthContext';
 import useRole from '../hooks/useRole';
 import "./styles/Events.css";
 import EventCard from '../components/EventCard';
-import { Card, ListGroup, Button, Navbar, Nav, Container } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 
 const Events = () => {
   const [events, setEvents] = useState([]);
@@ -69,7 +66,6 @@ const Events = () => {
               u => u.email === auth.currentUser?.email
             );
 
-
             return (
               <div key={event.id}>
                 <EventCard
@@ -86,8 +82,6 @@ const Events = () => {
 
 
               </div>
-
-
             );
           })}
         </div>
@@ -95,6 +89,5 @@ const Events = () => {
     </div>
   );
 };
-
 
 export default Events;

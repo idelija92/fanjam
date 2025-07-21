@@ -5,7 +5,7 @@ import useRole from '../hooks/useRole';
 import API from '../services/api';
 import "./styles/Home.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Navbar, Nav, Container,Carousel } from 'react-bootstrap';
+import { Button, Navbar, Nav, Container, Carousel } from 'react-bootstrap';
 
 
 
@@ -29,78 +29,82 @@ const Home = () => {
   }, []);
 
   return (
-  <>
- <section className="jumbotron text-center">
-   <div className="container text-center py-5">
-     <div className="col-md-8 mx-auto">
-       <h1 className="display-7 fw-normal" >Welcome to</h1>
-       <img className="logo" src="Fanjampic6.png" alt="Fanjam Logo" height="50" />
-<hr></hr>
-       <p className="lead fw-normal">
-         Be apart of the event with Fanjam. A new and exciting interactive experience for Fans and Bands.
-</p>
-<p className="lead fw-normal">
-Are you ready to to Jam?
-       </p>
-       <p>
-         <a href="/bands" className="btn btn-outline-warning my-2 me-3">Browse Bands &raquo;</a>
-         <a href="/events" className="btn btn-outline-warning my-2 me-3">View Events &raquo;</a>
-       </p>
-       {isAuthenticated && isAdmin() && (
-                   <div className="admin-tools d-flex flex-wrap justify-content-center gap-3 mt-3">
-                     <Button as={Link} to="/bands/create" variant="outline-secondary">
-                       🎸 Add New Band
-                     </Button>
-                     <Button as={Link} to="/events/create" variant="outline-secondary">
-                       🎶 Add New Event
-                     </Button>
+    <>
+      <section className="jumbotron text-center">
+        <div className="container text-center py-5">
+          <div className="col-md-8 mx-auto">
+            <h1 className="display-7 fw-normal" >Welcome to</h1>
+            <img className="logo" src="fanjampic6.png" alt="Fanjam Logo" height="50" />
+            <hr></hr>
+            <p className="lead fw-normal">
+              Be apart of the event with Fanjam. A new and exciting interactive experience for Fans and Bands.
+            </p>
+            <p className="lead fw-normal">
+              Are you ready to to Jam?
+            </p>
+            <p>
+              <Link to="/bands" className="btn btn-outline-warning my-2 me-3">
+                Browse Bands »
+              </Link>
+              <Link to="/events" className="btn btn-outline-warning my-2 me-3">
+                View Events »
+              </Link>
+            </p>
+            {isAuthenticated && isAdmin() && (
+              <div className="admin-tools d-flex flex-wrap justify-content-center gap-3 mt-3">
+                <Button as={Link} to="/bands/create" variant="outline-secondary">
+                  🎸 Add New Band
+                </Button>
+                <Button as={Link} to="/events/create" variant="outline-secondary">
+                  🎶 Add New Event
+                </Button>
 
-                     <Button as={Link} to="/users/create" variant="outline-secondary">
-                       ➕ Add New User
-                     </Button>
-                     <Button as={Link} to="/users" variant="outline-secondary">
-                       👤 Manage Users
-                     </Button>
-                   </div>
-                 )}
+                <Button as={Link} to="/users/create" variant="outline-secondary">
+                  ➕ Add New User
+                </Button>
+                <Button as={Link} to="/users" variant="outline-secondary">
+                  👤 Manage Users
+                </Button>
+              </div>
+            )}
 
-     </div>
-   </div>
- </section>
-
-
-
-<section>
-  <div className="position-relative overflow-hidden bg-light w-100" style={{ minHeight: '40vh' }}>
-    <img
-      src="instruments.png"
-      alt="Full width"
-      className="img-fluid w-100 h-100 object-fit-cover position-absolute top-0 start-0"
-      style={{ zIndex: 0 }}
-    />
-<div className="position-absolute top-50 start-50 translate-middle text-white text-center w-100 px-3">
-      <div className="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto">
-        <h1 className="display-5 display-5-sm fw-semibold mb-3 mb-md-4">
-          The FanJam Experience
-        </h1>
-
-        <p className="lead fw-normal fs-6 fs-md-5 mb-3 mb-md-4">
-          Stop watching. Start jamming. Connect with artists and fans in real-time.
-        </p>
-         <a className="btn btn-warning my-2 me-3" href="#">
-                  Learn More
-                </a>
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
+          </div>
+        </div>
+      </section>
 
 
 
- {/*} <section>
+      <section>
+        <div className="position-relative overflow-hidden bg-light w-100" style={{ minHeight: '40vh' }}>
+          <img
+            src="instruments.png"
+            alt="Full width"
+            className="img-fluid w-100 h-100 object-fit-cover position-absolute top-0 start-0"
+            style={{ zIndex: 0 }}
+          />
+          <div className="position-absolute top-50 start-50 translate-middle text-white text-center w-100 px-3">
+            <div className="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto">
+              <h1 className="display-5 display-5-sm fw-semibold mb-3 mb-md-4">
+                The FanJam Experience
+              </h1>
+
+              <p className="lead fw-normal fs-6 fs-md-5 mb-3 mb-md-4">
+                Stop watching. Start jamming. Connect with artists and fans in real-time.
+              </p>
+              <a className="btn btn-warning my-2 me-3" href="#">
+                Learn More
+              </a>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      {/*} <section>
     <div className="position-relative overflow-hidden bg-light w-100">
       <img src="instruments.png" alt="Full width" className="img-fluid w-100" />
       <div className="position-absolute top-50 start-50 translate-middle text-white text-center">
@@ -496,57 +500,57 @@ Are you ready to to Jam?
 
 
 
-<section className="jumbotron text-center">
-  <div className="container text-center py-5">
-    <div className="col-md-10 mx-auto">
-      <h1 className="display-7 fw-normal">Events</h1>
+      <section className="jumbotron text-center">
+        <div className="container text-center py-5">
+          <div className="col-md-10 mx-auto">
+            <h1 className="display-7 fw-normal">Events</h1>
 
 
 
-      <div className="d-flex flex-wrap justify-content-center gap-4">
-        {Array.isArray(events) && events.map(event => (
-          <div key={event.id} className="card" style={{ width: "18rem" }}>
-            <img className="card-img-top" src="guitar.jpg" alt="Card image cap" />
+            <div className="d-flex flex-wrap justify-content-center gap-4">
+              {Array.isArray(events) && events.map(event => (
+                <div key={event.id} className="card" style={{ width: "18rem" }}>
+                  <img className="card-img-top" src="guitar.jpg" alt="Card image cap" />
 
-            <div className="card-body">
+                  <div className="card-body">
 
-              <h4 className="card-title">{event.title}</h4>
+                    <h4 className="card-title">{event.title}</h4>
 
-              <p className="event-details">
-                {event.date} at
-                </p>
-                <p>
-               <strong>{event.venue}</strong>
+                    <p className="event-details">
+                      {event.date} at
+                    </p>
+                    <p>
+                      <strong>{event.venue}</strong>
 
-              </p>
+                    </p>
 
-                <hr/>
-                          <Link to={`/events/${event.id}/winners`} className="btn btn-outline-warning my-2 me-3">
-                                                     Song Rankings &raquo;
-                                                    </Link>
-{isAuthenticated && (
-                <div className="event-links">
-                  <Link to={`/events/${event.id}/vote`} className="btn btn-outline-secondary my-2 me-3">
-                    🎤 Vote for Songs
-                  </Link>
+                    <hr />
+                    <Link to={`/events/${event.id}/winners`} className="btn btn-outline-warning my-2 me-3">
+                      Song Rankings &raquo;
+                    </Link>
+                    {isAuthenticated && (
+                      <div className="event-links">
+                        <Link to={`/events/${event.id}/vote`} className="btn btn-outline-secondary my-2 me-3">
+                          🎤 Vote for Songs
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="card-footer text-muted">{event.location}
+                  </div>
+
                 </div>
-              )}
+              ))}
             </div>
-
-            <div className="card-footer text-muted">{event.location}
-            </div>
-
           </div>
-        ))}
-      </div>
-    </div>
-  </div>
+        </div>
 
-</section>
+      </section>
 
 
 
-{/*
+      {/*
 //image section with text
 
 
@@ -587,7 +591,7 @@ Are you ready to to Jam?
 
 
 
-           </>
+    </>
   );
 };
 
