@@ -113,16 +113,17 @@ const EventVotingPage = () => {
                 <hr />
 
                 <div className="d-grid gap-2">
-                  <a href="/" className="btn btn-outline-warning">
+                  <Link to="/" className="btn btn-outline-warning">
                     Home
-                  </a>
+                  </Link>
 
-                  <a href="/events" className="btn btn-outline-secondary">
+                  <Link to="/events" className="btn btn-outline-secondary">
                     ← Back to Events
-                  </a>
-                  <a href={`/events/${eventId}/winners`} className="btn btn-outline-secondary">
-                           Current Song Rankings
-                  </a>
+                  </Link>
+
+                  <Link to={`/events/${eventId}/winners`} className="btn btn-outline-secondary">
+                    Current Song Rankings
+                  </Link>
                 </div>
               </div>
             </div>

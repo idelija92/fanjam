@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect  } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 //import './EventCard.css';
 import useRole from '../hooks/useRole';
@@ -8,30 +8,30 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 const EventCard = ({
-    event,
-    isAttending,
-    onRsvp,
-    onCancelRsvp,
-    onDelete,
-    showEditDelete = false,
+  event,
+  isAttending,
+  onRsvp,
+  onCancelRsvp,
+  onDelete,
+  showEditDelete = false,
 }) => {
 
-    const { isUser, isAdmin, isVenue, isBand } = useRole();
-    const { currentUser } = useContext(AuthContext);
+  const { isUser, isAdmin, isVenue, isBand } = useRole();
+  const { currentUser } = useContext(AuthContext);
 
-    const canVote = isUser() || isAdmin();
-    const canRsvp = isUser() || isAdmin();
-    const canEditDelete = isAdmin() || (isVenue() && event.createdBy?.email === currentUser?.email);
-    const [attendingCount, setAttendingCount] = useState(event.rsvps?.length || 0);
-    const [isUserAttending, setIsUserAttending] = useState(isAttending);
+  const canVote = isUser() || isAdmin();
+  const canRsvp = isUser() || isAdmin();
+  const canEditDelete = isAdmin() || (isVenue() && event.createdBy?.email === currentUser?.email);
+  const [attendingCount, setAttendingCount] = useState(event.rsvps?.length || 0);
+  const [isUserAttending, setIsUserAttending] = useState(isAttending);
 
-useEffect(() => {
-  setAttendingCount(event.rsvps?.length || 0);
-}, [event.rsvps]);
+  useEffect(() => {
+    setAttendingCount(event.rsvps?.length || 0);
+  }, [event.rsvps]);
 
 
 
-{/*
+  {/*
  return (
      <div className="d-flex justify-content-center mt-4">
        <div className="col-md-8">
@@ -129,7 +129,7 @@ useEffect(() => {
   };
 */}
 
-return (
+  return (
     <div className="d-flex justify-content-center mt-4">
       <div className="col-md-10">
         <Card className="shadow">
@@ -148,14 +148,14 @@ return (
 
 
           <Card.Body className="p-0 text-center">
-          <p className="event-details ">
-                          {event.date} at {event.time}
-                          </p>
-                         <h5><strong>{event.venue}</strong></h5>
+            <p className="event-details ">
+              {event.date} at {event.time}
+            </p>
+            <h5><strong>{event.venue}</strong></h5>
 
 
             <ListGroup className="list-group-flush ">
-             {/* <ListGroup.Item>
+              {/* <ListGroup.Item>
               <div className="row">
               <div className="col-4 fw-bold text-start">Description:</div>
               <div className="col-8 text-start">{event.description}</div>
@@ -169,7 +169,7 @@ return (
 
 
 
-               {/*
+              {/*
                 <ListGroup.Item>
                 <strong>Bands & Setlists:</strong>
 
@@ -250,62 +250,62 @@ return (
 
 
 
-<ListGroup.Item>
-  <div className="mt-3">
-    featuring
-    {event.bands?.map((band) => (
-      <div key={band.id} className="mb-4">
-        <h5><strong>{band.name}</strong></h5>
-        <hr />
+              <ListGroup.Item>
+                <div className="mt-3">
+                  featuring
+                  {event.bands?.map((band) => (
+                    <div key={band.id} className="mb-4">
+                      <h5><strong>{band.name}</strong></h5>
+                      <hr />
 
 
 
-        {(band.customSongSlots > 0 || band.setlist?.length > 0) && (
-          <div className="d-flex flex-wrap justify-content-center gap-4">
-            {band.setlist?.length > 0 && (
-              <div><strong>Total Songs: </strong>{band.setlist.length}</div>
-            )}
+                      {(band.customSongSlots > 0 || band.setlist?.length > 0) && (
+                        <div className="d-flex flex-wrap justify-content-center gap-4">
+                          {band.setlist?.length > 0 && (
+                            <div><strong>Total Songs: </strong>{band.setlist.length}</div>
+                          )}
 
-            {band.customSongSlots > 0 && (
-              <div><strong>Custom Song Slots: </strong>{band.customSongSlots}</div>
-            )}
-          </div>
-        )}
+                          {band.customSongSlots > 0 && (
+                            <div><strong>Custom Song Slots: </strong>{band.customSongSlots}</div>
+                          )}
+                        </div>
+                      )}
 
-        <p></p>
+                      <p></p>
 
-        {band.setlist?.length > 0 && (
-          <div className="row">
-            {band.setlist.map((song, i) => (
-              <div key={i} className="col-md-4 col-sm-6 mb-2 text-start">
-                🎵 {song}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    ))}
-  </div>
-</ListGroup.Item>
+                      {band.setlist?.length > 0 && (
+                        <div className="row">
+                          {band.setlist.map((song, i) => (
+                            <div key={i} className="col-md-4 col-sm-6 mb-2 text-start">
+                              🎵 {song}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </ListGroup.Item>
 
 
 
               <ListGroup.Item>
 
-              <div className="d-flex flex-wrap justify-content-center gap-4">
-                <strong>Attending:</strong> {attendingCount}
-                <strong> Ticket Price: </strong> {event.type}
+                <div className="d-flex flex-wrap justify-content-center gap-4">
+                  <strong>Attending:</strong> {attendingCount}
+                  <strong> Ticket Price: </strong> {event.type}
                 </div>
               </ListGroup.Item>
-               <ListGroup.Item>
-               <h5 className="display-7 fw-normal text-muted">{event.description}</h5>
-               </ListGroup.Item>
+              <ListGroup.Item>
+                <h5 className="display-7 fw-normal text-muted">{event.description}</h5>
+              </ListGroup.Item>
             </ListGroup>
 
 
 
-<div
-  className="
+            <div
+              className="
     d-flex
     flex-column flex-sm-column flex-md-row
     flex-wrap
@@ -313,63 +313,63 @@ return (
     gap-3
     mx-auto
   "
-  style={{ maxWidth: '500px' }}  // limits container width on large screens
->
-  <Link to={`/events/${event.id}/winners`} className="btn btn-outline-warning">
-    Song Rankings &raquo;
-  </Link>
+              style={{ maxWidth: '500px' }}  // limits container width on large screens
+            >
+              <Link to={`/events/${event.id}/winners`} className="btn btn-outline-warning">
+                Song Rankings &raquo;
+              </Link>
 
-  {canVote && (
-    <Link to={`/events/${event.id}/vote`} className="btn btn-outline-secondary">
-      🎤 Vote for Songs
-    </Link>
-  )}
+              {canVote && (
+                <Link to={`/events/${event.id}/vote`} className="btn btn-outline-secondary">
+                  🎤 Vote for Songs
+                </Link>
+              )}
 
-  {canRsvp && (
-    isUserAttending ? (
-      <button
-        className="btn btn-outline-danger"
-        onClick={() => {
-          onCancelRsvp?.(event.id);
-          setIsUserAttending(false);
-          setAttendingCount(prev => prev - 1);
-        }}
-      >
-        ❌ Cancel RSVP
-      </button>
-    ) : (
-      <button
-        className="btn btn-outline-success"
-        onClick={() => {
-          onRsvp?.(event.id);
-          setIsUserAttending(true);
-          setAttendingCount(prev => prev + 1);
-        }}
-      >
-        ✅ RSVP
-      </button>
-    )
-  )}
+              {canRsvp && (
+                isUserAttending ? (
+                  <button
+                    className="btn btn-outline-danger"
+                    onClick={() => {
+                      onCancelRsvp?.(event.id);
+                      setIsUserAttending(false);
+                      setAttendingCount(prev => prev - 1);
+                    }}
+                  >
+                    ❌ Cancel RSVP
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-outline-success"
+                    onClick={() => {
+                      onRsvp?.(event.id);
+                      setIsUserAttending(true);
+                      setAttendingCount(prev => prev + 1);
+                    }}
+                  >
+                    ✅ RSVP
+                  </button>
+                )
+              )}
 
-  {canEditDelete && (
-    <>
-      <Link to={`/events/edit/${event.id}`} className="btn btn-secondary">
-         Edit Event
-      </Link>
+              {canEditDelete && (
+                <>
+                  <Link to={`/events/edit/${event.id}`} className="btn btn-secondary">
+                    Edit Event
+                  </Link>
 
-      <Button
-       variant="outline-danger"
-        onClick={() => onDelete?.(event.id)}
-      >
-        🗑️ Delete
-      </Button>
+                  <Button
+                    variant="outline-danger"
+                    onClick={() => onDelete?.(event.id)}
+                  >
+                    🗑️ Delete
+                  </Button>
 
-    </>
-  )}
-</div>
+                </>
+              )}
+            </div>
 
 
-{/*}
+            {/*}
             <div className="d-flex flex-wrap justify-content-center gap-4">
               <Link to={`/events/${event.id}/winners`} className="btn btn-outline-warning my-2 me-3">
                                                                    Song Rankings &raquo;
@@ -459,7 +459,7 @@ return (
 
 
           <Card.Footer className="card-footer text-muted text-center mt-4">
-             {event.location}
+            {event.location}
           </Card.Footer>
 
         </Card>
