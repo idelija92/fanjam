@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import API from '../services/api';
 import { AuthContext } from '../context/AuthContext';
+import "./styles/AdminPanel.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Button, Navbar, Nav, Container,Carousel } from 'react-bootstrap';
+
 
 const ALL_ROLES = ['USER', 'ADMIN', 'BAND', 'VENUE'];
 
@@ -61,9 +65,10 @@ function AdminUsers() {
     };
 
     return (
-        <div>
-            <h2>Admin: Manage Users</h2>
-            <table border="1" cellPadding="6">
+        <div class="table-container">
+             <div class="table-wrapper">
+            <h2 class="table-heading">Admin: Manage Users</h2>
+            <table border="1" cellPadding="6" background-color= "#f4f4f4" >
                 <thead>
                     <tr>
                         <th>ID</th><th>Username</th><th>Email</th><th>Roles</th><th>Actions</th>
@@ -77,14 +82,18 @@ function AdminUsers() {
                             <td>{user.email}</td>
                             <td>
                                 {ALL_ROLES.map(role => (
-                                    <label key={role} style={{ display: 'block' }}>
-                                        <input
-                                            type="checkbox"
-                                            checked={user.roles.includes(role)}
-                                            onChange={() => toggleRole(user.id, role)}
-                                        />
-                                        {role}
-                                    </label>
+                                   <div className="form-check">
+  <input
+    className="form-check-input"
+    type="checkbox"
+    id={`role-${role}`}
+    checked={user.roles.includes(role)}
+    onChange={() => toggleRole(user.id, role)}
+  />
+  <label className="form-check-label" htmlFor={`role-${role}`}>
+    {role}
+  </label>
+</div>
                                 ))}
                             </td>
                             <td>
@@ -94,6 +103,7 @@ function AdminUsers() {
                     ))}
                 </tbody>
             </table>
+        </div>
         </div>
     );
 }

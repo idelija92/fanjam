@@ -30,30 +30,56 @@ function Register() {
   };
 
   return (
-    <FormWrapper title="Register">
-      <form onSubmit={handleRegister}>
-        <FormInput
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <FormInput
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <FormInput
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <FormButton type="submit">Register</FormButton>
-      </form>
-      {message && <p style={{ marginTop: '1rem', textAlign: 'center' }}>{message}</p>}
-    </FormWrapper>
+   <FormWrapper title="Register">
+  <div className="container mt-5">
+    <div className="card shadow-sm">
+      <div className="card-header bg-primary text-white">
+        <h5 className="mb-0">Register</h5>
+      </div>
+      <div className="card-body">
+        <form onSubmit={handleRegister}>
+          <div className="mb-3">
+            <label htmlFor="username" className="form-label">Username</label>
+            <FormInput
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="form-control"
+            />
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="email" className="form-label">Email</label>
+            <FormInput
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="form-control"
+            />
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="password" className="form-label">Password</label>
+            <FormInput
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="form-control"
+            />
+          </div>
+
+          <FormButton type="submit" className="btn btn-success">Register</FormButton>
+        </form>
+
+        {message && <p className="text-center mt-3">{message}</p>}
+      </div>
+    </div>
+  </div>
+</FormWrapper>
+
   );
 }
 
