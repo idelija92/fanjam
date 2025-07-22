@@ -16,6 +16,7 @@ const EventCard = ({
     showEditDelete = false,
 }) => {
 
+
     const { isUser, isAdmin, isVenue, isBand } = useRole();
     const { currentUser } = useContext(AuthContext);
 
@@ -25,10 +26,20 @@ const EventCard = ({
     const [attendingCount, setAttendingCount] = useState(event.rsvps?.length || 0);
     const [isUserAttending, setIsUserAttending] = useState(isAttending);
 
+
+
 useEffect(() => {
   setAttendingCount(event.rsvps?.length || 0);
 }, [event.rsvps]);
 
+const getEventImage = (event) => {
+      if (event.venue === 'The Curragh Racecourse') return '/Horse-Country.png';
+      if (event.venue === 'Shenanigans Pub') return '/flame_guitar_venue.png';
+      if (event.venue === 'Messers Pub') return 'crowd_hands_up.jpg';
+      if (event.venue === 'Whelans') return 'https://www.google.com/imgres?q=whelans%20dublin%20logo&imgurl=https%3A%2F%2Fwww.whelanslive.com%2Fwp-content%2Fthemes%2Fyootheme%2Fcache%2Fa8%2Fwhelans-logo-black-new-a8956028.png&imgrefurl=https%3A%2F%2Fwww.whelanslive.com%2Fabout%2Fhistory%2F&docid=kMpgbjW0578jrM&tbnid=iiKI65Agdt_lNM&vet=12ahUKEwiP9_WOv8yOAxW2QUEAHVEAIbEQM3oECBMQAA..i&w=220&h=136&hcb=2&ved=2ahUKEwiP9_WOv8yOAxW2QUEAHVEAIbEQM3oECBMQAA';
+      if (event.location === 'Dublin') return '/mic2.png';
+      return '/guitar.jpg';
+    };
 
 
 {/*
@@ -136,9 +147,12 @@ return (
 
           <Card.Img
             variant="top"
-            src={event.imageUrl || 'guitar.jpg'}
-            alt="Event"
-            style={{ objectFit: 'cover', maxHeight: '300px' }}
+            /*src={event.imageUrl || 'guitar.jpg'}
+            alt="Event"*/
+             src={getEventImage(event)}
+             alt={event.title}
+
+            style={{ objectFit: 'cover',objectPosition: 'center', maxHeight: '500px' }}
           />
 
 
@@ -251,12 +265,15 @@ return (
 
 
 <ListGroup.Item>
+
   <div className="mt-3">
     featuring
+    <hr/>
     {event.bands?.map((band) => (
       <div key={band.id} className="mb-4">
-        <h5><strong>{band.name}</strong></h5>
-        <hr />
+      <div className="bg-secondary text-white p-2 rounded">
+       <h5><strong>{band.name}</strong></h5>
+       </div>
 
 
 
@@ -361,7 +378,7 @@ return (
        variant="outline-danger"
         onClick={() => onDelete?.(event.id)}
       >
-        🗑️ Delete
+        ❌ Delete
       </Button>
 
     </>

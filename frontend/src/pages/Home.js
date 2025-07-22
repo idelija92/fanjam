@@ -3,11 +3,9 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import useRole from '../hooks/useRole';
 import API from '../services/api';
-import "./styles/Home.css";
+//import "./styles/Home.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Navbar, Nav, Container,Carousel } from 'react-bootstrap';
-
-
+import { Button, Navbar, Nav, Container,Carousel} from 'react-bootstrap';
 
 
 const Home = () => {
@@ -28,6 +26,16 @@ const Home = () => {
     fetchEvents();
   }, []);
 
+const getEventImage = (event) => {
+      if (event.venue === 'The Curragh Racecourse') return '/Horse-Country.png';
+      if (event.venue === 'Shenanigans Pub') return '/flame_guitar_venue.png';
+      if (event.venue === 'Messers Pub') return 'crowd_hands_up.jpg';
+      if (event.venue === 'Whelans') return 'https://www.google.com/imgres?q=whelans%20dublin%20logo&imgurl=https%3A%2F%2Fwww.whelanslive.com%2Fwp-content%2Fthemes%2Fyootheme%2Fcache%2Fa8%2Fwhelans-logo-black-new-a8956028.png&imgrefurl=https%3A%2F%2Fwww.whelanslive.com%2Fabout%2Fhistory%2F&docid=kMpgbjW0578jrM&tbnid=iiKI65Agdt_lNM&vet=12ahUKEwiP9_WOv8yOAxW2QUEAHVEAIbEQM3oECBMQAA..i&w=220&h=136&hcb=2&ved=2ahUKEwiP9_WOv8yOAxW2QUEAHVEAIbEQM3oECBMQAA';
+      if (event.location === 'Dublin') return '/mic2.png';
+      return '/guitar.jpg';
+    };
+
+
   return (
   <>
  <section className="jumbotron text-center">
@@ -43,8 +51,13 @@ const Home = () => {
 Are you ready to to Jam?
        </p>
        <p>
-         <a href="/bands" className="btn btn-outline-warning my-2 me-3">Browse Bands &raquo;</a>
-         <a href="/events" className="btn btn-outline-warning my-2 me-3">View Events &raquo;</a>
+<Button as={Link} to="/bands" variant="outline-warning" className="my-2 me-3">
+  Browse Bands &raquo;
+</Button>
+
+<Button as={Link} to="/events" variant="outline-warning" className="my-2 me-3">
+  View Events &raquo;
+</Button>
        </p>
        {isAuthenticated && isAdmin() && (
                    <div className="admin-tools d-flex flex-wrap justify-content-center gap-3 mt-3">
@@ -87,9 +100,9 @@ Are you ready to to Jam?
         <p className="lead fw-normal fs-6 fs-md-5 mb-3 mb-md-4">
           Stop watching. Start jamming. Connect with artists and fans in real-time.
         </p>
-         <a className="btn btn-warning my-2 me-3" href="#">
-                  Learn More
-                </a>
+         <Button as={Link} to="/your-target-route" variant="warning" className="my-2 me-3">
+          Learn More
+         </Button>
       </div>
 
     </div>
@@ -506,7 +519,9 @@ Are you ready to to Jam?
       <div className="d-flex flex-wrap justify-content-center gap-4">
         {Array.isArray(events) && events.map(event => (
           <div key={event.id} className="card" style={{ width: "18rem" }}>
-            <img className="card-img-top" src="guitar.jpg" alt="Card image cap" />
+            <img className="card-img-top" src={getEventImage(event)} alt={event.title}
+            style={{ height: '200px',objectFit: 'cover',objectPosition: 'center' }}/>
+
 
             <div className="card-body">
 

@@ -30,9 +30,14 @@ const Bands = () => {
     }
   };
 
+
+
   return (
     <div className="bands-container">
       <h1 className="bands-title">Bands</h1>
+{bands.length === 0 ? (
+      <p>No bands yet!</p>
+    ) : (
 
 
       <ul className="bands-list">
@@ -46,7 +51,8 @@ const Bands = () => {
           />
         ))}
       </ul>
-    </div>
+ )}
+  </div>
   );
 };
 

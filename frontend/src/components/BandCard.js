@@ -1,12 +1,24 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import useRole from '../hooks/useRole';
-import './BandCard.css';
+//import './BandCard.css';
 import { Card, ListGroup, Button } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const BandCard = ({ band, showActions = false, onDelete }) => {
   const { isAdmin, isVenue, isBand } = useRole();
   const canSeeManager = isAdmin() || isVenue() || isBand();
+
+const getBandImage = (band) => {
+        if (band.name === 'Bon Jovi Tribute') return "https://1000logos.net/wp-content/uploads/2016/10/Bon-Jovi-Symbol.jpg";
+        if (band.name === 'Ed Sheeran Tribute') return 'https://1000logos.net/wp-content/uploads/2024/06/Ed-Sheeran-Logo.png';
+        if (band.name === 'AbbA Tribute') return 'https://1000logos.net/wp-content/uploads/2024/06/Abba-Logo.png';
+        if (band.name === 'Queen Tribute') return 'https://1000logos.net/wp-content/uploads/2024/06/Queen-Logo.png';
+        if (band.name === 'Green Day Tribute') return 'https://1000logos.net/wp-content/uploads/2024/06/Green-Day-Logo.png';
+        if (band.name === 'Iron Maiden Tribute') return 'https://1000logos.net/wp-content/uploads/2024/07/Iron-Maiden-Logo-768x432.png';
+        return '/piano.jpg';
+      };
+
 
   return  (
              <div className="d-flex justify-content-center mt-4">
@@ -15,9 +27,15 @@ const BandCard = ({ band, showActions = false, onDelete }) => {
                    {/* Image */}
                    <Card.Img
                      variant="top"
-                     src="mic2.png" // Replace with band.imageUrl if available
+                     /*src="https://1000logos.net/wp-content/uploads/2016/10/Bon-Jovi-Symbol.jpg"
                      alt={band.name}
-                     style={{ objectFit: 'cover', maxHeight: '300px' }}
+                     style={{ objectFit: 'cover', maxHeight: '300px' }}*/
+
+                     src={getBandImage(band)}
+                      alt={band.name}
+                     style={{ objectFit: 'cover',objectPosition: 'center', maxHeight: '300px' }}
+
+
                    />
 
                    {/* Band Name Header */}
@@ -72,7 +90,7 @@ const BandCard = ({ band, showActions = false, onDelete }) => {
                            variant="outline-danger"
                            onClick={() => onDelete?.(band.id)}
                          >
-                           🗑️ Delete
+                           ❌ Delete
                          </Button>
                        </div>
                      </Card.Footer>
@@ -81,7 +99,7 @@ const BandCard = ({ band, showActions = false, onDelete }) => {
                </div>
              </div>
            );
-         }
+         };
 
 {/*
 <div
