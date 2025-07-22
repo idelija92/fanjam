@@ -1,30 +1,45 @@
-name: Deploy Frontend to S3
+name: Build, Test & Deploy Frontend to S3
 
 on:
   push:
-    branches: [ "main", "feature/cloud-deploy" ]
+    branches:
+      - "main"
+      - "feature/cloud-deploy"
     paths:
       - 'frontend/**'
 
 jobs:
-  deploy:
+  build-test-deploy-frontend:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Set up Node.js 18
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Install dependencies and build
+      # Install dependencies
+      - name: Install dependencies
         working-directory: frontend
-        run: |
-          npm ci
-          npm run build
+        run: npm ci
 
+      # Run frontend tests BEFORE building
+      - name: Run frontend tests
+        working-directory: frontend
+        run: npm test -- --watchAll=false
+        # If tests fail, workflow stops, no deploy
+
+      # Build the frontend
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
+
+      # Configure AWS credentials for S3 deploy
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -32,5 +47,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-1
 
-      - name: Sync build folder to S3
+      # Sync built files to S3 bucket
+      - name: Deploy to S3
         run: aws s3 sync frontend/build/ s3://fanjam-app --delete
