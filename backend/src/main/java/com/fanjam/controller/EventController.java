@@ -298,5 +298,6 @@ public class EventController {
         userRepository.save(user);
 
         return ResponseEntity.ok("RSVP removed");
+        
     }
 }

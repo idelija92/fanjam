@@ -27,8 +27,7 @@ jobs:
       # Run backend tests BEFORE deployment
       - name: Run backend tests
         working-directory: backend
-        run: |
-          ./mvnw clean test
+        run: mvn clean test
         # If tests fail, the workflow stops here (no deploy)
 
       # Configure AWS credentials
