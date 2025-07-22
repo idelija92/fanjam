@@ -10,7 +10,7 @@ class FlywayMigrationTest {
     @Test
     void validateFlywayMigrations() {
         Flyway flyway = Flyway.configure()
-                .dataSource("jdbc:h2:mem:testdb", "sa", "")
+                .dataSource("jdbc:h2:mem:testdb;MODE=PostgreSQL", "sa", "")
                 .locations("classpath:db/migration")
                 .load();
 

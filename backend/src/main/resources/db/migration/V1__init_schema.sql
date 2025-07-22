@@ -27,7 +27,7 @@ CREATE TABLE events (
     date DATE,
     time TIME,
     type VARCHAR(50),
-    setlist TEXT[]
+    setlist TEXT
 );
 
 CREATE TABLE event_band (
