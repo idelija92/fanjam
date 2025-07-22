@@ -6,7 +6,6 @@ import com.fanjam.model.User;
 import com.fanjam.repository.BandRepository;
 import com.fanjam.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
