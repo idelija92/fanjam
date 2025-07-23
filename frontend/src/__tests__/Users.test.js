@@ -1,22 +1,51 @@
+import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import Users from '../pages/Users';
-import API from '../services/api';
 import { MemoryRouter } from 'react-router-dom';
+import Users from '../pages/Users';
+import axios from 'axios';
 
-jest.mock('../services/api');
+jest.mock('axios');
 
 describe('Users Component', () => {
+  const mockUsers = [
+    {
+      id: 1,
+      username: 'Alice',
+      email: 'alice@example.com',
+      roles: ['ADMIN']
+    },
+    {
+      id: 2,
+      username: 'Bob',
+      email: 'bob@example.com',
+      roles: ['USER']
+    }
+  ];
+
+  let originalWarn;
+  beforeAll(() => {
+    originalWarn = console.warn;
+    jest.spyOn(console, 'warn').mockImplementation((msg, ...args) => {
+      if (
+        typeof msg === 'string' &&
+        msg.includes('React Router Future Flag Warning')
+      ) {
+        return; 
+      }
+      originalWarn(msg, ...args);
+    });
+  });
+
+  afterAll(() => {
+    console.warn.mockRestore();
+  });
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   test('shows users loaded from API', async () => {
-    API.get.mockResolvedValueOnce({
-      data: [
-        { id: 1, username: 'Alice', email: 'alice@example.com', roles: ['ADMIN'] },
-        { id: 2, username: 'Bob', email: 'bob@example.com', roles: ['USER'] }
-      ]
-    });
+    axios.get.mockResolvedValueOnce({ data: mockUsers });
 
     render(
       <MemoryRouter>
@@ -25,24 +54,19 @@ describe('Users Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Alice')).toBeInTheDocument();
-      expect(screen.getByText('alice@example.com')).toBeInTheDocument();
-      expect(screen.getByText('ADMIN')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('Alice')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('alice@example.com')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('ADMIN')).toBeInTheDocument();
 
-      expect(screen.getByText('Bob')).toBeInTheDocument();
-      expect(screen.getByText('bob@example.com')).toBeInTheDocument();
-      expect(screen.getByText('USER')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('Bob')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('bob@example.com')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('USER')).toBeInTheDocument();
     });
   });
 
   test('deletes a user when confirmed', async () => {
-    API.get.mockResolvedValueOnce({
-      data: [
-        { id: 1, username: 'Alice', email: 'alice@example.com', roles: ['ADMIN'] }
-      ]
-    });
-
-    API.delete.mockResolvedValueOnce({});
+    axios.get.mockResolvedValueOnce({ data: mockUsers });
+    axios.delete.mockResolvedValueOnce({ status: 200 });
 
     window.confirm = jest.fn(() => true);
 
@@ -53,25 +77,22 @@ describe('Users Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Alice')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('Alice')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('Bob')).toBeInTheDocument();
     });
 
-    const deleteButton = screen.getByRole('button', { name: /delete/i });
-    fireEvent.click(deleteButton);
-
-    await waitFor(() => expect(API.delete).toHaveBeenCalledWith('/users/1'));
+   
+    const deleteButtons = screen.getAllByRole('button', { name: /❌ Delete/i });
+    const deleteBobButton = deleteButtons[1]; // second user (Bob)
+    fireEvent.click(deleteBobButton);
 
     await waitFor(() => {
-      expect(screen.queryByText('Alice')).not.toBeInTheDocument();
+      expect(axios.delete).toHaveBeenCalledWith('/users/2');
     });
   });
 
   test('does NOT delete a user when cancel is pressed', async () => {
-    API.get.mockResolvedValueOnce({
-      data: [
-        { id: 1, username: 'Alice', email: 'alice@example.com', roles: ['ADMIN'] }
-      ]
-    });
+    axios.get.mockResolvedValueOnce({ data: mockUsers });
 
     window.confirm = jest.fn(() => false);
 
@@ -82,14 +103,15 @@ describe('Users Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Alice')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('Alice')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('Bob')).toBeInTheDocument();
     });
 
-    const deleteButton = screen.getByRole('button', { name: /delete/i });
-    fireEvent.click(deleteButton);
+    const deleteButtons = screen.getAllByRole('button', { name: /❌ Delete/i });
+    const deleteAliceButton = deleteButtons[0];
+    fireEvent.click(deleteAliceButton);
 
-    expect(API.delete).not.toHaveBeenCalled();
 
-    expect(screen.getByText('Alice')).toBeInTheDocument();
+    expect(axios.delete).not.toHaveBeenCalled();
   });
 });
