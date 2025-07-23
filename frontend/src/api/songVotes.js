@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API = 'http://3.253.15.40:8080/api/song-votes';
+
+const API = 'http://54.195.241.54:8080/api/song-votes';
 
 export const voteForSong = async (eventId, songTitle, token, customMessage = '') => {
     return axios.post(
