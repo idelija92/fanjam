@@ -30,6 +30,7 @@ public class SecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/api/venue/**")).hasAnyRole("VENUE", "ADMIN")
                         .requestMatchers(new AntPathRequestMatcher("/api/band/**")).hasAnyRole("BAND", "ADMIN")
                         .requestMatchers(new AntPathRequestMatcher("/api/admin/**")).hasRole("ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/health")).permitAll()
 
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter,
