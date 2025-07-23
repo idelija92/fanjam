@@ -21,6 +21,8 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/health").permitAll()
+                        .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/song-votes/event/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/bands/my")).hasAnyRole("BAND", "ADMIN")
@@ -30,7 +32,6 @@ public class SecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/api/venue/**")).hasAnyRole("VENUE", "ADMIN")
                         .requestMatchers(new AntPathRequestMatcher("/api/band/**")).hasAnyRole("BAND", "ADMIN")
                         .requestMatchers(new AntPathRequestMatcher("/api/admin/**")).hasRole("ADMIN")
-                        .requestMatchers("/health").permitAll()
 
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter,
