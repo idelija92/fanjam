@@ -105,7 +105,6 @@ public class AuthController {
             }
         }
 
-        
         userRepository.delete(user);
         return ResponseEntity.ok("Account deleted.");
     }

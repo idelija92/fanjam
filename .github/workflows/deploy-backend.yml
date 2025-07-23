@@ -18,7 +18,7 @@ jobs:
       ECR_REPOSITORY: fanjam-backend
       IMAGE_TAG: latest
       ELASTIC_IP: 54.195.241.54
-      INSTANCE_TYPE: t2.micro
+      INSTANCE_TYPE: t3.micro
       AMI_ID: ami-021d9f8e43481e7da
       SECURITY_GROUP_ID: sg-0d1859e16ef4a2ffc
       KEY_NAME: fanjam-keypair
@@ -40,7 +40,7 @@ jobs:
         working-directory: backend
         run: mvn clean test
 
-      # Configure AWS credentials
+      # onfigure AWS credentials
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -59,85 +59,95 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./backend
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-      # Launch GREEN EC2 instance
+      # aunch GREEN EC2 instance
       - name: Launch Green EC2 instance
         id: launch_green
         run: |
-          GREEN_ID=$(aws ec2 run-instances \
+          GREEN_INSTANCE_ID=$(aws ec2 run-instances \
             --image-id $AMI_ID \
             --count 1 \
             --instance-type $INSTANCE_TYPE \
             --security-group-ids $SECURITY_GROUP_ID \
             --key-name $KEY_NAME \
+            --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=fanjam-backend-green}]' \
             --query 'Instances[0].InstanceId' \
             --output text)
-          echo "GREEN_ID=$GREEN_ID" >> $GITHUB_ENV
+          echo "GREEN_INSTANCE_ID=$GREEN_INSTANCE_ID" >> $GITHUB_ENV
 
-          # Wait for Green to be running
-          aws ec2 wait instance-running --instance-ids $GREEN_ID
+          echo "Waiting for Green instance ($GREEN_INSTANCE_ID) to enter running state..."
+          aws ec2 wait instance-running --instance-ids $GREEN_INSTANCE_ID
+          echo "Green instance is running"
 
-          # Fetch private IP
-          GREEN_IP=$(aws ec2 describe-instances \
-            --instance-ids $GREEN_ID \
+      # Wait until the Green instance is fully initialized (status checks OK)
+      - name: Wait for Green instance to pass status checks
+        run: |
+          aws ec2 wait instance-status-ok --instance-ids ${{ env.GREEN_INSTANCE_ID }}
+          echo "Green instance passed all status checks"
+
+      # Fetch Green instance Public IP
+      - name: Get Green Public IP
+        id: get_green_ip
+        run: |
+          GREEN_PUBLIC_IP=$(aws ec2 describe-instances \
+            --instance-ids ${{ env.GREEN_INSTANCE_ID }} \
             --query 'Reservations[0].Instances[0].PublicIpAddress' \
             --output text)
-          echo "GREEN_IP=$GREEN_IP" >> $GITHUB_ENV
+          echo "GREEN_PUBLIC_IP=$GREEN_PUBLIC_IP" >> $GITHUB_ENV
 
-      # Deploy Backend Container on Green
-      - name: Deploy container to Green
+      # Deploy backend container on Green instance via SSM
+      - name: Deploy Container to Green
         run: |
           aws ssm send-command \
-            --targets "Key=instanceIds,Values=${{ env.GREEN_ID }}" \
+            --targets "Key=instanceIds,Values=${{ env.GREEN_INSTANCE_ID }}" \
             --document-name "AWS-RunShellScript" \
-            --comment "Deploy FanJam backend to Green" \
+            --comment "Deploy FanJam backend on Green" \
             --parameters 'commands=[
-              "sudo yum install -y docker",
-              "sudo service docker start",
-              "sudo usermod -aG docker ec2-user",
-              "docker pull ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}",
+              "docker pull 870964588993.dkr.ecr.eu-west-1.amazonaws.com/fanjam-backend:latest",
+              "docker stop fanjam-backend || true",
+              "docker rm fanjam-backend || true",
               "docker run -d --name fanjam-backend \
                 -e SPRING_DATASOURCE_URL=jdbc:postgresql://fanjam-db.czes28w46v8t.eu-west-1.rds.amazonaws.com:5432/fanjamdb \
                 -e SPRING_DATASOURCE_USERNAME=fanjamdb \
                 -e SPRING_DATASOURCE_PASSWORD=fanjam123 \
                 -e SPRING_JPA_HIBERNATE_DDL_AUTO=update \
                 -p 8080:8080 \
-                ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}"
+                870964588993.dkr.ecr.eu-west-1.amazonaws.com/fanjam-backend:latest"
             ]' \
-            --region $AWS_REGION
+            --region eu-west-1
 
-      # Wait & Health Check Green
-      - name: Health Check Green
+      # Wait & Non-blocking Health Check on Green
+      - name: Health Check Green (non-blocking)
         continue-on-error: true
         run: |
-          echo "Waiting 30s for Green startup..."
+          echo "Waiting 30 seconds for container to start..."
           sleep 30
-          curl -v --max-time 10 http://${{ env.GREEN_IP }}:8080/actuator/health || echo "WARN: Green health check failed"
+          curl -v --max-time 15 http://${{ env.GREEN_PUBLIC_IP }}:8080/actuator/health || echo "⚠️ WARN: Green health check failed but continuing..."
 
       # Get current BLUE instance attached to Elastic IP
       - name: Get current Blue instance
         id: get_blue
         run: |
-          BLUE_ID=$(aws ec2 describe-addresses \
+          BLUE_INSTANCE_ID=$(aws ec2 describe-addresses \
             --public-ips $ELASTIC_IP \
             --query 'Addresses[0].InstanceId' \
             --output text)
-          echo "BLUE_ID=$BLUE_ID" >> $GITHUB_ENV
+          echo "BLUE_INSTANCE_ID=$BLUE_INSTANCE_ID" >> $GITHUB_ENV
 
       # Switch Elastic IP from Blue → Green
-      - name: Switch Elastic IP
+      - name: Switch Elastic IP to Green
         run: |
           aws ec2 associate-address \
-            --instance-id ${{ env.GREEN_ID }} \
+            --instance-id ${{ env.GREEN_INSTANCE_ID }} \
             --public-ip $ELASTIC_IP \
             --allow-reassociation
-          echo "Elastic IP switched to Green!"
+          echo "Elastic IP switched to Green instance ${{ env.GREEN_INSTANCE_ID }}"
 
-      # Terminate Blue
+      # Terminate Blue after switch
       - name: Terminate Blue instance
         run: |
-          if [ "${{ env.BLUE_ID }}" != "None" ]; then
-            aws ec2 terminate-instances --instance-ids ${{ env.BLUE_ID }}
-            echo "Blue instance terminated: ${{ env.BLUE_ID }}"
+          if [ "${{ env.BLUE_INSTANCE_ID }}" != "None" ] && [ "${{ env.BLUE_INSTANCE_ID }}" != "${{ env.GREEN_INSTANCE_ID }}" ]; then
+            echo "Terminating Blue instance: ${{ env.BLUE_INSTANCE_ID }}"
+            aws ec2 terminate-instances --instance-ids ${{ env.BLUE_INSTANCE_ID }}
           else
-            echo "No existing Blue instance found"
+            echo "No Blue instance found or Blue == Green, skipping termination"
           fi
