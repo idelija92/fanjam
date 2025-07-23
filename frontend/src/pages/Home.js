@@ -42,7 +42,7 @@ const getEventImage = (event) => {
    <div className="container text-center py-5">
      <div className="col-md-8 mx-auto">
        <h1 className="display-7 fw-normal" >Welcome to</h1>
-       <img className="logo" src="Fanjampic6.png" alt="Fanjam Logo" height="50" />
+       <img className="logo" src="Fanjampic6.PNG" alt="Fanjam Logo" height="50" />
 <hr></hr>
        <p className="lead fw-normal">
          Be apart of the event with Fanjam. A new and exciting interactive experience for Fans and Bands.
