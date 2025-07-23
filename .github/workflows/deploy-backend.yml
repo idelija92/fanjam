@@ -1,44 +1,34 @@
-name: Blue-Green Deploy Backend to ECR & EC2
+name: Build, Test & Deploy Backend to ECR
 
 on:
   push:
-    branches:
+    branches: 
       - "main"
       - "feature/cloud-deploy"
     paths:
       - 'backend/**'
 
 jobs:
-  blue-green-deploy:
+  build-test-deploy-backend:
     runs-on: ubuntu-latest
 
-    env:
-      AWS_REGION: eu-west-1
-      ECR_REGISTRY: 870964588993.dkr.ecr.eu-west-1.amazonaws.com
-      ECR_REPOSITORY: fanjam-backend
-      IMAGE_TAG: latest
-      ELASTIC_IP: 54.195.241.54
-      INSTANCE_TYPE: t2.micro
-      AMI_ID: ami-021d9f8e43481e7da
-      SECURITY_GROUP_ID: sg-0d1859e16ef4a2ffc
-      KEY_NAME: fanjam-keypair
-
     steps:
-      # Checkout code
+      # Checkout code from GitHub
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set up Java for backend tests
+      # Set up Java 21 (for Spring Boot backend)
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
           java-version: '21'
           distribution: 'temurin'
 
-      # Run backend tests
+      # Run backend tests BEFORE deployment
       - name: Run backend tests
         working-directory: backend
         run: mvn clean test
+        # If tests fail, the workflow stops here (no deploy)
 
       # Configure AWS credentials
       - name: Configure AWS credentials
@@ -46,124 +36,40 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: eu-west-1
 
       # Log in to Amazon ECR
       - name: Log in to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      # Build & Push Docker image
+      # Build, tag, and push Docker image to ECR
       - name: Build & Push Docker image
+        env:
+          ECR_REGISTRY: 870964588993.dkr.ecr.eu-west-1.amazonaws.com
+          ECR_REPOSITORY: fanjam-backend
+          IMAGE_TAG: latest
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./backend
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-      # Launch GREEN EC2 instance
-      - name: Launch Green EC2 instance
-        id: launch_green
-        run: |
-          GREEN_INSTANCE_ID=$(aws ec2 run-instances \
-            --image-id $AMI_ID \
-            --count 1 \
-            --instance-type $INSTANCE_TYPE \
-            --security-group-ids $SECURITY_GROUP_ID \
-            --key-name $KEY_NAME \
-            --query 'Instances[0].InstanceId' \
-            --output text)
-          echo "GREEN_INSTANCE_ID=$GREEN_INSTANCE_ID" >> $GITHUB_ENV
-
-          # Wait for Green to be running
-          aws ec2 wait instance-running --instance-ids $GREEN_INSTANCE_ID
-
-      # Wait until the Green instance is fully initialized
-      - name: Wait for Green instance to pass status checks
-        run: |
-          aws ec2 wait instance-status-ok --instance-ids ${{ env.GREEN_INSTANCE_ID }}
-          echo "Green instance passed all status checks"
-
-      # Wait until Green instance is registered with SSM
-      - name: Wait for Green SSM Agent
-        run: |
-          echo "Waiting for Green instance SSM Agent to register..."
-          for i in {1..30}; do
-            SSM_READY=$(aws ssm describe-instance-information \
-              --query 'InstanceInformationList[*].InstanceId' \
-              --output text | grep -c "${{ env.GREEN_INSTANCE_ID }}" || true)
-
-            if [ "$SSM_READY" -gt 0 ]; then
-              echo "SSM Agent is ready on ${{ env.GREEN_INSTANCE_ID }}"
-              break
-            fi
-
-            echo "⏳ SSM Agent not ready yet, retrying in 15s..."
-            sleep 15
-          done
-
-      # Get Green Public IP
-      - name: Get Green Public IP
-        id: get_green_ip
-        run: |
-          GREEN_PUBLIC_IP=$(aws ec2 describe-instances \
-            --instance-ids ${{ env.GREEN_INSTANCE_ID }} \
-            --query 'Reservations[0].Instances[0].PublicIpAddress' \
-            --output text)
-          echo "GREEN_PUBLIC_IP=$GREEN_PUBLIC_IP" >> $GITHUB_ENV
-
-      # Deploy backend container on Green instance via SSM (TEMP NAME: fanjam-backend-green)
-      - name: Deploy Container to Green
+      # Restart backend container on EC2 via SSM only if tests passed
+      - name: Restart backend container on EC2 via SSM
         run: |
           aws ssm send-command \
-            --targets "Key=instanceIds,Values=${{ env.GREEN_INSTANCE_ID }}" \
+            --instance-ids ${{ secrets.EC2_INSTANCE_ID }} \
             --document-name "AWS-RunShellScript" \
-            --comment "Deploy FanJam backend on Green" \
+            --comment "Restart FanJam backend container" \
             --parameters 'commands=[
-              "docker pull 870964588993.dkr.ecr.eu-west-1.amazonaws.com/fanjam-backend:latest",
-              "docker stop fanjam-backend-green || true",
-              "docker rm fanjam-backend-green || true",
-              "docker run -d --name fanjam-backend-green \
+              "docker pull 870964588993.dkr.ecr.eu-west-1.amazonaws.com/fanjam-backend",
+              "docker stop fanjam-backend || true",
+              "docker rm fanjam-backend || true",
+              "docker run -d --name fanjam-backend \
                 -e SPRING_DATASOURCE_URL=jdbc:postgresql://fanjam-db.czes28w46v8t.eu-west-1.rds.amazonaws.com:5432/fanjamdb \
                 -e SPRING_DATASOURCE_USERNAME=fanjamdb \
                 -e SPRING_DATASOURCE_PASSWORD=fanjam123 \
                 -e SPRING_JPA_HIBERNATE_DDL_AUTO=update \
                 -p 8080:8080 \
-                870964588993.dkr.ecr.eu-west-1.amazonaws.com/fanjam-backend:latest"
+                870964588993.dkr.ecr.eu-west-1.amazonaws.com/fanjam-backend"
             ]' \
             --region eu-west-1
-
-      # Wait & Health Check Green
-      - name: Health Check Green
-        continue-on-error: true
-        run: |
-          echo "Waiting 30s for Green startup..."
-          sleep 30
-          curl -v --max-time 10 http://${{ env.GREEN_PUBLIC_IP }}:8080/actuator/health || echo "WARN: Green health check failed"
-
-      # Get current BLUE instance attached to Elastic IP
-      - name: Get current Blue instance
-        id: get_blue
-        run: |
-          BLUE_INSTANCE_ID=$(aws ec2 describe-addresses \
-            --public-ips $ELASTIC_IP \
-            --query 'Addresses[0].InstanceId' \
-            --output text)
-          echo "BLUE_INSTANCE_ID=$BLUE_INSTANCE_ID" >> $GITHUB_ENV
-
-      # Switch Elastic IP from Blue → Green
-      - name: Switch Elastic IP
-        run: |
-          aws ec2 associate-address \
-            --instance-id ${{ env.GREEN_INSTANCE_ID }} \
-            --public-ip $ELASTIC_IP \
-            --allow-reassociation
-          echo "Elastic IP switched to Green!"
-
-      # Terminate Blue instance after switch
-      - name: Terminate Blue instance
-        run: |
-          if [ "${{ env.BLUE_INSTANCE_ID }}" != "None" ]; then
-            aws ec2 terminate-instances --instance-ids ${{ env.BLUE_INSTANCE_ID }}
-            echo "Blue instance terminated: ${{ env.BLUE_INSTANCE_ID }}"
-          else
-            echo "No existing Blue instance found"
-          fi
