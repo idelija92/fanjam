@@ -26,8 +26,8 @@ const getEventImage = (event) => {
         const fetchData = async () => {
             try {
                 const [voteRes, eventRes] = await Promise.all([
-                    axios.get(`http://localhost:8080/api/song-votes/event/${eventId}`),
-                    axios.get(`http://localhost:8080/api/events/${eventId}`)
+                    axios.get(`http://54.195.241.54:8080/api/song-votes/event/${eventId}`),
+                    axios.get(`http://54.195.241.54:8080/api/events/${eventId}`)
                 ]);
 
                 setVotes(voteRes.data);
