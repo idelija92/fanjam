@@ -26,7 +26,8 @@ import EditSetlist from './pages/EditSetlist';
 import { AuthProvider } from './context/AuthContext';
 import './App.css'; // For full-height CSS //added rc
 import 'bootstrap/dist/css/bootstrap.min.css'; // added rc
-import { Button, Navbar, Nav } from 'react-bootstrap'; //added rc
+import { Container, Card, Spinner, Button, Navbar, Nav } from 'react-bootstrap'; //added rc
+import About from './pages/About';
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
           <Route path="/bands" element={<Bands />} />
           <Route path="/events" element={<Events />} />
           <Route path="/events/:eventId/winners" element={<EventWinnersPage />} />
+          <Route path="/about" element={<About />} />
 
           <Route
             path="/events/:eventId/vote"

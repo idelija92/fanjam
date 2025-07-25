@@ -3,6 +3,8 @@ import API from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import EventCard from '../components/EventCard';
 import { useNavigate } from 'react-router-dom';
+import { Card, ListGroup, Button, Navbar, Nav, Container } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const VenueDashboard = () => {
     const [events, setEvents] = useState([]);
@@ -37,9 +39,14 @@ const VenueDashboard = () => {
     };
 
     return (
-        <div className="venue-dashboard-container">
-            <h1>Venue Dashboard</h1>
-            <p>Events created by you:</p>
+
+
+
+        <div className="events-container">
+        <h1 className="events-title">Venue Dashboard</h1>
+                <div className="mt-3 text-muted">
+            <p><strong>Events created by you:</strong></p>
+            </div>
 
             {events.length === 0 ? (
                 <p>No events created yet.</p>
@@ -54,6 +61,7 @@ const VenueDashboard = () => {
                 ))
             )}
         </div>
+
     );
 };
 

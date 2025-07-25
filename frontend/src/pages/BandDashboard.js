@@ -35,11 +35,12 @@ const BandDashboard = () => {
     const getEventImage = (event) => {
           if (event.venue === 'The Curragh Racecourse') return '/Horse-Country.png';
           if (event.venue === 'Shenanigans Pub') return '/flame_guitar_venue.png';
-          if (event.venue === 'Messers Pub') return 'crowd_hands_up.jpg';
-          if (event.venue === 'Whelans') return 'mics.png';
+          if (event.venue === 'Messers Pub') return '/crowd_hands_up.jpg';
+          if (event.venue === 'Whelans Pub') return '/enjoying.png';
           if (event.location === 'Dublin') return '/mic2.png';
           return '/guitar.jpg';
         };
+
 
         const getBandImage = (band) => {
                 if (band.name === 'Bon Jovi Tribute') return "https://1000logos.net/wp-content/uploads/2016/10/Bon-Jovi-Symbol.jpg";
