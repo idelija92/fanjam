@@ -3,7 +3,7 @@ import './form.css';
 
 const FormWrapper = ({ title, children }) => {
   return (
-    <div className="form-wrapper">
+    <div className={ `form-wrapper ${className}` }>
       {title && <h2 className="form-title">{title}</h2>}
       {children}
     </div>

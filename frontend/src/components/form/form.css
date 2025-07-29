@@ -51,3 +51,7 @@
   border-radius: 4px;
   resize: vertical;
 }
+
+.full-width-wrapper {
+  max-width: none;
+}
