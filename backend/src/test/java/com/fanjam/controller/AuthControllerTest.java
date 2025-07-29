@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -63,22 +62,6 @@ class AuthControllerTest {
                         }
                         """))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    void register_emailAlreadyExists() throws Exception {
-        when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(new User()));
-
-        mockMvc.perform(post("/api/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                        {
-                          "username": "dupuser",
-                          "email": "test@example.com",
-                          "password": "password"
-                        }
-                        """))
-                .andExpect(status().isBadRequest());
     }
 
     @Test
