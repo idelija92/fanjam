@@ -30,7 +30,7 @@ describe('Users Component', () => {
         typeof msg === 'string' &&
         msg.includes('React Router Future Flag Warning')
       ) {
-        return; 
+        return;
       }
       originalWarn(msg, ...args);
     });
@@ -53,15 +53,13 @@ describe('Users Component', () => {
       </MemoryRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.getByDisplayValue('Alice')).toBeInTheDocument();
-      expect(screen.getByDisplayValue('alice@example.com')).toBeInTheDocument();
-      expect(screen.getByDisplayValue('ADMIN')).toBeInTheDocument();
+    expect(await screen.findByText('Alice')).toBeInTheDocument();
+    expect(screen.getByText('alice@example.com')).toBeInTheDocument();
+    expect(screen.getByText('ADMIN')).toBeInTheDocument();
 
-      expect(screen.getByDisplayValue('Bob')).toBeInTheDocument();
-      expect(screen.getByDisplayValue('bob@example.com')).toBeInTheDocument();
-      expect(screen.getByDisplayValue('USER')).toBeInTheDocument();
-    });
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+    expect(screen.getByText('bob@example.com')).toBeInTheDocument();
+    expect(screen.getByText('USER')).toBeInTheDocument();
   });
 
   test('deletes a user when confirmed', async () => {
@@ -76,15 +74,10 @@ describe('Users Component', () => {
       </MemoryRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.getByDisplayValue('Alice')).toBeInTheDocument();
-      expect(screen.getByDisplayValue('Bob')).toBeInTheDocument();
-    });
+    await screen.findByText('Bob');
 
-   
-    const deleteButtons = screen.getAllByRole('button', { name: /❌ Delete/i });
-    const deleteBobButton = deleteButtons[1]; // second user (Bob)
-    fireEvent.click(deleteBobButton);
+    const deleteButtons = screen.getAllByRole('button', { name: /Delete/i });
+    fireEvent.click(deleteButtons[1]); // Bob's delete button
 
     await waitFor(() => {
       expect(axios.delete).toHaveBeenCalledWith('/users/2');
@@ -102,15 +95,10 @@ describe('Users Component', () => {
       </MemoryRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.getByDisplayValue('Alice')).toBeInTheDocument();
-      expect(screen.getByDisplayValue('Bob')).toBeInTheDocument();
-    });
+    await screen.findByText('Alice');
 
-    const deleteButtons = screen.getAllByRole('button', { name: /❌ Delete/i });
-    const deleteAliceButton = deleteButtons[0];
-    fireEvent.click(deleteAliceButton);
-
+    const deleteButtons = screen.getAllByRole('button', { name: /Delete/i });
+    fireEvent.click(deleteButtons[0]); // Alice's delete button
 
     expect(axios.delete).not.toHaveBeenCalled();
   });
