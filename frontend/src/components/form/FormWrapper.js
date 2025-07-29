@@ -1,9 +1,9 @@
 import React from 'react';
 import './form.css';
 
-const FormWrapper = ({ title, children }) => {
+const FormWrapper = ({ title, children, className = '' }) => {
   return (
-    <div className={ `form-wrapper ${className}` }>
+    <div className={`form-wrapper ${className}`}>
       {title && <h2 className="form-title">{title}</h2>}
       {children}
     </div>

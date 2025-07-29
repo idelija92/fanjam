@@ -77,7 +77,7 @@ describe('Users Component', () => {
     await screen.findByText('Bob');
 
     const deleteButtons = screen.getAllByRole('button', { name: /Delete/i });
-    fireEvent.click(deleteButtons[1]); // Bob's delete button
+    fireEvent.click(deleteButtons[1]);
 
     await waitFor(() => {
       expect(axios.delete).toHaveBeenCalledWith('/users/2');
@@ -98,7 +98,7 @@ describe('Users Component', () => {
     await screen.findByText('Alice');
 
     const deleteButtons = screen.getAllByRole('button', { name: /Delete/i });
-    fireEvent.click(deleteButtons[0]); // Alice's delete button
+    fireEvent.click(deleteButtons[0]); 
 
     expect(axios.delete).not.toHaveBeenCalled();
   });
