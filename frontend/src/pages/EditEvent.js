@@ -7,6 +7,8 @@ import FormButton from '../components/form/FormButton';
 import '../components/form/form.css';
 import { AuthContext } from '../context/AuthContext';
 import useRole from '../hooks/useRole';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Button, Navbar, Nav, Container,Row, Col, Card, Form} from 'react-bootstrap';
 
 const EditEvent = () => {
   const { id } = useParams();
@@ -71,7 +73,7 @@ const EditEvent = () => {
   };
 
   return (
-    <FormWrapper title="Edit Event">
+    /*<FormWrapper title="Edit Event">
       <p><Link to="/events">← Back to Events</Link></p>
       <form onSubmit={handleSubmit}>
         <FormInput name="title" value={form.title || ''} onChange={handleChange} placeholder="Title" />
@@ -103,6 +105,132 @@ const EditEvent = () => {
       </form>
       {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
     </FormWrapper>
+    */
+
+    <div className="d-flex justify-content-center mt-4">
+      <div className="col-md-7">
+        <Card className="shadow">
+          <Card.Header className="bg-secondary text-white text-center">
+            <h5 className="mb-0">Edit Event</h5>
+          </Card.Header>
+
+          <Card.Body className="p-4">
+            <div className="mb-3">
+              <Link to="/events" className="btn btn-outline-secondary btn-sm">
+                ← Back to Events
+              </Link>
+            </div>
+
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3">
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="title"
+                  placeholder="Event title"
+                  value={form.title || ''}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+
+             <div className="row">
+               <Form.Group className="col-md-6 mb-3">
+                 <Form.Label>Date</Form.Label>
+                 <Form.Control
+                   type="date"
+                   name="date"
+                   value={form.date || ''}
+                   onChange={handleChange}
+                   required
+                 />
+               </Form.Group>
+
+               <Form.Group className="col-md-6 mb-3">
+                 <Form.Label>Time</Form.Label>
+                 <Form.Control
+                   type="time"
+                   name="time"
+                   value={form.time || ''}
+                   onChange={handleChange}
+                   required
+                 />
+               </Form.Group>
+             </div>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Venue</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="venue"
+                  placeholder="Venue name"
+                  value={form.venue || ''}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Location</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="location"
+                  placeholder="City or Address"
+                  value={form.location || ''}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="description"
+                  placeholder="Event description"
+                  value={form.description || ''}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Event Type</Form.Label>
+                <Form.Select name="type" value={form.type || 'FREE'} onChange={handleChange}>
+                  <option value="FREE">Free</option>
+                  <option value="PAID">Paid</option>
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group className="mb-4">
+                <Form.Label>Select Bands</Form.Label>
+                <Form.Select
+                  multiple
+                  name="bands"
+                  value={form.bands.map(b => b.id)}
+                  onChange={handleBandSelection}
+                >
+                  {allBands.map(b => (
+                    <option key={b.id} value={b.id}>
+                      {b.name}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+
+              <div className="text-center">
+                <Button variant="warning" type="submit">
+                  Update
+                </Button>
+              </div>
+
+              {error && (
+                <p className="text-danger text-center mt-3">{error}</p>
+              )}
+            </Form>
+          </Card.Body>
+        </Card>
+      </div>
+    </div>
+
   );
 };
 

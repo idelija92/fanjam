@@ -23,6 +23,7 @@ import EventWinnersPage from './pages/EventWinnersPage';
 import BandDashboard from './pages/BandDashboard';
 import VenueDashboard from './pages/VenueDashboard';
 import EditSetlist from './pages/EditSetlist';
+import About from './pages/About';
 import { AuthProvider } from './context/AuthContext';
 import './App.css'; // For full-height CSS //added rc
 import 'bootstrap/dist/css/bootstrap.min.css'; // added rc
@@ -44,6 +45,7 @@ function App() {
           <Route path="/bands" element={<Bands />} />
           <Route path="/events" element={<Events />} />
           <Route path="/events/:eventId/winners" element={<EventWinnersPage />} />
+          <Route path="/about" element={<About />} />
 
           <Route
             path="/events/:eventId/vote"
