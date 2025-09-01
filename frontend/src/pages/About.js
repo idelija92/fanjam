@@ -16,7 +16,7 @@ const About = () => {
        <div className="container text-center py-5">
          <div className="col-md-12 mx-auto">
            <h1 className="display-7 fw-normal" >About</h1>
-           <img className="logo" src="Fanjampic6.png" alt="Fanjam Logo" height="50" />
+           <img className="logo" src="fanjampic6.png" alt="Fanjam Logo" height="50" />
     <hr></hr>
     <br/>
     <h4> Where Music Meets Connection</h4>

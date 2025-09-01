@@ -18,9 +18,11 @@ API.interceptors.response.use(
   res => res,
   err => {
     if (err.response && err.response.status === 401) {
-      toast.error('Session expired, please log in again');
       localStorage.removeItem('token');
-      window.location.href = '/login';
+      if (window.location.pathname !== '/login') {
+        toast.error('Session expired, please log in again');
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(err);
   }

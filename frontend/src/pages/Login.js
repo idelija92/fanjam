@@ -25,53 +25,57 @@ function Login() {
       navigate('/');
     } catch (err) {
       console.error(err);
-      toast.error('Login failed: Invalid email or password');
+      if (err.response && err.response.status === 401) {
+        toast.error('Invalid email or password. Please try again.');
+      } else {
+        toast.error('Login failed. Please try again later.');
+      }
       localStorage.removeItem('token');
     }
   };
 
   return (
     <FormWrapper title="Login">
-  <div className="container mt-5">
-    <div className="card shadow-sm">
-      <div className="card-header bg-primary text-white">
-        <h5 className="mb-0">Login</h5>
-      </div>
-      <div className="card-body">
-        <p className="text-center">
-          <Link to="/" className="btn btn-secondary btn-sm mb-3">← Back to Home</Link>
-        </p>
-        <form onSubmit={handleLogin}>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">Email</label>
-            <FormInput
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="form-control"
-            />
+      <div className="container mt-5">
+        <div className="card shadow-sm">
+          <div className="card-header bg-primary text-white">
+            <h5 className="mb-0">Login</h5>
           </div>
+          <div className="card-body">
+            <p className="text-center">
+              <Link to="/" className="btn btn-secondary btn-sm mb-3">← Back to Home</Link>
+            </p>
+            <form onSubmit={handleLogin}>
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label">Email</label>
+                <FormInput
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="form-control"
+                />
+              </div>
 
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">Password</label>
-            <FormInput
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="form-control"
-            />
+              <div className="mb-3">
+                <label htmlFor="password" className="form-label">Password</label>
+                <FormInput
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="form-control"
+                />
+              </div>
+
+              <FormButton type="submit" className="btn btn-success">Login</FormButton>
+            </form>
+
+            {message && <p className="text-center mt-3">{message}</p>}
           </div>
-
-          <FormButton type="submit" className="btn btn-success">Login</FormButton>
-        </form>
-
-        {message && <p className="text-center mt-3">{message}</p>}
+        </div>
       </div>
-    </div>
-  </div>
-</FormWrapper>
+    </FormWrapper>
 
   );
 }
