@@ -35,8 +35,8 @@ const EventCard = ({
   const getEventImage = (event) => {
     if (event.venue === 'The Curragh Racecourse') return '/Horse-Country.png';
     if (event.venue === 'Shenanigans Pub') return '/flame_guitar_venue.png';
-    if (event.venue === 'Messers Pub') return 'crowd_hands_up.jpg';
-    if (event.venue === 'Whelans') return 'https://www.google.com/imgres?q=whelans%20dublin%20logo&imgurl=https%3A%2F%2Fwww.whelanslive.com%2Fwp-content%2Fthemes%2Fyootheme%2Fcache%2Fa8%2Fwhelans-logo-black-new-a8956028.png&imgrefurl=https%3A%2F%2Fwww.whelanslive.com%2Fabout%2Fhistory%2F&docid=kMpgbjW0578jrM&tbnid=iiKI65Agdt_lNM&vet=12ahUKEwiP9_WOv8yOAxW2QUEAHVEAIbEQM3oECBMQAA..i&w=220&h=136&hcb=2&ved=2ahUKEwiP9_WOv8yOAxW2QUEAHVEAIbEQM3oECBMQAA';
+    if (event.venue === 'Messers Pub') return '/crowd_hands_up.jpg';
+    if (event.venue === 'Whelans Pub') return '/enjoying.png';
     if (event.location === 'Dublin') return '/mic2.png';
     return '/guitar.jpg';
   };
