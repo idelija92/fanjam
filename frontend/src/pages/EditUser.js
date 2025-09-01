@@ -46,49 +46,23 @@ const EditUser = () => {
 
   return (
     <FormWrapper title="Edit User">
-  <div className="container mt-5">
-    <div className="card shadow-sm">
-      <div className="card-header bg-primary text-white">
-        <h5 className="mb-0">Edit User</h5>
-      </div>
-      <div className="card-body">
-        <p>
-          <Link to="/users" className="btn btn-secondary btn-sm mb-3">← Back to Users</Link>
-        </p>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="username" className="form-label">Username</label>
-            <FormInput name="username" value={form.username} onChange={handleChange} placeholder="Username" className="form-control" />
-          </div>
+      <p><Link to="/users">← Back to Users</Link></p>
+      <form onSubmit={handleSubmit}>
+        <FormInput name="username" value={form.username} onChange={handleChange} placeholder="Username" />
+        <FormInput name="email" value={form.email} onChange={handleChange} placeholder="Email" />
+        <FormInput type="password" name="password" value={form.password} onChange={handleChange} placeholder="Password" />
 
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">Email</label>
-            <FormInput name="email" value={form.email} onChange={handleChange} placeholder="Email" className="form-control" />
-          </div>
-
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">Password</label>
-            <FormInput type="password" name="password" value={form.password} onChange={handleChange} placeholder="Password" className="form-control" />
-          </div>
-
-          <div className="mb-3">
-            <label htmlFor="roles" className="form-label">Roles</label>
-            <select multiple value={form.roles} onChange={handleRoleChange} className="form-select" style={{ height: 'auto' }}>
-              {ALL_ROLES.map(role => (
-                <option key={role} value={role}>{role}</option>
-              ))}
-            </select>
-          </div>
-
-          <FormButton type="submit" className="btn btn-success">Update</FormButton>
-        </form>
-
-        {error && <p className="text-danger text-center mt-3">{error}</p>}
-      </div>
-    </div>
-  </div>
-</FormWrapper>
-
+        <label>Roles:</label>
+        <select multiple value={form.roles} onChange={handleRoleChange}>
+          {ALL_ROLES.map(role => (
+            <option key={role} value={role}>{role}</option>
+          ))}
+        </select>
+        
+        <FormButton type="submit">Update</FormButton>
+      </form>
+      {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+    </FormWrapper>
   );
 };
 
